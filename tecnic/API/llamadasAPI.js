@@ -17,8 +17,11 @@ export function obtenerDatosGetWorklistAPI(opcionUF) {
 // Función para realizar la solicitud a la API y actualizar los datos periódicamente
 export function actualizarDatosPeriodicamente(callback, opcionUF) {
   obtenerDatosGetWorklistAPI(opcionUF).then((data) => {
+    console.log(data);
+    console.log("callback: " + opcionUF);
+    console.log(callback);
     callback(data);
-    setInterval(() => actualizarDatosPeriodicamente(callback), 60000);
+    setInterval(() => actualizarDatosPeriodicamente(callback), 5000);
   });
 }
 

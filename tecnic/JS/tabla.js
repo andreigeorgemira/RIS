@@ -93,14 +93,14 @@ export function crearTablaWorklist(apiData, select, mostrarRealitzat, tabla, opc
     var thead = document.createElement("thead");
     thead.innerHTML = `
   <tr>
-    <th style="width: 8%">HORA</th>
-    <th style="width: 12%">DATA</th>
-    <th style="width: 10%">NHC</th>
+    <th style="width: 8%">NHC</th>
+    <th style="width: 12%">DATA/HORA</th>
+    <th style="width: 10%">TERMINI</th>
     <th style="width: 30%">NOM</th>
     <th style="width: 10%">DATA NAIX</th>
     <th style="width: 10%">PROVA</th>
-    <th style="width: 12%">ARRIBADA</th>
-    <th style="width: 6%"></th>
+    <th style="width: 12%">UBICACIÓ</th>
+    <th style="width: 6%">TRASLLAT</th>
   </tr>
 `;
     tabla.appendChild(thead);
@@ -112,48 +112,21 @@ export function crearTablaWorklist(apiData, select, mostrarRealitzat, tabla, opc
     if (apiData) {
       // Iterar sobre las filas de datos recibidas
       apiData.rows.forEach((item) => {
-        // Verificar si se cumple una condición específica
-        var condicionRealitzats = filtroRealitzats && item.ID_AGENDES_HCS == valorSelect && item.HORA_CONSULTA != "0000";
+        // Crear una nueva fila HTML
+        var row = document.createElement("tr");
 
-        // Verificar condiciones para mostrar o no una fila en la tabla
-        if ((filtroRealitzats && item.ID_AGENDES_HCS == valorSelect) || (!filtroRealitzats && item.ID_AGENDES_HCS == valorSelect && item.HORA_CONSULTA == "0000")) {
-          // Crear una nueva fila HTML
-          var row = document.createElement("tr");
+        // Llenar la fila con datos específicos
+        row.innerHTML = `
+          <td>${item.NHC}</td>
+          <td>${item.DATASOL}</td>
+          <td><b>${item.TERMINI}</b></td>
+          <td>${item.PACIENT}</td>
+          <td>${item.EDAT}</td>
+          <td>${item.PROVA}</td>
+          <td>${item.UBICACIO}</td>
+          <td>${item.TRASLLAT}</td>`;
 
-          // Llenar la fila con datos específicos
-          row.innerHTML = `
-        <td>${formatearHora(item.HORA_VISITA)}</td>
-        <td>${fechaFormateada(item.DATA_VISITA)}</td>
-        <td><b>${item.NHC}</b></td>
-        <td>${item.APELLIDO1} ${item.APELLIDO2}, ${item.NOMBRE}</td>
-        <td>${fechaFormateada(item.DATA_NEIXAMENT)}</td>
-        <td>${item.TIPUS}</td>`;
-
-          // Verificar condiciones adicionales y agregar contenido a la fila
-          if (item.HORA_CONSULTA == "0000" && item.HORA_ARRIBADA != "0000") {
-            row.innerHTML += `<td>${formatearHora(item.HORA_ARRIBADA)}</td>`;
-            row.innerHTML += '<td><img src="icons/espera.png" width="25px" height="25px"></td>';
-            contador++;
-
-            // Agregar una clase específica a la fila
-            row.classList.add("fila-espera");
-          } else {
-            // Verificar la condición adicional para determinar el contenido de la fila
-            if (condicionRealitzats) {
-              row.innerHTML += `<td>${formatearHora(item.HORA_ARRIBADA)}</td>`;
-              row.innerHTML += '<td><i class="fa-solid fa-check fa-xl" style="color: #49bc50;"></i></i></td>';
-
-              // Agregar una clase específica a la fila
-              row.classList.add("realitzat");
-            } else {
-              row.innerHTML += "<td></td>";
-              row.innerHTML += "<td></td>";
-              contador++;
-            }
-          }
-          // Agregar la fila a la tabla
-          tbody.appendChild(row);
-        }
+        tbody.appendChild(row);
       });
     }
 
@@ -163,14 +136,13 @@ export function crearTablaWorklist(apiData, select, mostrarRealitzat, tabla, opc
     var thead = document.createElement("thead");
     thead.innerHTML = `
   <tr>
-    <th style="width: 8%">HORA</th>
-    <th style="width: 12%">DATA</th>
-    <th style="width: 10%">NHC</th>
-    <th style="width: 30%">NOM</th>
+    <th style="width: 8%">NHC</th>
+    <th style="width: 17%">DATA/HORA</th>
+    <th style="width: 35%">NOM</th>
     <th style="width: 10%">DATA NAIX</th>
     <th style="width: 10%">PROVA</th>
-    <th style="width: 12%">ARRIBADA</th>
-    <th style="width: 6%"></th>
+    <th style="width: 12%">UBICACIÓ</th>
+    <th style="width: 6%">TRASLLAT</th>
   </tr>
 `;
     tabla.appendChild(thead);
@@ -182,48 +154,20 @@ export function crearTablaWorklist(apiData, select, mostrarRealitzat, tabla, opc
     if (apiData) {
       // Iterar sobre las filas de datos recibidas
       apiData.rows.forEach((item) => {
-        // Verificar si se cumple una condición específica
-        var condicionRealitzats = filtroRealitzats && item.ID_AGENDES_HCS == valorSelect && item.HORA_CONSULTA != "0000";
+        // Crear una nueva fila HTML
+        var row = document.createElement("tr");
 
-        // Verificar condiciones para mostrar o no una fila en la tabla
-        if ((filtroRealitzats && item.ID_AGENDES_HCS == valorSelect) || (!filtroRealitzats && item.ID_AGENDES_HCS == valorSelect && item.HORA_CONSULTA == "0000")) {
-          // Crear una nueva fila HTML
-          var row = document.createElement("tr");
+        // Llenar la fila con datos específicos
+        row.innerHTML = `
+          <td>${item.NHC}</td>
+          <td>${item.DATASOL}</td>
+          <td>${item.PACIENT}</td>
+          <td>${item.EDAT}</td>
+          <td>${item.PROVA}</td>
+          <td>${item.UBICACIO}</td>
+          <td>${item.TRASLLAT}</td>`;
 
-          // Llenar la fila con datos específicos
-          row.innerHTML = `
-        <td>${formatearHora(item.HORA_VISITA)}</td>
-        <td>${fechaFormateada(item.DATA_VISITA)}</td>
-        <td><b>${item.NHC}</b></td>
-        <td>${item.APELLIDO1} ${item.APELLIDO2}, ${item.NOMBRE}</td>
-        <td>${fechaFormateada(item.DATA_NEIXAMENT)}</td>
-        <td>${item.TIPUS}</td>`;
-
-          // Verificar condiciones adicionales y agregar contenido a la fila
-          if (item.HORA_CONSULTA == "0000" && item.HORA_ARRIBADA != "0000") {
-            row.innerHTML += `<td>${formatearHora(item.HORA_ARRIBADA)}</td>`;
-            row.innerHTML += '<td><img src="icons/espera.png" width="25px" height="25px"></td>';
-            contador++;
-
-            // Agregar una clase específica a la fila
-            row.classList.add("fila-espera");
-          } else {
-            // Verificar la condición adicional para determinar el contenido de la fila
-            if (condicionRealitzats) {
-              row.innerHTML += `<td>${formatearHora(item.HORA_ARRIBADA)}</td>`;
-              row.innerHTML += '<td><i class="fa-solid fa-check fa-xl" style="color: #49bc50;"></i></i></td>';
-
-              // Agregar una clase específica a la fila
-              row.classList.add("realitzat");
-            } else {
-              row.innerHTML += "<td></td>";
-              row.innerHTML += "<td></td>";
-              contador++;
-            }
-          }
-          // Agregar la fila a la tabla
-          tbody.appendChild(row);
-        }
+        tbody.appendChild(row);
       });
     }
 
