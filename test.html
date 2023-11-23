@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" integrity="sha384-pzjw8b+7Dk/1nHOqcL1u47POtXd3V+ctsoSMr2SvCqL4y2aaBg2o5g06iy5P61H1" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <title>Calendario</title>
+  </head>
+  <body>
+    <div style="float: left">
+      <button class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <button id="open-calendar" class="btn btn-outline-secondary"><i class="bi bi-calendar"></i> Avui</button>
+      <button class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-right"></i>
+      </button>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Configura flatpickr con las opciones deseadas
+        flatpickr("#open-calendar", {
+          enableTime: false, // Puedes habilitar la hora si es necesario
+          dateFormat: "Y-m-d", // Formato de fecha
+          onClose: function (selectedDates, dateStr, instance) {
+            // Aquí puedes manejar la fecha seleccionada, por ejemplo, almacenarla en una variable o realizar otras acciones
+            console.log("Fecha seleccionada:", dateStr);
+            // Puedes guardar la fecha seleccionada en una variable o en algún otro lugar según tus necesidades
+          },
+          yearDropdown: true, // Habilita el menú desplegable para seleccionar el año
+        });
+      });
+    </script>
+  </body>
+</html>
