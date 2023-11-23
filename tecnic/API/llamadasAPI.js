@@ -21,7 +21,7 @@ export function actualizarDatosPeriodicamente(callback, opcionUF) {
     console.log("callback: " + opcionUF);
     console.log(callback);
     callback(data);
-    setInterval(() => actualizarDatosPeriodicamente(callback), 5000);
+    setInterval(() => actualizarDatosPeriodicamente(callback), 60000);
   });
 }
 
