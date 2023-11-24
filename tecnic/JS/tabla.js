@@ -1,16 +1,20 @@
 import { formatearHora, fechaFormateada } from "./utilidades.js";
 
-var contador;
+var contador = [0, 0, 0, 0];
 
-export function getContadorProgramades() {
-  return contador;
+export function getContadorProgramades(index) {
+  return contador[index];
 }
 
-export function crearTablaWorklist(apiData, select, mostrarRealitzat, tabla, opcionUF) {
+export function crearTablaWorklist(valoresAPI, select, mostrarRealitzat, tabla, opcionUF) {
   // Obtener el valor actualmente seleccionado en el filtro
   var valorSelect = select.value;
 
-  contador = 0;
+  for (var index = 0; index < contador.length; index++) {
+    contador[index] = 0;
+  }
+
+  console.log(valoresAPI);
 
   // Verificar si el toggle para "realitzats" está activado
   var filtroRealitzats = mostrarRealitzat;
@@ -39,9 +43,12 @@ export function crearTablaWorklist(apiData, select, mostrarRealitzat, tabla, opc
     var tbody = document.createElement("tbody");
 
     // Verificar si hay datos de la API
-    if (apiData) {
-      // Iterar sobre las filas de datos recibidas
-      apiData.rows.forEach((item) => {
+    if (valoresAPI) {
+      console.log("DENTRO IF C");
+      console.log(valoresAPI);
+
+      // Iterar sobre las filas de datos recibidos
+      valoresAPI.rows.forEach((item) => {
         // Verificar si se cumple una condición específica
         var condicionRealitzats = filtroRealitzats && item.ID_AGENDES_HCS == valorSelect && item.HORA_CONSULTA != "0000";
 
@@ -63,7 +70,7 @@ export function crearTablaWorklist(apiData, select, mostrarRealitzat, tabla, opc
           if (item.HORA_CONSULTA == "0000" && item.HORA_ARRIBADA != "0000") {
             row.innerHTML += `<td>${formatearHora(item.HORA_ARRIBADA)}</td>`;
             row.innerHTML += '<td><img src="icons/espera.png" width="25px" height="25px"></td>';
-            contador++;
+            contador[0]++;
 
             // Agregar una clase específica a la fila
             row.classList.add("fila-espera");
@@ -78,7 +85,7 @@ export function crearTablaWorklist(apiData, select, mostrarRealitzat, tabla, opc
             } else {
               row.innerHTML += "<td></td>";
               row.innerHTML += "<td></td>";
-              contador++;
+              contador[0]++;
             }
           }
           // Agregar la fila a la tabla
@@ -89,29 +96,31 @@ export function crearTablaWorklist(apiData, select, mostrarRealitzat, tabla, opc
 
     tabla.appendChild(tbody);
   } else if (opcionUF == "H") {
+    console.log("DENTRO IF H");
+    console.log(valoresAPI);
     // Insertar thead con sus contenidos
     var thead = document.createElement("thead");
     thead.innerHTML = `
-  <tr>
-    <th style="width: 8%">NHC</th>
-    <th style="width: 12%">DATA/HORA</th>
-    <th style="width: 10%">TERMINI</th>
-    <th style="width: 30%">NOM</th>
-    <th style="width: 10%">DATA NAIX</th>
-    <th style="width: 10%">PROVA</th>
-    <th style="width: 12%">UBICACIÓ</th>
-    <th style="width: 6%">TRASLLAT</th>
-  </tr>
-`;
+    <tr>
+      <th style="width: 8%">NHC</th>
+      <th style="width: 12%">DATA/HORA</th>
+      <th style="width: 10%">TERMINI</th>
+      <th style="width: 30%">NOM</th>
+      <th style="width: 10%">DATA NAIX</th>
+      <th style="width: 10%">PROVA</th>
+      <th style="width: 12%">UBICACIÓ</th>
+      <th style="width: 6%">TRASLLAT</th>
+    </tr>
+  `;
     tabla.appendChild(thead);
 
     // Insertar tbody
     var tbody = document.createElement("tbody");
 
     // Verificar si hay datos de la API
-    if (apiData) {
-      // Iterar sobre las filas de datos recibidas
-      apiData.rows.forEach((item) => {
+    if (valoresAPI) {
+      // Iterar sobre las filas de datos recibidos
+      valoresAPI.rows.forEach((item) => {
         // Crear una nueva fila HTML
         var row = document.createElement("tr");
 
@@ -126,34 +135,38 @@ export function crearTablaWorklist(apiData, select, mostrarRealitzat, tabla, opc
           <td>${item.UBICACIO}</td>
           <td>${item.TRASLLAT}</td>`;
 
+        contador[1]++;
+
         tbody.appendChild(row);
       });
     }
 
     tabla.appendChild(tbody);
   } else if (opcionUF == "U") {
+    console.log("DENTRO IF U");
+    console.log(valoresAPI);
     // Insertar thead con sus contenidos
     var thead = document.createElement("thead");
     thead.innerHTML = `
-  <tr>
-    <th style="width: 8%">NHC</th>
-    <th style="width: 17%">DATA/HORA</th>
-    <th style="width: 35%">NOM</th>
-    <th style="width: 10%">DATA NAIX</th>
-    <th style="width: 10%">PROVA</th>
-    <th style="width: 12%">UBICACIÓ</th>
-    <th style="width: 6%">TRASLLAT</th>
-  </tr>
-`;
+    <tr>
+      <th style="width: 8%">NHC</th>
+      <th style="width: 17%">DATA/HORA</th>
+      <th style="width: 35%">NOM</th>
+      <th style="width: 10%">DATA NAIX</th>
+      <th style="width: 10%">PROVA</th>
+      <th style="width: 12%">UBICACIÓ</th>
+      <th style="width: 6%">TRASLLAT</th>
+    </tr>
+  `;
     tabla.appendChild(thead);
 
     // Insertar tbody
     var tbody = document.createElement("tbody");
 
     // Verificar si hay datos de la API
-    if (apiData) {
-      // Iterar sobre las filas de datos recibidas
-      apiData.rows.forEach((item) => {
+    if (valoresAPI) {
+      // Iterar sobre las filas de datos recibidos
+      valoresAPI.rows.forEach((item) => {
         // Crear una nueva fila HTML
         var row = document.createElement("tr");
 
@@ -166,6 +179,8 @@ export function crearTablaWorklist(apiData, select, mostrarRealitzat, tabla, opc
           <td>${item.PROVA}</td>
           <td>${item.UBICACIO}</td>
           <td>${item.TRASLLAT}</td>`;
+
+        contador[2]++;
 
         tbody.appendChild(row);
       });

@@ -7,6 +7,9 @@ var tabla = document.getElementById("tabla");
 var select = document.getElementById("filtro");
 var mostrarRealitzat = document.getElementById("mostrarRealitzat");
 var contadorProgramades = document.getElementById("totalProgramades");
+var contadorHospitalitzacio = document.getElementById("totalHospitalitzacio");
+var contadorUrgencies = document.getElementById("totalUrgencies");
+var contadorAltres = document.getElementById("totalAltres");
 var icono = document.getElementById("icono");
 var filtroRealitzats = false;
 
@@ -23,29 +26,37 @@ var agendesDatos;
 var opcionUF = "C";
 
 // Objeto para almacenar en caché los datos de la API
-var cache = {
+var opcionesSelect = {
   C: null,
   H: null,
   U: null,
 };
 
-// Llamar a la función para obtener datos al cargar la página
-obtenerDatosGetWorklistAPI(opcionUF).then((datos) => {
-  worklistDatos = datos;
-  crearTablaWorklist(worklistDatos, select, filtroRealitzats, tabla, opcionUF);
-  actualizarContadorProgramades();
-  cache[opcionUF] = agendesDatos;
-});
+var valoresAPI = {
+  C: null,
+  H: null,
+  U: null,
+};
 
-// Iniciar la actualización periódica de datos
-actualizarDatosPeriodicamente((datos) => {
-  worklistDatos = datos;
-  crearTablaWorklist(worklistDatos, select, filtroRealitzats, tabla, opcionUF);
-  actualizarContadorProgramades();
-}, opcionUF);
+// Función para obtener datos de la API y actualizar el array
+function obtenerDatosYActualizarArray() {
+  // Realizar las tres llamadas de manera simultánea usando Promise.all
+  Promise.all([obtenerDatosGetWorklistAPI("C"), obtenerDatosGetWorklistAPI("H"), obtenerDatosGetWorklistAPI("U")]).then(([datosC, datosH, datosU]) => {
+    valoresAPI.C = datosC;
+    valoresAPI.H = datosH;
+    valoresAPI.U = datosU;
+
+    crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, opcionUF);
+  });
+}
+
+obtenerDatosYActualizarArray();
+
+actualizarContadores();
+opcionesSelect[opcionUF] = agendesDatos;
 
 // Llamar a la función para obtener datos al cargar la página
-obtenerYProcesarDatosConCache();
+obtenerYProcesarDatosConopcionesSelect();
 
 // Agregar un event listener al contenedor del div
 mostrarRealitzat.addEventListener("click", function () {
@@ -61,7 +72,7 @@ mostrarRealitzat.addEventListener("click", function () {
 // Agregar un event listener para el cambio en el filtro
 select.addEventListener("change", function () {
   crearTablaWorklist(worklistDatos, select, filtroRealitzats, tabla, opcionUF);
-  actualizarContadorProgramades();
+  actualizarContadores();
 });
 
 // Event listener para el botón de refresh
@@ -71,22 +82,25 @@ refreshButton.addEventListener("click", function () {
   obtenerDatosGetWorklistAPI(opcionUF, worklistDatos, select, filtroRealitzats, tabla);
 });
 
-function actualizarContadorProgramades() {
-  contadorProgramades.innerHTML = `(${getContadorProgramades()})`;
+function actualizarContadores() {
+  contadorProgramades.innerHTML = `(${getContadorProgramades(0)})`;
+  contadorHospitalitzacio.innerHTML = `(${getContadorProgramades(1)})`;
+  contadorUrgencies.innerHTML = `(${getContadorProgramades(2)})`;
+  contadorAltres.innerHTML = `(${getContadorProgramades(3)})`;
 }
 
 // Función para obtener y procesar los datos con gestión de caché
-function obtenerYProcesarDatosConCache() {
+function obtenerYProcesarDatosConopcionesSelect() {
   // Verifica si ya tienes los datos en caché
-  if (cache[opcionUF]) {
+  if (opcionesSelect[opcionUF]) {
     // Si los datos están en caché, utiliza los datos existentes
-    agendesDatos = cache[opcionUF];
+    agendesDatos = opcionesSelect[opcionUF];
     datosSelect(agendesDatos, select);
   } else {
     // Si los datos no están en caché, realiza la llamada a la API
     obtenerDatosGetAgendesRAD(opcionUF).then((datos) => {
       // Almacena los datos en caché para futuras referencias
-      cache[opcionUF] = datos;
+      opcionesSelect[opcionUF] = datos;
 
       // Procesa y muestra los datos
       agendesDatos = datos;
@@ -100,13 +114,14 @@ var contenedor = document.querySelector(".mi-contenedor");
 
 // Añade un evento de clic al contenedor para manejar clics en los botones
 contenedor.addEventListener("click", function (event) {
-  // Verifica si el clic ocurrió en un botón dentro del contenedor
-  if (event.target.tagName === "BUTTON") {
-    var value = event.target.value;
-    opcionUF = obtenerValorUF(value);
+  // Verifica si el clic ocurrió en un botón o en cualquier elemento dentro del botón
+  var boton = event.target.closest("button");
+  if (boton && contenedor.contains(boton)) {
+    var valor = boton.value;
+    opcionUF = obtenerValorUF(valor);
 
     // Llama a la función para obtener y procesar los datos con el nuevo valor UF
-    obtenerYProcesarDatosConCache();
+    obtenerYProcesarDatosConopcionesSelect();
     obtenerDatosGetWorklistAPI(opcionUF).then((datos) => {
       worklistDatos = datos;
       crearTablaWorklist(worklistDatos, select, filtroRealitzats, tabla, opcionUF);

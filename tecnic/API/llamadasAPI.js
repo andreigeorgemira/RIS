@@ -10,6 +10,7 @@ export function obtenerDatosGetWorklistAPI(opcionUF) {
       "Content-Type": "application/json",
     },
     method: "POST",
+    mode: "cors",
     body: JSON.stringify({ center: "CMQR", uf: opcionUF, date: fechaFormateada(fecha) }),
   }).then((data) => data.json());
 }
@@ -17,9 +18,6 @@ export function obtenerDatosGetWorklistAPI(opcionUF) {
 // Función para realizar la solicitud a la API y actualizar los datos periódicamente
 export function actualizarDatosPeriodicamente(callback, opcionUF) {
   obtenerDatosGetWorklistAPI(opcionUF).then((data) => {
-    console.log(data);
-    console.log("callback: " + opcionUF);
-    console.log(callback);
     callback(data);
     setInterval(() => actualizarDatosPeriodicamente(callback), 60000);
   });
