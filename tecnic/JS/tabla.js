@@ -38,12 +38,11 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
     var tbody = document.createElement("tbody");
 
     // Verificar si hay datos de la API
-    if (valoresAPI && valoresAPI.C.rows) {
+    if (valoresAPI.C.rows) {
+      // Verificar si se cumple una condición específica
+      var condicionRealitzats = filtroRealitzats && item.ID_AGENDES_HCS == valorSelect && item.HORA_CONSULTA != "0000";
       // Iterar sobre las filas de datos recibidos
       valoresAPI.C.rows.forEach((item) => {
-        // Verificar si se cumple una condición específica
-        var condicionRealitzats = filtroRealitzats && item.ID_AGENDES_HCS == valorSelect && item.HORA_CONSULTA != "0000";
-
         // Verificar condiciones para mostrar o no una fila en la tabla
         if ((filtroRealitzats && item.ID_AGENDES_HCS == valorSelect) || (!filtroRealitzats && item.ID_AGENDES_HCS == valorSelect && item.HORA_CONSULTA == "0000")) {
           // Crear una nueva fila HTML
@@ -62,7 +61,6 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
           if (item.HORA_CONSULTA == "0000" && item.HORA_ARRIBADA != "0000") {
             row.innerHTML += `<td>${formatearHora(item.HORA_ARRIBADA)}</td>`;
             row.innerHTML += '<td><img src="icons/espera.png" width="25px" height="25px"></td>';
-            contador[0]++;
 
             // Agregar una clase específica a la fila
             row.classList.add("fila-espera");
@@ -77,7 +75,6 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
             } else {
               row.innerHTML += "<td></td>";
               row.innerHTML += "<td></td>";
-              contador[0]++;
             }
           }
           // Agregar la fila a la tabla
@@ -108,29 +105,37 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
     var tbody = document.createElement("tbody");
 
     // Verificar si hay datos de la API
-    if (valoresAPI && valoresAPI.H.rows) {
+    if (valoresAPI.H.rows) {
       // Iterar sobre las filas de datos recibidos
       valoresAPI.H.rows.forEach((item) => {
         // Crear una nueva fila HTML
         var row = document.createElement("tr");
 
-        // Llenar la fila con datos específicos
-        row.innerHTML = `
-          <td>${item.NHC}</td>
+        if (item.TIPPRV == valorSelect) {
+          // Llenar la fila con datos específicos
+          row.innerHTML = `
+          <td><b>${item.NHC}</b></td>
           <td>${item.DATASOL}</td>
           <td><b>${item.TERMINI}</b></td>
           <td>${item.PACIENT}</td>
           <td>${item.EDAT}</td>
           <td>${item.PROVA}</td>
           <td>${item.UBICACIO}</td>
-          <td>${item.TRASLLAT}</td>`;
+          <td><b>${traslado(item.TRASLLAT)}<b></td>`;
 
-        contador[1]++;
+          contador[1]++;
 
-        tbody.appendChild(row);
+          tbody.appendChild(row);
+        }
       });
     }
-
+    function traslado(valorTraslado) {
+      if (valorTraslado == "0") {
+        return "A Peu";
+      } else if (valorTraslado == "1") {
+        return "Cadira";
+      }
+    }
     tabla.appendChild(tbody);
   } else if (opcionUF == "U") {
     // Insertar thead con sus contenidos
@@ -152,23 +157,33 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
     var tbody = document.createElement("tbody");
 
     // Verificar si hay datos de la API
-    if (valoresAPI && valoresAPI.U.rows) {
+    if (valoresAPI.U.rows) {
       // Iterar sobre las filas de datos recibidos
       valoresAPI.U.rows.forEach((item) => {
         // Crear una nueva fila HTML
         var row = document.createElement("tr");
 
-        // Llenar la fila con datos específicos
-        row.innerHTML = `
-          <td>${item.NHC}</td>
+        if (item.TIPPRV == valorSelect) {
+          // Llenar la fila con datos específicos
+          row.innerHTML = `
+          <td><b>${item.NHC}</b></td>
           <td>${item.DATASOL}</td>
           <td>${item.PACIENT}</td>
           <td>${item.EDAT}</td>
           <td>${item.PROVA}</td>
           <td>${item.UBICACIO}</td>
-          <td>${item.TRASLLAT}</td>`;
+          <td>${traslado(item.TRASLLAT)}</td>`;
 
-        contador[2]++;
+          contador[2]++;
+        }
+
+        function traslado(valorTraslado) {
+          if (valorTraslado == "0") {
+            return "A Peu";
+          } else if (valorTraslado == "1") {
+            return "Cadira";
+          }
+        }
 
         tbody.appendChild(row);
       });

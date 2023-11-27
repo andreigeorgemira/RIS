@@ -21,7 +21,6 @@ document.getElementById("NombreUser").innerHTML = "User " + user;
 document.getElementById("EspecialidadUser").innerHTML = "Especialidad  " + especialidad;
 
 // Variable para almacenar los datos de la API
-var worklistDatos;
 var agendesDatos;
 var opcionUF = "C";
 
@@ -39,7 +38,7 @@ var valoresAPI = {
 };
 
 // Función para obtener datos de la API y actualizar el array
-function obtenerDatosYActualizarArray() {
+function obtenerDatosAPI() {
   // Realizar las tres llamadas de manera simultánea usando Promise.all
   Promise.all([obtenerDatosGetWorklistAPI("C"), obtenerDatosGetWorklistAPI("H"), obtenerDatosGetWorklistAPI("U")]).then(([datosC, datosH, datosU]) => {
     valoresAPI.C = datosC;
@@ -47,16 +46,26 @@ function obtenerDatosYActualizarArray() {
     valoresAPI.U = datosU;
 
     crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, opcionUF);
+
+    opcionesSelect[opcionUF] = agendesDatos;
   });
 }
 
-obtenerDatosYActualizarArray();
+// Función para obtener datos de la API y actualizar el array
+function obtenerSelectAPI() {
+  // Realizar las tres llamadas de manera simultánea usando Promise.all
+  Promise.all([obtenerDatosGetAgendesRAD("C"), obtenerDatosGetAgendesRAD("H"), obtenerDatosGetAgendesRAD("U")]).then(([datosC, datosH, datosU]) => {
+    opcionesSelect.C = datosC;
+    opcionesSelect.H = datosH;
+    opcionesSelect.U = datosU;
+  });
+}
 
-actualizarContadores();
-opcionesSelect[opcionUF] = agendesDatos;
+obtenerDatosAPI();
+obtenerSelectAPI();
 
 // Llamar a la función para obtener datos al cargar la página
-obtenerYProcesarDatosConopcionesSelect();
+datosFiltradosSelect();
 
 // Agregar un event listener al contenedor del div
 mostrarRealitzat.addEventListener("click", function () {
@@ -66,12 +75,12 @@ mostrarRealitzat.addEventListener("click", function () {
   icono.classList.toggle("fa-eye-slash");
 
   // Llamar a la función para actualizar la tabla
-  crearTablaWorklist(worklistDatos, select, filtroRealitzats, tabla, opcionUF);
+  crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, opcionUF);
 });
 
 // Agregar un event listener para el cambio en el filtro
 select.addEventListener("change", function () {
-  crearTablaWorklist(worklistDatos, select, filtroRealitzats, tabla, opcionUF);
+  crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, opcionUF);
   actualizarContadores();
 });
 
@@ -79,7 +88,7 @@ select.addEventListener("change", function () {
 var refreshButton = document.getElementById("refresh");
 refreshButton.addEventListener("click", function () {
   // Llamar a la función para obtener datos y actualizar la tabla
-  obtenerDatosGetWorklistAPI(opcionUF, worklistDatos, select, filtroRealitzats, tabla);
+  obtenerDatosAPI();
 });
 
 function actualizarContadores() {
@@ -90,12 +99,10 @@ function actualizarContadores() {
 }
 
 // Función para obtener y procesar los datos con gestión de caché
-function obtenerYProcesarDatosConopcionesSelect() {
+function datosFiltradosSelect() {
   // Verifica si ya tienes los datos en caché
   if (opcionesSelect[opcionUF]) {
-    // Si los datos están en caché, utiliza los datos existentes
-    agendesDatos = opcionesSelect[opcionUF];
-    datosSelect(agendesDatos, select);
+    datosSelect(opcionesSelect[opcionUF], select);
   } else {
     // Si los datos no están en caché, realiza la llamada a la API
     obtenerDatosGetAgendesRAD(opcionUF).then((datos) => {
@@ -121,7 +128,7 @@ contenedor.addEventListener("click", function (event) {
     opcionUF = obtenerValorUF(valor);
 
     // Llama a la función para obtener y procesar los datos con el nuevo valor UF
-    obtenerYProcesarDatosConopcionesSelect();
+    datosFiltradosSelect();
     crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, opcionUF);
   }
 });
