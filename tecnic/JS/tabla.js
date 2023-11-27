@@ -6,18 +6,13 @@ export function getContadorProgramades(index) {
   return contador[index];
 }
 
-export function crearTablaWorklist(valoresAPI, select, mostrarRealitzat, tabla, opcionUF) {
+export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, opcionUF) {
   // Obtener el valor actualmente seleccionado en el filtro
   var valorSelect = select.value;
 
   for (var index = 0; index < contador.length; index++) {
     contador[index] = 0;
   }
-
-  console.log(valoresAPI);
-
-  // Verificar si el toggle para "realitzats" está activado
-  var filtroRealitzats = mostrarRealitzat;
 
   // Limpiar el contenido actual de la tabla
   tabla.innerHTML = "";
@@ -43,12 +38,9 @@ export function crearTablaWorklist(valoresAPI, select, mostrarRealitzat, tabla, 
     var tbody = document.createElement("tbody");
 
     // Verificar si hay datos de la API
-    if (valoresAPI) {
-      console.log("DENTRO IF C");
-      console.log(valoresAPI);
-
+    if (valoresAPI && valoresAPI.C.rows) {
       // Iterar sobre las filas de datos recibidos
-      valoresAPI.rows.forEach((item) => {
+      valoresAPI.C.rows.forEach((item) => {
         // Verificar si se cumple una condición específica
         var condicionRealitzats = filtroRealitzats && item.ID_AGENDES_HCS == valorSelect && item.HORA_CONSULTA != "0000";
 
@@ -96,8 +88,6 @@ export function crearTablaWorklist(valoresAPI, select, mostrarRealitzat, tabla, 
 
     tabla.appendChild(tbody);
   } else if (opcionUF == "H") {
-    console.log("DENTRO IF H");
-    console.log(valoresAPI);
     // Insertar thead con sus contenidos
     var thead = document.createElement("thead");
     thead.innerHTML = `
@@ -118,9 +108,9 @@ export function crearTablaWorklist(valoresAPI, select, mostrarRealitzat, tabla, 
     var tbody = document.createElement("tbody");
 
     // Verificar si hay datos de la API
-    if (valoresAPI) {
+    if (valoresAPI && valoresAPI.H.rows) {
       // Iterar sobre las filas de datos recibidos
-      valoresAPI.rows.forEach((item) => {
+      valoresAPI.H.rows.forEach((item) => {
         // Crear una nueva fila HTML
         var row = document.createElement("tr");
 
@@ -143,8 +133,6 @@ export function crearTablaWorklist(valoresAPI, select, mostrarRealitzat, tabla, 
 
     tabla.appendChild(tbody);
   } else if (opcionUF == "U") {
-    console.log("DENTRO IF U");
-    console.log(valoresAPI);
     // Insertar thead con sus contenidos
     var thead = document.createElement("thead");
     thead.innerHTML = `
@@ -164,9 +152,9 @@ export function crearTablaWorklist(valoresAPI, select, mostrarRealitzat, tabla, 
     var tbody = document.createElement("tbody");
 
     // Verificar si hay datos de la API
-    if (valoresAPI) {
+    if (valoresAPI && valoresAPI.U.rows) {
       // Iterar sobre las filas de datos recibidos
-      valoresAPI.rows.forEach((item) => {
+      valoresAPI.U.rows.forEach((item) => {
         // Crear una nueva fila HTML
         var row = document.createElement("tr");
 

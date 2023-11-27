@@ -122,10 +122,7 @@ contenedor.addEventListener("click", function (event) {
 
     // Llama a la función para obtener y procesar los datos con el nuevo valor UF
     obtenerYProcesarDatosConopcionesSelect();
-    obtenerDatosGetWorklistAPI(opcionUF).then((datos) => {
-      worklistDatos = datos;
-      crearTablaWorklist(worklistDatos, select, filtroRealitzats, tabla, opcionUF);
-    });
+    crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, opcionUF);
   }
 });
 
