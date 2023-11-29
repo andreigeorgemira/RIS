@@ -2,7 +2,7 @@ import { fechaFormateada } from "../JS/utilidades.js";
 
 // Función para realizar la solicitud a la API y guardar los datos
 export function obtenerDatosGetWorklistAPI(opcionUF) {
-  var fecha = new Date();
+  let fecha = new Date();
 
   return fetch("https://localhost:7224/Radiologia/api/v4/ris/tecnic/getWorklist", {
     headers: {

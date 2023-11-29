@@ -1,59 +1,46 @@
 import { obtenerDatosGetWorklistAPI, actualizarDatosPeriodicamente, obtenerDatosGetAgendesRAD } from "../API/llamadasAPI.js";
-import { crearTablaWorklist, getContadorProgramades } from "./tabla.js";
+import { crearTablaWorklist } from "./tabla.js";
 import { datosSelect } from "./utilidades.js";
 
-// Obtener referencias a elementos HTML
-var tabla = document.getElementById("tabla");
-var select = document.getElementById("filtro");
-var mostrarRealitzat = document.getElementById("mostrarRealitzat");
-var contadorProgramades = document.getElementById("totalProgramades");
-var contadorHospitalitzacio = document.getElementById("totalHospitalitzacio");
-var contadorUrgencies = document.getElementById("totalUrgencies");
-var contadorAltres = document.getElementById("totalAltres");
-var icono = document.getElementById("icono");
-var filtroRealitzats = false;
+let tabla = document.getElementById("tabla");
+let select = document.getElementById("filtro");
+let mostrarRealitzat = document.getElementById("mostrarRealitzat");
+let icono = document.getElementById("icono");
+
+let filtroRealitzats = false;
+let agendesDatos;
+let opcionUF = "C";
+
+let opcionesSelect = {
+  C: null,
+  H: null,
+  U: null,
+};
+
+let valoresAPI = {
+  C: null,
+  H: null,
+  U: null,
+};
 
 // Recuperar el nombre de usuario y especialidad que recibo por de la URL
-var urlParams = new URLSearchParams(window.location.search);
-var user = urlParams.get("user");
-var especialidad = urlParams.get("especialidad");
+let urlParams = new URLSearchParams(window.location.search);
+let user = urlParams.get("user");
+let especialidad = urlParams.get("especialidad");
 document.getElementById("NombreUser").innerHTML = "User " + user;
 document.getElementById("EspecialidadUser").innerHTML = "Especialidad  " + especialidad;
 
-// Variable para almacenar los datos de la API
-var agendesDatos;
-var opcionUF = "C";
-
-// Objeto para almacenar en caché los datos de la API
-var opcionesSelect = {
-  C: null,
-  H: null,
-  U: null,
-};
-
-var valoresAPI = {
-  C: null,
-  H: null,
-  U: null,
-};
-
-// Función para obtener datos de la API y actualizar el array
 function obtenerDatosAPI() {
-  // Realizar las tres llamadas de manera simultánea usando Promise.all
   Promise.all([obtenerDatosGetWorklistAPI("C"), obtenerDatosGetWorklistAPI("H"), obtenerDatosGetWorklistAPI("U")]).then(([datosC, datosH, datosU]) => {
     valoresAPI.C = datosC;
     valoresAPI.H = datosH;
     valoresAPI.U = datosU;
-
-    crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, opcionUF);
-
+    crearYActualizarTabla();
     opcionesSelect[opcionUF] = agendesDatos;
   });
 }
 
-// Función para obtener datos de la API y actualizar el array
 function obtenerSelectAPI() {
-  // Realizar las tres llamadas de manera simultánea usando Promise.all
   Promise.all([obtenerDatosGetAgendesRAD("C"), obtenerDatosGetAgendesRAD("H"), obtenerDatosGetAgendesRAD("U")]).then(([datosC, datosH, datosU]) => {
     opcionesSelect.C = datosC;
     opcionesSelect.H = datosH;
@@ -61,80 +48,45 @@ function obtenerSelectAPI() {
   });
 }
 
-obtenerDatosAPI();
-obtenerSelectAPI();
-
-// Llamar a la función para obtener datos al cargar la página
-datosFiltradosSelect();
-
-// Agregar un event listener al contenedor del div
-mostrarRealitzat.addEventListener("click", function () {
-  filtroRealitzats = !filtroRealitzats;
-
-  icono.classList.toggle("fa-eye");
-  icono.classList.toggle("fa-eye-slash");
-
-  // Llamar a la función para actualizar la tabla
+function crearYActualizarTabla() {
   crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, opcionUF);
-});
-
-// Agregar un event listener para el cambio en el filtro
-select.addEventListener("change", function () {
-  crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, opcionUF);
-  actualizarContadores();
-});
-
-// Event listener para el botón de refresh
-var refreshButton = document.getElementById("refresh");
-refreshButton.addEventListener("click", function () {
-  // Llamar a la función para obtener datos y actualizar la tabla
-  obtenerDatosAPI();
-});
-
-function actualizarContadores() {
-  contadorProgramades.innerHTML = `(${getContadorProgramades(0)})`;
-  contadorHospitalitzacio.innerHTML = `(${getContadorProgramades(1)})`;
-  contadorUrgencies.innerHTML = `(${getContadorProgramades(2)})`;
-  contadorAltres.innerHTML = `(${getContadorProgramades(3)})`;
 }
 
-// Función para obtener y procesar los datos con gestión de caché
 function datosFiltradosSelect() {
-  // Verifica si ya tienes los datos en caché
   if (opcionesSelect[opcionUF]) {
     datosSelect(opcionesSelect[opcionUF], select);
   } else {
-    // Si los datos no están en caché, realiza la llamada a la API
     obtenerDatosGetAgendesRAD(opcionUF).then((datos) => {
-      // Almacena los datos en caché para futuras referencias
       opcionesSelect[opcionUF] = datos;
-
-      // Procesa y muestra los datos
       agendesDatos = datos;
       datosSelect(agendesDatos, select);
     });
   }
 }
 
-// Obtén el contenedor por su clase
-var contenedor = document.querySelector(".mi-contenedor");
+mostrarRealitzat.addEventListener("click", function () {
+  filtroRealitzats = !filtroRealitzats;
+  icono.classList.toggle("fa-eye");
+  icono.classList.toggle("fa-eye-slash");
+  crearYActualizarTabla();
+});
 
-// Añade un evento de clic al contenedor para manejar clics en los botones
+select.addEventListener("change", crearYActualizarTabla);
+
+let refreshButton = document.getElementById("refresh");
+refreshButton.addEventListener("click", obtenerDatosAPI);
+
+let contenedor = document.querySelector(".mi-contenedor");
 contenedor.addEventListener("click", function (event) {
-  // Verifica si el clic ocurrió en un botón o en cualquier elemento dentro del botón
-  var boton = event.target.closest("button");
+  let boton = event.target.closest("button");
   if (boton && contenedor.contains(boton)) {
-    var valor = boton.value;
-    opcionUF = obtenerValorUF(valor);
-
-    // Llama a la función para obtener y procesar los datos con el nuevo valor UF
+    opcionUF = obtenerValorUF(boton.value);
     datosFiltradosSelect();
-    crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, opcionUF);
+    crearYActualizarTabla();
   }
 });
 
 function obtenerValorUF(valor) {
-  // Asigna el valor de UF según el botón clicado
   switch (valor) {
     case "programades":
       return "C";
@@ -148,3 +100,8 @@ function obtenerValorUF(valor) {
       return "C";
   }
 }
+
+// Llamar a las funciones iniciales
+obtenerDatosAPI();
+obtenerSelectAPI();
+datosFiltradosSelect();

@@ -3,15 +3,15 @@ export function formatearHora(hora) {
 }
 
 export function fechaFormateada(fecha) {
-  var fechaOriginal = new Date(fecha);
-  var dia = fechaOriginal.getDate();
-  var mes = fechaOriginal.getMonth() + 1;
-  var anio = fechaOriginal.getFullYear();
+  let fechaOriginal = new Date(fecha);
+  let dia = fechaOriginal.getDate();
+  let mes = fechaOriginal.getMonth() + 1;
+  let anio = fechaOriginal.getFullYear();
 
-  var diaFormateado = dia < 10 ? "0" + dia : dia;
-  var mesFormateado = mes < 10 ? "0" + mes : mes;
+  let diaFormateado = dia < 10 ? "0" + dia : dia;
+  let mesFormateado = mes < 10 ? "0" + mes : mes;
 
-  var fechaFormateada = `${diaFormateado}/${mesFormateado}/${anio}`;
+  let fechaFormateada = `${diaFormateado}/${mesFormateado}/${anio}`;
 
   return fechaFormateada;
 }
@@ -28,7 +28,7 @@ export function datosSelect(datosAPI, filtro) {
     }
 
     // Crea un elemento de opción
-    var optionElement = document.createElement("option");
+    let optionElement = document.createElement("option");
 
     // Asigna el valor y el texto del elemento de opción
     optionElement.value = row.ID; // Asegúrate de que la propiedad 'numero' sea la correcta en tus datos
