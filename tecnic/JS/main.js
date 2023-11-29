@@ -74,7 +74,10 @@ mostrarRealitzat.addEventListener("click", function () {
 select.addEventListener("change", crearYActualizarTabla);
 
 let refreshButton = document.getElementById("refresh");
-refreshButton.addEventListener("click", obtenerDatosAPI);
+refreshButton.addEventListener("click", function () {
+  obtenerDatosAPI();
+  obtenerSelectAPI();
+});
 
 let contenedor = document.querySelector(".mi-contenedor");
 contenedor.addEventListener("click", function (event) {
