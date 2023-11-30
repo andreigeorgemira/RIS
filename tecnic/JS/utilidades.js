@@ -8,8 +8,9 @@ export function fechaFormateada(fecha) {
   let mes = fechaOriginal.getMonth() + 1;
   let anio = fechaOriginal.getFullYear();
 
-  let diaFormateado = dia < 10 ? "0" + dia : dia;
-  let mesFormateado = mes < 10 ? "0" + mes : mes;
+  // Formatear siempre en el orden "dd/mm/aaaa"
+  let diaFormateado = dia.toString().padStart(2, "0");
+  let mesFormateado = mes.toString().padStart(2, "0");
 
   let fechaFormateada = `${diaFormateado}/${mesFormateado}/${anio}`;
 

@@ -63,11 +63,11 @@
     <div class="container-fluid">
       <hr />
       <div style="float: left; margin-bottom: 5px">
-        <button class="btn btn-light btn-sm">
+        <button id="btnDiaAnterior" class="btn btn-light btn-sm">
           <i class="fa-solid fa-arrow-left fa-lg" style="color: #000000"></i>
         </button>
-        <button class="btn btn-light btn-sm"><i class="fa-regular fa-calendar-days fa-lg"></i> Avui</button>
-        <button class="btn btn-light btn-sm">
+        <button id="btnAbrirModal" class="btn btn-light btn-sm"><i class="far fa-calendar-days fa-lg"></i>Avui</button>
+        <button id="btnDiaSiguiente" class="btn btn-light btn-sm">
           <i class="fa-solid fa-arrow-right fa-lg" style="color: #000000"></i>
         </button>
       </div>
@@ -78,6 +78,37 @@
       <table class="tabla" id="tabla"></table>
     </div>
 
-    <script async type="module" src="JS/main.js"></script>
+    <div id="myModal" class="modal">
+      <div class="header">
+        <button id="btnCerrarModal" class="close-btn">&times;</button>
+        <div class="dropdown">
+          <button class="nav-btn month-dropdown"><i class="far fa-calendar"></i> <span id="mesSeleccionado"></span></button>
+          <div class="dropdown-content">
+            <button id="btnCambioMes0">Enero</button>
+            <button id="btnCambioMes1">Febrero</button>
+            <button id="btnCambioMes2">Marzo</button>
+            <button id="btnCambioMes3">Abril</button>
+            <button id="btnCambioMes4">Mayo</button>
+            <button id="btnCambioMes5">Junio</button>
+            <button id="btnCambioMes6">Julio</button>
+            <button id="btnCambioMes7">Agosto</button>
+            <button id="btnCambioMes8">Septiembre</button>
+            <button id="btnCambioMes9">Octubre</button>
+            <button id="btnCambioMes10">Noviembre</button>
+            <button id="btnCambioMes11">Diciembre</button>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="nav-btn year-dropdown"><i class="far fa-calendar"></i> <span id="anoSeleccionado"></span></button>
+          <div class="dropdown-content" id="yearDropdownContent"></div>
+        </div>
+        <button id="btnGuardarFecha" class="save-btn">Guardar</button>
+      </div>
+      <div class="custom-calendar" id="customCalendar"></div>
+    </div>
+
+    <div id="overlay" class="modal-overlay"></div>
+
+    <script type="module" src="JS/main.js"></script>
   </body>
 </html>
