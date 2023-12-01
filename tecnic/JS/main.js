@@ -32,7 +32,7 @@ document.getElementById("NombreUser").innerHTML = "User " + user;
 document.getElementById("EspecialidadUser").innerHTML = "Especialidad  " + especialidad;
 
 function obtenerDatosAPI(fechaSeleccionada) {
-  const fecha = fechaSeleccionada ? new Date(fechaSeleccionada) : new Date();
+  let fecha = fechaSeleccionada ? new Date(fechaSeleccionada) : new Date();
 
   Promise.all([obtenerDatosGetWorklistAPI("C", fecha), obtenerDatosGetWorklistAPI("H", fecha), obtenerDatosGetWorklistAPI("U", fecha)]).then(([datosC, datosH, datosU]) => {
     valoresAPI.C = datosC;
@@ -126,7 +126,7 @@ let anoActual;
 let fecha = new Date();
 
 function abrirModal() {
-  const fechaActual = new Date();
+  let fechaActual = new Date();
   mesActual = fechaActual.getMonth();
   anoActual = fechaActual.getFullYear();
 
@@ -142,16 +142,16 @@ function cerrarModal() {
 }
 
 function crearCalendario() {
-  const contenedorCalendario = document.getElementById("customCalendar");
+  let contenedorCalendario = document.getElementById("customCalendar");
   contenedorCalendario.innerHTML = "";
 
-  const diasEnMes = new Date(anoActual, mesActual + 1, 0).getDate();
-  const primerDiaSemana = new Date(anoActual, mesActual, 1).getDay();
+  let diasEnMes = new Date(anoActual, mesActual + 1, 0).getDate();
+  let primerDiaSemana = new Date(anoActual, mesActual, 1).getDay();
 
-  const diasSemana = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+  let diasSemana = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
 
   diasSemana.forEach((dia) => {
-    const elementoDia = document.createElement("button");
+    let elementoDia = document.createElement("button");
     elementoDia.textContent = dia;
     elementoDia.disabled = true;
     contenedorCalendario.appendChild(elementoDia);
@@ -161,27 +161,45 @@ function crearCalendario() {
   document.getElementById("anoSeleccionado").textContent = anoActual.toString().padStart(4, "0");
 
   for (let i = 0; i < primerDiaSemana - 1; i++) {
-    const diaVacio = document.createElement("button");
+    let diaVacio = document.createElement("button");
     diaVacio.textContent = "";
     diaVacio.disabled = true;
     contenedorCalendario.appendChild(diaVacio);
   }
 
   for (let dia = 1; dia <= diasEnMes; dia++) {
-    const elementoDia = document.createElement("button");
+    let elementoDia = document.createElement("button");
     elementoDia.textContent = dia.toString().padStart(2, "0");
+
+    // Agrega la clase 'selected' al botón del día actual
+    if (dia === fecha.getDate() && mesActual === fecha.getMonth() && anoActual === fecha.getFullYear()) {
+      elementoDia.classList.add("selected");
+    }
+
     elementoDia.onclick = () => seleccionarFecha(dia);
     contenedorCalendario.appendChild(elementoDia);
   }
 }
 
 function seleccionarFecha(dia) {
-  const fechaSeleccionada = `${(mesActual + 1).toString().padStart(2, "0")}/${dia.toString().padStart(2, "0")}/${anoActual.toString().padStart(4, "0")}`;
-  obtenerDatosAPI(fechaSeleccionada);
+  // Quita la clase 'selected' del botón anteriormente seleccionado
+  let botonAnterior = document.querySelector(`#customCalendar button.selected`);
+  if (botonAnterior) {
+    botonAnterior.classList.remove("selected");
+  }
 
-  if (fechaFormateada((fecha = new Date())) != fechaFormateada(fechaSeleccionada)) {
-    var split = fechaSeleccionada.split("/");
-    textoCalendario.textContent = [split[1], split[0], split[2]].join("/");
+  // Agrega la clase 'selected' al botón del día actual
+  let botonSeleccionado = document.querySelector(`#customCalendar button:nth-child(${dia + 7})`);
+  if (botonSeleccionado) {
+    botonSeleccionado.classList.add("selected");
+  }
+
+  fecha.setDate(dia);
+  let fechaFormateadaStr = fecha;
+  obtenerDatosAPI(fechaFormateadaStr);
+
+  if (fechaFormateada(fecha) !== fechaFormateada(new Date())) {
+    textoCalendario.textContent = fechaFormateada(fechaFormateadaStr);
   } else {
     textoCalendario.textContent = "Avui";
   }
@@ -192,21 +210,27 @@ function guardarFecha() {
   cerrarModal();
 }
 
-function diaAnterior() {}
+function diaAnterior() {
+  fecha.setDate(fecha.getDate() - 1);
+  seleccionarFecha(fecha.getDate());
+}
 
-function diaSiguiente() {}
+function diaSiguiente() {
+  fecha.setDate(fecha.getDate() + 1);
+  seleccionarFecha(fecha.getDate());
+}
 
 function obtenerNombreMes(mes) {
-  const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+  let nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
   return nombresMeses[mes];
 }
 
 function llenarDropdownAno() {
-  const contenidoDropdownAno = document.getElementById("yearDropdownContent");
+  let contenidoDropdownAno = document.getElementById("yearDropdownContent");
   contenidoDropdownAno.innerHTML = "";
 
   for (let i = anoActual - 10; i <= anoActual + 10; i++) {
-    const botonAno = document.createElement("button");
+    let botonAno = document.createElement("button");
     botonAno.textContent = i.toString().padStart(4, "0");
     botonAno.onclick = () => cambiarAno(i);
     contenidoDropdownAno.appendChild(botonAno);
