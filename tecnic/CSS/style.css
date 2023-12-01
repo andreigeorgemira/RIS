@@ -208,3 +208,13 @@ a {
 .dropdown:hover .dropdown-content {
   display: block;
 }
+
+/* Estilo para el día actual y seleccionado */
+.custom-calendar button.selected {
+  background-color: #66b3ff; /* Puedes ajustar el color según tus preferencias */
+}
+
+/* Estilo de hover para todos los días excepto el seleccionado */
+.custom-calendar button:not(.selected):hover {
+  background-color: #66b3ff; /* Mismo color que el día seleccionado */
+}

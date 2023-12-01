@@ -1,11 +1,12 @@
 import { obtenerDatosGetWorklistAPI, actualizarDatosPeriodicamente, obtenerDatosGetAgendesRAD } from "../API/llamadasAPI.js";
 import { crearTablaWorklist } from "./tabla.js";
-import { datosSelect } from "./utilidades.js";
+import { datosSelect, fechaFormateada } from "./utilidades.js";
 
 let tabla = document.getElementById("tabla");
 let select = document.getElementById("filtro");
 let mostrarRealitzat = document.getElementById("mostrarRealitzat");
 let icono = document.getElementById("icono");
+let textoCalendario = document.getElementById("calendario");
 
 let filtroRealitzats = false;
 let agendesDatos;
@@ -122,6 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 let mesActual;
 let anoActual;
+let fecha = new Date();
 
 function abrirModal() {
   const fechaActual = new Date();
@@ -176,32 +178,23 @@ function crearCalendario() {
 function seleccionarFecha(dia) {
   const fechaSeleccionada = `${(mesActual + 1).toString().padStart(2, "0")}/${dia.toString().padStart(2, "0")}/${anoActual.toString().padStart(4, "0")}`;
   obtenerDatosAPI(fechaSeleccionada);
-}
 
-function guardarFecha() {
-  // Lógica para guardar la fecha
+  if (fechaFormateada((fecha = new Date())) != fechaFormateada(fechaSeleccionada)) {
+    var split = fechaSeleccionada.split("/");
+    textoCalendario.textContent = [split[1], split[0], split[2]].join("/");
+  } else {
+    textoCalendario.textContent = "Avui";
+  }
   cerrarModal();
 }
 
-function diaAnterior() {
-  if (mesActual > 0) {
-    mesActual--;
-  } else {
-    mesActual = 11;
-    anoActual--;
-  }
-  crearCalendario();
+function guardarFecha() {
+  cerrarModal();
 }
 
-function diaSiguiente() {
-  if (mesActual < 11) {
-    mesActual++;
-  } else {
-    mesActual = 0;
-    anoActual++;
-  }
-  crearCalendario();
-}
+function diaAnterior() {}
+
+function diaSiguiente() {}
 
 function obtenerNombreMes(mes) {
   const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
