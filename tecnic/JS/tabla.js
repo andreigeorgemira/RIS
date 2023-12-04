@@ -111,10 +111,6 @@ let ultimoValorAlfabeticoH = null;
 let ultimoValorAlfabeticoU = null;
 
 export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, opcionUF) {
-  let valorSelectC = select.value; // Almacena el valor para C
-  let valorSelectH = select.value; // Almacena el valor para H
-  let valorSelectU = select.value; // Almacena el valor para U
-
   tabla.innerHTML = "";
 
   let thead = document.createElement("thead");
@@ -124,6 +120,7 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
   let tbody = document.createElement("tbody");
 
   if (opcionUF === "C" && valoresAPI.C.rows) {
+    let valorSelectC = select.value; // Almacena el valor para C
     let contadorC = (valoresAPI.C.rows || []).filter(function (item) {
       var selectConstante = valorSelectC;
 
@@ -144,8 +141,7 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
       return !condicionRealitzats && (condicion1 || condicion2);
     });
 
-    let longitudContadorC = contadorC.length;
-    document.getElementById("totalProgramades").textContent = `(${longitudContadorC})`;
+    document.getElementById("totalProgramades").textContent = `(${contadorC.length})`;
 
     // Resto de la lógica para la tabla C
     valoresAPI.C.rows.forEach((item) => {
@@ -155,6 +151,7 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
       }
     });
   } else if (opcionUF === "H" && valoresAPI.H.rows) {
+    let valorSelectH = select.value; // Almacena el valor para H
     let contadorH = (valoresAPI.H.rows || []).filter(function (item) {
       var selectAlfabetico = valorSelectH;
 
@@ -166,8 +163,7 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
       return condicion;
     });
 
-    let longitudContadorH = contadorH.length;
-    document.getElementById("totalHospitalitzacio").textContent = `(${longitudContadorH})`;
+    document.getElementById("totalHospitalitzacio").textContent = `(${contadorH.length})`;
 
     // Resto de la lógica para la tabla H
     valoresAPI.H.rows.forEach((item) => {
@@ -177,6 +173,7 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
       }
     });
   } else if (opcionUF === "U" && valoresAPI.U.rows) {
+    let valorSelectU = select.value; // Almacena el valor para U
     let contadorU = (valoresAPI.U.rows || []).filter(function (item) {
       var selectAlfabetico = valorSelectU;
 
@@ -188,8 +185,7 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
       return condicion;
     });
 
-    let longitudContadorU = contadorU.length;
-    document.getElementById("totalUrgencies").textContent = `(${longitudContadorU})`;
+    document.getElementById("totalUrgencies").textContent = `(${contadorU.length})`;
 
     // Resto de la lógica para la tabla U
     valoresAPI.U.rows.forEach((item) => {

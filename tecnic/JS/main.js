@@ -9,7 +9,6 @@ let icono = document.getElementById("icono");
 let textoCalendario = document.getElementById("calendario");
 
 let filtroRealitzats = false;
-let agendesDatos;
 let opcionUF = "C";
 
 let opcionesSelect = {
@@ -39,9 +38,13 @@ function obtenerDatosAPI(fechaSeleccionada) {
     valoresAPI.H = datosH;
     valoresAPI.U = datosU;
     crearYActualizarTabla();
-    opcionesSelect[opcionUF] = agendesDatos;
   });
 }
+
+setInterval(function () {
+  console.log("update");
+  obtenerDatosAPI(); // Puedes pasar una fecha específica si es necesario
+}, 60000);
 
 function obtenerSelectAPI() {
   Promise.all([obtenerDatosGetAgendesRAD("C"), obtenerDatosGetAgendesRAD("H"), obtenerDatosGetAgendesRAD("U")]).then(([datosC, datosH, datosU]) => {
@@ -61,8 +64,7 @@ function datosFiltradosSelect() {
   } else {
     obtenerDatosGetAgendesRAD(opcionUF).then((datos) => {
       opcionesSelect[opcionUF] = datos;
-      agendesDatos = datos;
-      datosSelect(agendesDatos, select);
+      datosSelect(opcionesSelect[opcionUF], select);
     });
   }
 }
@@ -89,6 +91,12 @@ contenedor.addEventListener("click", function (event) {
     opcionUF = obtenerValorUF(boton.value);
     datosFiltradosSelect();
     crearYActualizarTabla();
+
+    // Añadir y quitar la clase 'active' según el botón seleccionado
+    contenedor.querySelectorAll("button").forEach((btn) => {
+      btn.classList.remove("botonSeleccionado");
+    });
+    boton.classList.add("botonSeleccionado");
   }
 });
 

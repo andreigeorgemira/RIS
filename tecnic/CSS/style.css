@@ -45,6 +45,10 @@ a {
   cursor: pointer;
 }
 
+.botonSeleccionado {
+  background-color: lightsalmon; /* Cambia el color de fondo cuando está seleccionado */
+}
+
 .calendar {
   float: left;
   height: 20px;

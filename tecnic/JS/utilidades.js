@@ -17,30 +17,48 @@ export function fechaFormateada(fecha) {
   return fechaFormateada;
 }
 
-export function datosSelect(datosAPI, filtro) {
-  // Vacía el contenido actual del select
-  filtro.innerHTML = "";
+// Variable global para almacenar la última opción seleccionada
+let lastSelectedOption = null;
 
-  // Itera sobre los elementos en 'rows' y crea opciones para el selector
+export function datosSelect(datosAPI, selectElement) {
+  // Verificar que los datosAPI y rows existan
+  if (!datosAPI || !datosAPI.rows) {
+    // Manejar el caso de datosAPI nulo o sin propiedad 'rows'
+    return;
+  }
+
+  // Vaciar el contenido actual del select
+  selectElement.innerHTML = "";
+
+  // Iterar sobre los elementos en 'rows' y crear opciones para el selector
   datosAPI.rows.forEach((row) => {
-    // Verifica si el ID es "ALT" y omite la opción
-    if (row.ID === "ALT") {
+    // Verificar propiedades antes de acceder a ellas
+    if (row.ID === "ALT" || !row.ID || !row.DESCRIPCIO) {
+      // Omitir la opción si el ID es "ALT" o si faltan propiedades
       return;
     }
 
-    // Crea un elemento de opción
+    // Crear un elemento de opción
     let optionElement = document.createElement("option");
 
-    // Asigna el valor y el texto del elemento de opción
-    optionElement.value = row.ID; // Asegúrate de que la propiedad 'numero' sea la correcta en tus datos
-    optionElement.textContent = row.DESCRIPCIO; // Asegúrate de que la propiedad 'texto' sea la correcta en tus datos
+    // Asignar el valor y el texto del elemento de opción
+    optionElement.value = row.ID;
+    optionElement.textContent = row.DESCRIPCIO;
 
-    // Verifica si el ID es 580 y marca la opción como seleccionada
-    if (row.ID === 580) {
+    // Marcar la opción con ID 580 como seleccionada por defecto
+    if (row.ID === 580 && lastSelectedOption === null) {
       optionElement.selected = true;
+      lastSelectedOption = 580; // Actualizar la variable global
+    } else if (lastSelectedOption !== null && row.ID.toString() === lastSelectedOption.toString()) {
+      optionElement.selected = true; // Seleccionar la última opción almacenada
     }
 
-    // Añade la opción al selector
-    filtro.appendChild(optionElement);
+    // Añadir la opción al selector
+    selectElement.appendChild(optionElement);
+  });
+
+  // Agregar un evento de cambio al selector para actualizar la opción seleccionada
+  selectElement.addEventListener("change", function () {
+    lastSelectedOption = selectElement.value;
   });
 }
