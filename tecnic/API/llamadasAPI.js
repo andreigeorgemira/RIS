@@ -13,14 +13,6 @@ export function obtenerDatosGetWorklistAPI(opcionUF, fecha = new Date()) {
   }).then((data) => data.json());
 }
 
-// Función para realizar la solicitud a la API y actualizar los datos periódicamente
-export function actualizarDatosPeriodicamente(callback, opcionUF) {
-  obtenerDatosGetWorklistAPI(opcionUF).then((data) => {
-    callback(data);
-    setInterval(() => actualizarDatosPeriodicamente(callback), 60000);
-  });
-}
-
 // Función para realizar la solicitud a la API y guardar los datos
 export function obtenerDatosGetAgendesRAD(opcionUF) {
   return fetch("https://localhost:7224/Radiologia/api/v4/ris/tecnic/GetAgendesRAD", {

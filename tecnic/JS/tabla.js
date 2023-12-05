@@ -44,7 +44,6 @@ function crearEncabezado(opcionUF) {
 
 function datosC(item, filtroRealitzats, valorSelect) {
   let condicionRealitzats = filtroRealitzats && item.ID_AGENDES_HCS == valorSelect && item.HORA_CONSULTA != "0000";
-  let horaArrivada = condicionRealitzats ? formatearHora(item.HORA_ARRIBADA) : "";
 
   let row = document.createElement("tr");
   row.innerHTML = `
@@ -53,15 +52,21 @@ function datosC(item, filtroRealitzats, valorSelect) {
     <td><b>${item.NHC}</b></td>
     <td>${item.APELLIDO1} ${item.APELLIDO2}, ${item.NOMBRE}</td>
     <td>${fechaFormateada(item.DATA_NEIXAMENT)}</td>
-    <td>${item.TIPUS}</td>
-    <td>${horaArrivada}</td>
-    <td>${condicionRealitzats ? '<i class="fa-solid fa-check fa-xl" style="color: #49bc50;"></i></i>' : ""}</td>
-  `;
+    <td>${item.TIPUS}</td>`;
 
   if (item.HORA_CONSULTA == "0000" && item.HORA_ARRIBADA != "0000") {
+    row.innerHTML += `<td>${formatearHora(item.HORA_ARRIBADA)}</td>`;
+    row.innerHTML += '<td><img src="icons/espera.png" width="25px" height="25px"></td>';
     row.classList.add("fila-espera");
-  } else if (condicionRealitzats) {
-    row.classList.add("realitzat");
+  } else {
+    if (condicionRealitzats) {
+      row.innerHTML += `<td>${formatearHora(item.HORA_ARRIBADA)}</td>`;
+      row.innerHTML += '<td><i class="fa-solid fa-check fa-xl" style="color: #49bc50;"></i></i></td>';
+      row.classList.add("realitzat");
+    } else {
+      row.innerHTML += "<td></td>";
+      row.innerHTML += "<td></td>";
+    }
   }
 
   return row;

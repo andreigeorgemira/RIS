@@ -1,4 +1,4 @@
-import { obtenerDatosGetWorklistAPI, actualizarDatosPeriodicamente, obtenerDatosGetAgendesRAD } from "../API/llamadasAPI.js";
+import { obtenerDatosGetWorklistAPI, obtenerDatosGetAgendesRAD } from "../API/llamadasAPI.js";
 import { crearTablaWorklist } from "./tabla.js";
 import { datosSelect, fechaFormateada } from "./utilidades.js";
 
@@ -30,7 +30,13 @@ let especialidad = urlParams.get("especialidad");
 document.getElementById("NombreUser").innerHTML = "User " + user;
 document.getElementById("EspecialidadUser").innerHTML = "Especialidad  " + especialidad;
 
-function obtenerDatosAPI(fechaSeleccionada) {
+let spinner = document.getElementById("modalSpinner");
+
+function obtenerDatosAPI(fechaSeleccionada, mostrarSpinner = true) {
+  if (mostrarSpinner) {
+    spinner.style.display = "flex";
+  }
+
   let fecha = fechaSeleccionada ? new Date(fechaSeleccionada) : new Date();
 
   Promise.all([obtenerDatosGetWorklistAPI("C", fecha), obtenerDatosGetWorklistAPI("H", fecha), obtenerDatosGetWorklistAPI("U", fecha)]).then(([datosC, datosH, datosU]) => {
@@ -38,13 +44,21 @@ function obtenerDatosAPI(fechaSeleccionada) {
     valoresAPI.H = datosH;
     valoresAPI.U = datosU;
     crearYActualizarTabla();
+
+    if (mostrarSpinner) {
+      spinner.style.display = "none";
+    }
   });
 }
 
-setInterval(function () {
-  console.log("update");
-  obtenerDatosAPI(); // Puedes pasar una fecha específica si es necesario
-}, 60000);
+function obtenerDatosPeriodicos() {
+  setTimeout(function () {
+    obtenerDatosAPI(undefined, false);
+    obtenerDatosPeriodicos();
+  }, 60000);
+}
+
+obtenerDatosPeriodicos();
 
 function obtenerSelectAPI() {
   Promise.all([obtenerDatosGetAgendesRAD("C"), obtenerDatosGetAgendesRAD("H"), obtenerDatosGetAgendesRAD("U")]).then(([datosC, datosH, datosU]) => {
@@ -79,10 +93,18 @@ mostrarRealitzat.addEventListener("click", function () {
 select.addEventListener("change", crearYActualizarTabla);
 
 let refreshButton = document.getElementById("refresh");
+
 refreshButton.addEventListener("click", function () {
-  obtenerDatosAPI();
+  console.log("refresh");
+  vaciarTabla();
   obtenerSelectAPI();
+  obtenerDatosAPI();
 });
+
+function vaciarTabla() {
+  tabla.innerHTML = "";
+  console.log("hola");
+}
 
 let contenedor = document.querySelector(".mi-contenedor");
 contenedor.addEventListener("click", function (event) {
@@ -103,13 +125,12 @@ contenedor.addEventListener("click", function (event) {
 function obtenerValorUF(valor) {
   switch (valor) {
     case "programades":
+    case "altres":
       return "C";
     case "hospitalitzacio":
       return "H";
     case "urgencies":
       return "U";
-    case "altres":
-      return "C";
     default:
       return "C";
   }
@@ -246,9 +267,11 @@ function llenarDropdownAno() {
 }
 
 function cambiarMes(nuevoMes) {
-  mesActual = nuevoMes;
-  crearCalendario();
-  document.getElementById("mesSeleccionado").textContent = obtenerNombreMes(mesActual);
+  if (mesActual !== nuevoMes) {
+    mesActual = nuevoMes;
+    crearCalendario();
+    document.getElementById("mesSeleccionado").textContent = obtenerNombreMes(mesActual);
+  }
 }
 
 function cambiarAno(nuevoAno) {
