@@ -124,31 +124,75 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
 
   let tbody = document.createElement("tbody");
 
-  if (opcionUF === "C" && valoresAPI.C.rows) {
-    let valorSelectC = select.value; // Almacena el valor para C
-    let contadorC = (valoresAPI.C.rows || []).filter(function (item) {
-      var selectConstante = valorSelectC;
+  let contadorC = [];
+  let contadorH = [];
+  let contadorU = [];
 
-      if (/^\d+$/.test(selectConstante)) {
-        // Si selectConstante es numérico, actualiza el último valor numérico conocido para C
-        ultimoValorNumericoC = selectConstante;
+  let valorSelectC;
+  let valorSelectH;
+  let valorSelectU;
+
+  // Contador para C
+  contadorC = (valoresAPI.C.rows || []).filter(function (item) {
+    valorSelectC = select.value;
+
+    if (/^\d+$/.test(valorSelectC)) {
+      ultimoValorNumericoC = valorSelectC;
+    } else {
+      valorSelectC = ultimoValorNumericoC;
+    }
+
+    // Condiciones para C
+    let condicionRealitzats = item.ID_AGENDES_HCS == ultimoValorNumericoC && item.HORA_CONSULTA != "0000";
+    let condicion1 = filtroRealitzats && item.ID_AGENDES_HCS == ultimoValorNumericoC;
+    let condicion2 = !filtroRealitzats && item.ID_AGENDES_HCS == ultimoValorNumericoC && item.HORA_CONSULTA == "0000";
+
+    return !condicionRealitzats && (condicion1 || condicion2);
+  });
+
+  contadorH = (valoresAPI.H.rows || []).filter(function (item) {
+    valorSelectH = select.value;
+
+    if (/^[a-zA-Z]+$/.test(valorSelectH)) {
+      ultimoValorAlfabeticoH = valorSelectH;
+    } else {
+      if (ultimoValorAlfabeticoH == undefined) {
+        ultimoValorAlfabeticoH = "RXS";
       } else {
-        // Si no es numérico, utiliza el último valor numérico conocido para C
-        selectConstante = ultimoValorNumericoC;
+        valorSelectH = ultimoValorAlfabeticoH;
       }
+    }
 
-      // Condiciones para C
-      let condicionRealitzats = item.ID_AGENDES_HCS == ultimoValorNumericoC && item.HORA_CONSULTA != "0000";
-      let condicion1 = filtroRealitzats && item.ID_AGENDES_HCS == ultimoValorNumericoC;
-      let condicion2 = !filtroRealitzats && item.ID_AGENDES_HCS == ultimoValorNumericoC && item.HORA_CONSULTA == "0000";
+    console.log(ultimoValorAlfabeticoH);
 
-      // Retornar true si no cumple con la primera condición y cumple con al menos una de las otras dos condiciones
-      return !condicionRealitzats && (condicion1 || condicion2);
-    });
+    let condicion = item.TIPPRV == ultimoValorAlfabeticoH && item.PACIENT != null;
+    return condicion;
+  });
 
-    document.getElementById("totalProgramades").textContent = `(${contadorC.length})`;
+  contadorU = (valoresAPI.U.rows || []).filter(function (item) {
+    valorSelectU = select.value;
 
-    // Resto de la lógica para la tabla C
+    if (/^[a-zA-Z]+$/.test(valorSelectU)) {
+      ultimoValorAlfabeticoU = valorSelectU;
+    } else {
+      if (ultimoValorAlfabeticoU == undefined) {
+        ultimoValorAlfabeticoU = "RXS";
+      } else {
+        valorSelectU = ultimoValorAlfabeticoU;
+      }
+    }
+
+    let condicion = item.TIPPRV == ultimoValorAlfabeticoU && item.FDATASOL != null;
+    return condicion;
+  });
+
+  document.getElementById("totalProgramades").textContent = `(${contadorC.length})`;
+  document.getElementById("totalHospitalitzacio").textContent = `(${contadorH.length})`;
+  document.getElementById("totalUrgencies").textContent = `(${contadorU.length})`;
+
+  // Resto de la lógica para la tabla C
+  if (opcionUF === "C" && valoresAPI.C.rows) {
+    valorSelectC = select.value;
     valoresAPI.C.rows.forEach((item) => {
       if ((filtroRealitzats && item.ID_AGENDES_HCS == valorSelectC) || (!filtroRealitzats && item.ID_AGENDES_HCS == valorSelectC && item.HORA_CONSULTA == "0000")) {
         let row = datosC(item, filtroRealitzats, valorSelectC);
@@ -156,21 +200,7 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
       }
     });
   } else if (opcionUF === "H" && valoresAPI.H.rows) {
-    let valorSelectH = select.value; // Almacena el valor para H
-    let contadorH = (valoresAPI.H.rows || []).filter(function (item) {
-      var selectAlfabetico = valorSelectH;
-
-      // Actualiza el último valor alfabético conocido para H
-      ultimoValorAlfabeticoH = selectAlfabetico;
-
-      // Condiciones para H
-      let condicion = item.TIPPRV == ultimoValorAlfabeticoH && item.PACIENT != null;
-      return condicion;
-    });
-
-    document.getElementById("totalHospitalitzacio").textContent = `(${contadorH.length})`;
-
-    // Resto de la lógica para la tabla H
+    valorSelectH = select.value;
     valoresAPI.H.rows.forEach((item) => {
       if (item.TIPPRV == valorSelectH) {
         let row = datosH(item, valorSelectH);
@@ -178,21 +208,7 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
       }
     });
   } else if (opcionUF === "U" && valoresAPI.U.rows) {
-    let valorSelectU = select.value; // Almacena el valor para U
-    let contadorU = (valoresAPI.U.rows || []).filter(function (item) {
-      var selectAlfabetico = valorSelectU;
-
-      // Actualiza el último valor alfabético conocido para U
-      ultimoValorAlfabeticoU = selectAlfabetico;
-
-      // Condiciones para U
-      let condicion = item.TIPPRV == ultimoValorAlfabeticoU && item.FDATASOL != null;
-      return condicion;
-    });
-
-    document.getElementById("totalUrgencies").textContent = `(${contadorU.length})`;
-
-    // Resto de la lógica para la tabla U
+    valorSelectU = select.value;
     valoresAPI.U.rows.forEach((item) => {
       if (item.TIPPRV == valorSelectU) {
         let row = datosU(item);
@@ -200,6 +216,5 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
       }
     });
   }
-
   tabla.appendChild(tbody);
 }

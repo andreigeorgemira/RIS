@@ -95,7 +95,6 @@ select.addEventListener("change", crearYActualizarTabla);
 let refreshButton = document.getElementById("refresh");
 
 refreshButton.addEventListener("click", function () {
-  console.log("refresh");
   vaciarTabla();
   obtenerSelectAPI();
   obtenerDatosAPI();
@@ -103,7 +102,6 @@ refreshButton.addEventListener("click", function () {
 
 function vaciarTabla() {
   tabla.innerHTML = "";
-  console.log("hola");
 }
 
 let contenedor = document.querySelector(".mi-contenedor");
