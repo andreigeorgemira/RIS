@@ -96,7 +96,6 @@ let refreshButton = document.getElementById("refresh");
 
 refreshButton.addEventListener("click", function () {
   vaciarTabla();
-  obtenerSelectAPI();
   obtenerDatosAPI();
 });
 
@@ -223,6 +222,7 @@ function seleccionarFecha(dia) {
 
   fecha.setDate(dia);
   let fechaFormateadaStr = fecha;
+  vaciarTabla();
   obtenerDatosAPI(fechaFormateadaStr);
 
   if (fechaFormateada(fecha) !== fechaFormateada(new Date())) {

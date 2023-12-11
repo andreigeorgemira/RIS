@@ -163,8 +163,6 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
       }
     }
 
-    console.log(ultimoValorAlfabeticoH);
-
     let condicion = item.TIPPRV == ultimoValorAlfabeticoH && item.PACIENT != null;
     return condicion;
   });
@@ -192,10 +190,9 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
 
   // Resto de la lógica para la tabla C
   if (opcionUF === "C" && valoresAPI.C.rows) {
-    valorSelectC = select.value;
     valoresAPI.C.rows.forEach((item) => {
-      if ((filtroRealitzats && item.ID_AGENDES_HCS == valorSelectC) || (!filtroRealitzats && item.ID_AGENDES_HCS == valorSelectC && item.HORA_CONSULTA == "0000")) {
-        let row = datosC(item, filtroRealitzats, valorSelectC);
+      if ((filtroRealitzats && item.ID_AGENDES_HCS == ultimoValorNumericoC) || (!filtroRealitzats && item.ID_AGENDES_HCS == ultimoValorNumericoC && item.HORA_CONSULTA == "0000")) {
+        let row = datosC(item, filtroRealitzats, ultimoValorNumericoC);
         tbody.appendChild(row);
       }
     });

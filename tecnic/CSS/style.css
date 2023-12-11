@@ -283,7 +283,6 @@ a {
   background-color: #66b3ff; /* Puedes ajustar el color según tus preferencias */
 }
 
-/* Estilo de hover para todos los días excepto el seleccionado */
-.custom-calendar button:not(.selected):hover {
+.custom-calendar button:not(.selected):not(:empty):not(:nth-child(-n + 7)):hover {
   background-color: #66b3ff; /* Mismo color que el día seleccionado */
 }
