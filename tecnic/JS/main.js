@@ -10,6 +10,7 @@ let textoCalendario = document.getElementById("calendario");
 
 let filtroRealitzats = false;
 let opcionUF = "C";
+let fechaSeleccionadaGlobal;
 
 let opcionesSelect = {
   C: null,
@@ -53,25 +54,19 @@ function obtenerDatosAPI(fechaSeleccionada, mostrarSpinner = true) {
 
 function obtenerDatosPeriodicos() {
   setTimeout(function () {
-    obtenerDatosAPI(undefined, false);
+    obtenerDatosAPI(fechaSeleccionadaGlobal, false);
     obtenerDatosPeriodicos();
-  }, 60000);
+  }, 5000);
 }
 
 obtenerDatosPeriodicos();
 
-function obtenerSelectAPI() {
-  Promise.all([obtenerDatosGetAgendesRAD("C"), obtenerDatosGetAgendesRAD("H"), obtenerDatosGetAgendesRAD("U")]).then(([datosC, datosH, datosU]) => {
-    opcionesSelect.C = datosC;
-    opcionesSelect.H = datosH;
-    opcionesSelect.U = datosU;
-  });
-}
-
 function crearYActualizarTabla() {
   crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, opcionUF);
+  eventoClic();
 }
 
+// Función simplificada para manejar la selección de datos
 function datosFiltradosSelect() {
   if (opcionesSelect[opcionUF]) {
     datosSelect(opcionesSelect[opcionUF], select);
@@ -101,6 +96,31 @@ refreshButton.addEventListener("click", function () {
 
 function vaciarTabla() {
   tabla.innerHTML = "";
+}
+
+//document.getElementById("close").addEventListener("click", cerrarPopUp);
+//document.getElementById("tancar").addEventListener("click", cerrarPopUp);
+
+function eventoClic() {
+  let filasTabla = document.querySelectorAll("#tabla tbody tr");
+
+  filasTabla.forEach((fila) => {
+    fila.addEventListener("click", function () {
+      let idFila = fila.getAttribute("id");
+      console.log(idFila);
+      abrirPopUp();
+    });
+  });
+}
+
+function abrirPopUp() {
+  document.getElementById("modal-popup").style.display = "block";
+  document.getElementById("overlay").style.display = "block";
+}
+
+function cerrarPopUp() {
+  document.getElementById("modal-popup").style.display = "none";
+  document.getElementById("overlay").style.display = "none";
 }
 
 let contenedor = document.querySelector(".mi-contenedor");
@@ -143,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById(`btnCambioMes${i}`).addEventListener("click", () => cambiarMes(i));
   }
 
-  document.getElementById("btnGuardarFecha").addEventListener("click", guardarFecha);
+  document.getElementById("btnAvui").addEventListener("click", fechaHoy);
   document.getElementById("overlay").addEventListener("click", cerrarModal);
 });
 
@@ -220,8 +240,15 @@ function seleccionarFecha(dia) {
     botonSeleccionado.classList.add("selected");
   }
 
-  fecha.setDate(dia);
-  let fechaFormateadaStr = fecha;
+  let fecha = new Date(anoActual, mesActual, dia);
+  const diaStr = fecha.getDate().toString().padStart(2, "0");
+  const mesStr = (fecha.getMonth() + 1).toString().padStart(2, "0");
+  const anoStr = fecha.getFullYear().toString();
+
+  const fechaFormateadaStr = `${mesStr}/${diaStr}/${anoStr}`;
+
+  fechaSeleccionadaGlobal = fechaFormateadaStr;
+
   vaciarTabla();
   obtenerDatosAPI(fechaFormateadaStr);
 
@@ -233,8 +260,9 @@ function seleccionarFecha(dia) {
   cerrarModal();
 }
 
-function guardarFecha() {
-  cerrarModal();
+function fechaHoy() {
+  let hoy = new Date();
+  seleccionarFecha(hoy.getDate());
 }
 
 function diaAnterior() {
@@ -256,7 +284,7 @@ function llenarDropdownAno() {
   let contenidoDropdownAno = document.getElementById("yearDropdownContent");
   contenidoDropdownAno.innerHTML = "";
 
-  for (let i = anoActual - 10; i <= anoActual + 10; i++) {
+  for (let i = anoActual - 30; i <= anoActual + 10; i++) {
     let botonAno = document.createElement("button");
     botonAno.textContent = i.toString().padStart(4, "0");
     botonAno.onclick = () => cambiarAno(i);
@@ -280,5 +308,4 @@ function cambiarAno(nuevoAno) {
 
 // Llamar a las funciones iniciales
 obtenerDatosAPI();
-obtenerSelectAPI();
 datosFiltradosSelect();

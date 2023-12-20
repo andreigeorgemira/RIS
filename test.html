@@ -3,78 +3,119 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Test Protocol</title>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <title>Document</title>
   </head>
   <body>
-    <div class="container">
-      <h2>Test Protocol</h2>
-      <form>
-        <div class="form-group">
-          <label for="solicitant">Solicitant:</label>
-          <input type="text" class="form-control" id="solicitant" readonly />
+    <div>
+      <div>
+        <div>
+          <div>
+            <h4>Dades de la prova</h4>
+          </div>
+          <div>
+            <h4>Realització</h4>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="procés">Procés:</label>
-          <input type="text" class="form-control" id="procés" readonly />
-        </div>
-        <div class="form-group">
-          <label for="observacions_mèdiques">Observacions Mèdiques:</label>
-          <input type="text" class="form-control" id="observacions_mèdiques" readonly />
-        </div>
-        <div class="form-group">
-          <label for="prova">Prova:</label>
-          <input type="text" class="form-control" id="prova" readonly />
-        </div>
-        <div class="form-group">
-          <label for="estudis_anteriors">Estudis Anteriors:</label>
-          <input type="text" class="form-control" id="estudis_anteriors" readonly />
-        </div>
-        <div class="form-group">
-          <label for="projecció">Projecció:</label>
-          <input type="text" class="form-control" id="projecció" readonly />
-        </div>
-        <div class="form-group">
-          <label for="nhc">NHC:</label>
-          <input type="text" class="form-control" id="nhc" readonly />
-        </div>
-        <div class="form-group">
-          <label for="numero_errors">Nombre d'Errors:</label>
-          <input type="text" class="form-control" id="numero_errors" readonly />
-        </div>
-        <div class="form-group">
-          <label for="doctor">Doctor:</label>
-          <input type="text" class="form-control" id="doctor" readonly />
-        </div>
-        <div class="form-group">
-          <label for="observacions_tècnic">Observacions del Tècnic:</label>
-          <input type="text" class="form-control" id="observacions_tècnic" readonly />
-        </div>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAlert">Enviar a WorkList</button>
-        <button type="button" class="btn btn-danger">Tancar</button>
-      </form>
-    </div>
+        <hr />
 
-    <div class="modal" tabindex="-1" role="dialog" id="modalAlert">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Modal title</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
+        <div>
+          <div>
+            <label for="solicitant">SOLICITANT</label>
+            <div>
+              <input type="text" />
+            </div>
+          </div>
+
+          <div>
+            <label for="nombre-errors">NOMBRE D'ERRORS</label>
+            <div>
+              <input type="text" value="0" />
+            </div>
+          </div>
+
+          <div>
+            <label for="proces">PROCÉS</label>
+            <div>
+              <input type="text" />
+            </div>
+          </div>
+
+          <div>
+            <label for="nhc">NHC</label>
+            <div>
+              <input type="text" />
+            </div>
+          </div>
+
+          <div>
+            <label for="doctor">DOCTOR</label>
+            <div>
+              <select>
+                <option></option>
+                <option>*** Indeterminat ***</option>
+                <option>Abreu De Con, Jose Angel</option>
+                <option>Bonfill Garcin, Marta</option>
+                <option>Danus Lainez, Monica</option>
+                <option>Fabregas Vallverdu Blanca</option>
+                <option>Kohan, Sebastian</option>
+                <option>Montero Jaime, Manuel</option>
+                <option>Perez Riverola, Victor</option>
+                <option>Vives Abello,Joan Pere</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="observacions-mediques">OBSERVACIONS MÈDIQUES</label>
+            <div>
+              <textarea rows="5"></textarea>
+            </div>
+          </div>
+
+          <div>
+            <label for="observacions-tecnic">OBSERVACIONS DEL TÈCNIC</label>
+            <div>
+              <textarea rows="5"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div>
+            <div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>PROVA</th>
+                    <th>PROJECCIO</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div>
+            <button type="button">
+              <span>Enviar a WorkList</span>
             </button>
           </div>
-          <div class="modal-body">
-            <p>Modal body text goes here.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary">Enviar</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel·lar</button>
+        </div>
+
+        <div>
+          <div>
+            <span>Veure estudis anteriors</span>
           </div>
         </div>
+      </div>
+
+      <div>
+        <button id="tancar" type="button">Tancar</button>
       </div>
     </div>
   </body>

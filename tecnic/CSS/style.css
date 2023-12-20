@@ -153,6 +153,18 @@ a {
   font-weight: bold;
 }
 
+.modal-content {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 1000px;
+  height: fit-content;
+  border-radius: 40px;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+}
+
 .modal {
   display: none;
   position: fixed;
@@ -232,7 +244,7 @@ a {
   cursor: pointer;
 }
 
-.save-btn {
+.avui {
   background-color: #4caf50;
   color: white;
   padding: 10px 15px;
@@ -241,7 +253,7 @@ a {
   cursor: pointer;
 }
 
-.save-btn:hover {
+.avui:hover {
   background-color: #45a049;
 }
 

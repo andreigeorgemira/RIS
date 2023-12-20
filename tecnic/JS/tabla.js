@@ -46,6 +46,7 @@ function datosC(item, filtroRealitzats, valorSelect) {
   let condicionRealitzats = filtroRealitzats && item.ID_AGENDES_HCS == valorSelect && item.HORA_CONSULTA != "0000";
 
   let row = document.createElement("tr");
+  row.id = `row_${item.NUMAGE}`;
   row.innerHTML = `
     <td>${formatearHora(item.HORA_VISITA)}</td>
     <td>${fechaFormateada(item.DATA_VISITA)}</td>
@@ -74,6 +75,7 @@ function datosC(item, filtroRealitzats, valorSelect) {
 
 function datosH(item) {
   let row = document.createElement("tr");
+  row.id = `row_${item.NUMAGE}`;
   row.innerHTML = `
     <td><b>${item.NHC}</b></td>
     <td>${item.DATASOL}</td>
@@ -90,6 +92,7 @@ function datosH(item) {
 
 function datosU(item) {
   let row = document.createElement("tr");
+  row.id = `row_${item.NUMAGE}`;
   row.innerHTML = `
     <td><b>${item.NHC}</b></td>
     <td>${item.DATASOL}</td>
