@@ -46,7 +46,7 @@ function datosC(item, filtroRealitzats, valorSelect) {
   let condicionRealitzats = filtroRealitzats && item.ID_AGENDES_HCS == valorSelect && item.HORA_CONSULTA != "0000";
 
   let row = document.createElement("tr");
-  row.id = `row_${item.NUMAGE}`;
+  row.id = `${item.NUMAGE}`;
   row.innerHTML = `
     <td>${formatearHora(item.HORA_VISITA)}</td>
     <td>${fechaFormateada(item.DATA_VISITA)}</td>
@@ -200,18 +200,16 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
       }
     });
   } else if (opcionUF === "H" && valoresAPI.H.rows) {
-    valorSelectH = select.value;
     valoresAPI.H.rows.forEach((item) => {
-      if (item.TIPPRV == valorSelectH) {
-        let row = datosH(item, valorSelectH);
+      if (item.TIPPRV == ultimoValorAlfabeticoH) {
+        let row = datosH(item, ultimoValorAlfabeticoH);
         tbody.appendChild(row);
       }
     });
   } else if (opcionUF === "U" && valoresAPI.U.rows) {
-    valorSelectU = select.value;
     valoresAPI.U.rows.forEach((item) => {
-      if (item.TIPPRV == valorSelectU) {
-        let row = datosU(item);
+      if (item.TIPPRV == ultimoValorAlfabeticoU) {
+        let row = datosU(item, ultimoValorAlfabeticoU);
         tbody.appendChild(row);
       }
     });

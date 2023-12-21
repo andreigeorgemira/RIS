@@ -1,111 +1,136 @@
-let mesActual;
-let anoActual;
+document.addEventListener("DOMContentLoaded", function () {
+  // Obtén referencias a elementos del DOM
+  var modal = document.querySelector(".modal");
+  var openModalButton = document.querySelector("#openModalButton");
 
-function abrirModal() {
-  const fechaActual = new Date();
-  mesActual = fechaActual.getMonth();
-  anoActual = fechaActual.getFullYear();
+  // Función para abrir el modal
+  function openModal() {
+    modal.innerHTML = `
+    <div id="content" class="modal-content">
+        <div id="head" class="modal-header">
+          <h2 class="modal-title"><b>NHC</b> COGNOM,NOM</h2>
+          <button class="btn-close" id="tancar" type="button"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-6">
+              <h4>Dades de la prova</h4>
+            </div>
+            <div class="col-6">
+              <h4>Realització</h4>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-6 col-form-label">
+              HOLA
+              <div class="col-12">
+                <input class="form-control" />
+              </div>
+            </div>
 
-  document.getElementById("myModal").style.display = "block";
-  document.getElementById("overlay").style.display = "block";
-  crearCalendario();
-  llenarDropdownAno();
-}
+            <div class="col-6 col-form-label">
+              HOLA
+              <div class="col-12">
+                <input class="form-control" />
+              </div>
+            </div>
 
-function cerrarModal() {
-  document.getElementById("myModal").style.display = "none";
-  document.getElementById("overlay").style.display = "none";
-}
+            <div class="col-4 col-form-label">
+              HOLA
+              <div class="col-12">
+                <input class="form-control" />
+              </div>
+            </div>
 
-function crearCalendario() {
-  const contenedorCalendario = document.getElementById("customCalendar");
-  contenedorCalendario.innerHTML = "";
+            <div class="col-2 col-form-label">
+              HOLA
+              <div class="col-12">
+                <input class="form-control" />
+              </div>
+            </div>
 
-  const diasEnMes = new Date(anoActual, mesActual + 1, 0).getDate();
-  const primerDiaSemana = new Date(anoActual, mesActual, 1).getDay();
+            <div class="col-6 col-form-label">
+              HOLA
+              <div class="col-12">
+                <input class="form-control" />
+              </div>
+            </div>
 
-  const diasSemana = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+            <div class="col-6 col-form-label">
+              HOLA
+              <div class="col-12">
+                <textarea class="form-control"></textarea>
+              </div>
+            </div>
 
-  diasSemana.forEach((dia) => {
-    const elementoDia = document.createElement("button");
-    elementoDia.textContent = dia;
-    elementoDia.disabled = true;
-    contenedorCalendario.appendChild(elementoDia);
-  });
+            <div class="col-6 col-form-label">
+              HOLA
+              <div class="col-12">
+                <textarea class="form-control"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6 col-form-label">
+              <div class="col-12">
+                <table class="table table-hover">
+                  <thead class="thead-inversed">
+                    <tr>
+                      <th>PROVA</th>
+                      <th>PROJECCIO</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col-6 text-right">
+              <div class="alert alert-danger text-center">
+                <b>El pacient te més d'una prova pendent per avui</b><br />
+                <div class="text-left">
+                  <ul></ul>
+                </div>
+              </div>
+              <button class="btn btn-lg btn-secondary hand col-6" type="button">
+                <span>Enviar a WorkList</span>
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="col-12">
+                <span class="hand">Veure estudis anteriors</span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary hand" id="tancar" type="button">Tancar</button>
+          </div>
+        </div>
+      </div>
+    `;
 
-  document.getElementById("mesSeleccionado").textContent = obtenerNombreMes(mesActual);
-  document.getElementById("anoSeleccionado").textContent = anoActual;
+    var closeButtons = document.querySelectorAll("#tancar");
 
-  for (let i = 0; i < primerDiaSemana - 1; i++) {
-    const diaVacio = document.createElement("button");
-    diaVacio.textContent = "";
-    diaVacio.disabled = true;
-    contenedorCalendario.appendChild(diaVacio);
+    closeButtons.forEach(function (closeButton) {
+      closeButton.addEventListener("click", closeModal);
+    });
+    modal.style.display = "flex";
   }
 
-  for (let dia = 1; dia <= diasEnMes; dia++) {
-    const elementoDia = document.createElement("button");
-    elementoDia.textContent = dia;
-    elementoDia.onclick = () => seleccionarFecha(dia);
-    contenedorCalendario.appendChild(elementoDia);
+  // Función para cerrar el modal
+  function closeModal() {
+    var modalFooterButton = modal.querySelector("#tancar");
+    modalFooterButton.removeEventListener("click", closeModal);
+    modal.innerHTML = "";
+    modal.style.display = "none";
   }
-}
 
-function seleccionarFecha(dia) {
-  const fechaSeleccionada = `${dia}/${mesActual + 1}/${anoActual}`;
-  console.log(fechaSeleccionada);
-}
-
-function guardarFecha() {
-  // Lógica para guardar la fecha
-  cerrarModal();
-}
-
-function mesAnterior() {
-  if (mesActual > 0) {
-    mesActual--;
-  } else {
-    mesActual = 11;
-    anoActual--;
-  }
-  crearCalendario();
-}
-
-function mesSiguiente() {
-  if (mesActual < 11) {
-    mesActual++;
-  } else {
-    mesActual = 0;
-    anoActual++;
-  }
-  crearCalendario();
-}
-
-function obtenerNombreMes(mes) {
-  const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-  return nombresMeses[mes];
-}
-
-function llenarDropdownAno() {
-  const contenidoDropdownAno = document.getElementById("yearDropdownContent");
-  contenidoDropdownAno.innerHTML = "";
-
-  for (let i = anoActual - 10; i <= anoActual + 10; i++) {
-    const botonAno = document.createElement("button");
-    botonAno.textContent = i;
-    botonAno.onclick = () => cambiarAno(i);
-    contenidoDropdownAno.appendChild(botonAno);
-  }
-}
-
-function cambiarMes(nuevoMes) {
-  mesActual = nuevoMes;
-  crearCalendario();
-  document.getElementById("mesSeleccionado").textContent = obtenerNombreMes(mesActual);
-}
-
-function cambiarAno(nuevoAno) {
-  anoActual = nuevoAno;
-  crearCalendario();
-  document.getElementById("anoSeleccionado").textContent = anoActual;
-}
+  // Asocia eventos a los botones
+  openModalButton.addEventListener("click", openModal);
+});

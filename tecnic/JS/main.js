@@ -1,12 +1,16 @@
 import { obtenerDatosGetWorklistAPI, obtenerDatosGetAgendesRAD } from "../API/llamadasAPI.js";
 import { crearTablaWorklist } from "./tabla.js";
-import { datosSelect, fechaFormateada } from "./utilidades.js";
+import { datosSelect, fechaFormateada, mostrarOverlay, cerrarOverlay } from "./utilidades.js";
 
 let tabla = document.getElementById("tabla");
 let select = document.getElementById("filtro");
 let mostrarRealitzat = document.getElementById("mostrarRealitzat");
 let icono = document.getElementById("icono");
 let textoCalendario = document.getElementById("calendario");
+
+document.addEventListener("DOMContentLoaded", function () {
+  var overlayDatos = document.querySelector(".overlayDatos");
+});
 
 let filtroRealitzats = false;
 let opcionUF = "C";
@@ -56,7 +60,7 @@ function obtenerDatosPeriodicos() {
   setTimeout(function () {
     obtenerDatosAPI(fechaSeleccionadaGlobal, false);
     obtenerDatosPeriodicos();
-  }, 5000);
+  }, 60000);
 }
 
 obtenerDatosPeriodicos();
@@ -108,19 +112,9 @@ function eventoClic() {
     fila.addEventListener("click", function () {
       let idFila = fila.getAttribute("id");
       console.log(idFila);
-      abrirPopUp();
+      mostrarOverlay(overlayDatos);
     });
   });
-}
-
-function abrirPopUp() {
-  document.getElementById("modal-popup").style.display = "block";
-  document.getElementById("overlay").style.display = "block";
-}
-
-function cerrarPopUp() {
-  document.getElementById("modal-popup").style.display = "none";
-  document.getElementById("overlay").style.display = "none";
 }
 
 let contenedor = document.querySelector(".mi-contenedor");
