@@ -1,6 +1,6 @@
 import { obtenerDatosGetWorklistAPI, obtenerDatosGetAgendesRAD } from "../API/llamadasAPI.js";
 import { crearTablaWorklist } from "./tabla.js";
-import { datosSelect, fechaFormateada, mostrarOverlay, cerrarOverlay } from "./utilidades.js";
+import { datosSelect, fechaFormateada, mostrarOverlay, insertarCalendario } from "./utilidades.js";
 
 let tabla = document.getElementById("tabla");
 let select = document.getElementById("filtro");
@@ -102,17 +102,13 @@ function vaciarTabla() {
   tabla.innerHTML = "";
 }
 
-//document.getElementById("close").addEventListener("click", cerrarPopUp);
-//document.getElementById("tancar").addEventListener("click", cerrarPopUp);
-
 function eventoClic() {
   let filasTabla = document.querySelectorAll("#tabla tbody tr");
 
   filasTabla.forEach((fila) => {
     fila.addEventListener("click", function () {
-      let idFila = fila.getAttribute("id");
-      console.log(idFila);
-      mostrarOverlay(overlayDatos);
+      let nhc_a_buscar = fila.getAttribute("id");
+      mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar);
     });
   });
 }
@@ -147,6 +143,9 @@ function obtenerValorUF(valor) {
   }
 }
 
+var modal = document.getElementById("modalCalendario");
+insertarCalendario(modal);
+
 document.getElementById("btnDiaAnterior").addEventListener("click", diaAnterior);
 document.getElementById("btnAbrirModal").addEventListener("click", abrirModal);
 document.getElementById("btnDiaSiguiente").addEventListener("click", diaSiguiente);
@@ -170,14 +169,14 @@ function abrirModal() {
   mesActual = fechaActual.getMonth();
   anoActual = fechaActual.getFullYear();
 
-  document.getElementById("myModal").style.display = "block";
+  document.getElementById("modalCalendario").style.display = "block";
   document.getElementById("overlay").style.display = "block";
   crearCalendario();
   llenarDropdownAno();
 }
 
 function cerrarModal() {
-  document.getElementById("myModal").style.display = "none";
+  document.getElementById("modalCalendario").style.display = "none";
   document.getElementById("overlay").style.display = "none";
 }
 
@@ -261,11 +260,13 @@ function fechaHoy() {
 
 function diaAnterior() {
   fecha.setDate(fecha.getDate() - 1);
+  console.log(fecha.getDate());
   seleccionarFecha(fecha.getDate());
 }
 
 function diaSiguiente() {
   fecha.setDate(fecha.getDate() + 1);
+  console.log(fecha.getDate());
   seleccionarFecha(fecha.getDate());
 }
 

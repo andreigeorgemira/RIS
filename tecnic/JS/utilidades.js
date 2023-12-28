@@ -1,3 +1,5 @@
+import { obtenerObservacionsTecnic } from "../API/llamadasAPI.js";
+
 export function formatearHora(hora) {
   return hora.slice(0, 2) + ":" + hora.slice(2, 4);
 }
@@ -63,13 +65,50 @@ export function datosSelect(datosAPI, selectElement) {
   });
 }
 
-export function mostrarOverlay(overlayDatos) {
+export function insertarCalendario(calendario) {
+  calendario.innerHTML = `
+  <div class="header">
+        <button id="btnCerrarModal" class="close-btn">&times;</button>
+        <div class="dropdown">
+          <button class="nav-btn month-dropdown"><i class="far fa-calendar"></i> <span id="mesSeleccionado"></span></button>
+          <div class="dropdown-content">
+            <button id="btnCambioMes0">Enero</button>
+            <button id="btnCambioMes1">Febrero</button>
+            <button id="btnCambioMes2">Marzo</button>
+            <button id="btnCambioMes3">Abril</button>
+            <button id="btnCambioMes4">Mayo</button>
+            <button id="btnCambioMes5">Junio</button>
+            <button id="btnCambioMes6">Julio</button>
+            <button id="btnCambioMes7">Agosto</button>
+            <button id="btnCambioMes8">Septiembre</button>
+            <button id="btnCambioMes9">Octubre</button>
+            <button id="btnCambioMes10">Noviembre</button>
+            <button id="btnCambioMes11">Diciembre</button>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="nav-btn year-dropdown"><i class="far fa-calendar"></i> <span id="anoSeleccionado"></span></button>
+          <div class="dropdown-content" id="yearDropdownContent"></div>
+        </div>
+        <button id="btnAvui" class="avui">Avui</button>
+      </div>
+      <div class="custom-calendar" id="customCalendar"></div>
+  `;
+}
+
+export function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar) {
+  let dato = valoresAPI.C.rows.find((item) => item.NHC === nhc_a_buscar);
+  let numage = `${dato.NHC}`;
+  console.log(obtenerObservacionsTecnic(numage));
+  let desactivado = dato.HORA_CONSULTA != "0000";
+
   overlayDatos.innerHTML = `
-  <div id="content" class="overlay-content">
+    <div id="content" class="overlay-content">
       <div id="head" class="modal-header">
-        <h2 class="modal-title"><b>NHC</b> COGNOM,NOM</h2>
+        <h3 class="modal-title"><b>[${dato.NHC}]</b>${dato.APELLIDO1} ${dato.APELLIDO2}, ${dato.NOMBRE}</h3>
         <button class="btn-close" id="tancar" type="button"></button>
       </div>
+      <hr />
       <div class="modal-body">
         <div class="row">
           <div class="col-6">
@@ -79,53 +118,54 @@ export function mostrarOverlay(overlayDatos) {
             <h4>Realització</h4>
           </div>
         </div>
+        <hr />
         <div class="row">
           <div class="col-6 col-form-label">
-            HOLA
+            SOLICITANT
             <div class="col-12">
-              <input class="form-control" />
+              <input class="form-control" ${desactivado ? "" : "disabled"} />
             </div>
           </div>
 
           <div class="col-6 col-form-label">
-            HOLA
-            <div class="col-12">
-              <input class="form-control" />
+            NOMBRE D'ERRORS
+            <div class="col-1">
+              <input class="form-control" ${desactivado ? "" : "disabled"} />
             </div>
           </div>
 
           <div class="col-4 col-form-label">
-            HOLA
+            PROCÉS
             <div class="col-12">
-              <input class="form-control" />
+              <input class="form-control" ${desactivado ? "" : "disabled"} />
             </div>
           </div>
 
           <div class="col-2 col-form-label">
-            HOLA
+            NHC
             <div class="col-12">
-              <input class="form-control" />
+              <input class="form-control" ${desactivado ? "" : "disabled"} value="${dato.NHC}"/>
             </div>
           </div>
 
           <div class="col-6 col-form-label">
-            HOLA
+            DOCTOR
             <div class="col-12">
-              <input class="form-control" />
+              <input class="form-control" ${desactivado ? "" : "disabled"}/>
             </div>
           </div>
 
           <div class="col-6 col-form-label">
-            HOLA
+            OBSERVACIONS MÈDIQUES
             <div class="col-12">
-              <textarea class="form-control"></textarea>
+              <textarea class="form-control" ${desactivado ? "" : "disabled"}></textarea>
             </div>
           </div>
 
           <div class="col-6 col-form-label">
-            HOLA
+            OBSERVACIONS DEL TÈCNIC
             <div class="col-12">
-              <textarea class="form-control"></textarea>
+              <textarea class="form-control" ${desactivado ? "" : "disabled"}></textarea>
             </div>
           </div>
         </div>

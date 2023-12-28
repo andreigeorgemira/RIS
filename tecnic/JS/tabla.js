@@ -42,26 +42,26 @@ function crearEncabezado(opcionUF) {
   return headers[opcionUF];
 }
 
-function datosC(item, filtroRealitzats, valorSelect) {
-  let condicionRealitzats = filtroRealitzats && item.ID_AGENDES_HCS == valorSelect && item.HORA_CONSULTA != "0000";
+function datosC(dato, filtroRealitzats, valorSelect) {
+  let condicionRealitzats = filtroRealitzats && dato.ID_AGENDES_HCS == valorSelect && dato.HORA_CONSULTA != "0000";
 
   let row = document.createElement("tr");
-  row.id = `${item.NUMAGE}`;
+  row.id = `${dato.NHC}`;
   row.innerHTML = `
-    <td>${formatearHora(item.HORA_VISITA)}</td>
-    <td>${fechaFormateada(item.DATA_VISITA)}</td>
-    <td><b>${item.NHC}</b></td>
-    <td>${item.APELLIDO1} ${item.APELLIDO2}, ${item.NOMBRE}</td>
-    <td>${fechaFormateada(item.DATA_NEIXAMENT)}</td>
-    <td>${item.TIPUS}</td>`;
+    <td>${formatearHora(dato.HORA_VISITA)}</td>
+    <td>${fechaFormateada(dato.DATA_VISITA)}</td>
+    <td><b>${dato.NHC}</b></td>
+    <td>${dato.APELLIDO1} ${dato.APELLIDO2}, ${dato.NOMBRE}</td>
+    <td>${fechaFormateada(dato.DATA_NEIXAMENT)}</td>
+    <td>${dato.TIPUS}</td>`;
 
-  if (item.HORA_CONSULTA == "0000" && item.HORA_ARRIBADA != "0000") {
-    row.innerHTML += `<td>${formatearHora(item.HORA_ARRIBADA)}</td>`;
+  if (dato.HORA_CONSULTA == "0000" && dato.HORA_ARRIBADA != "0000") {
+    row.innerHTML += `<td>${formatearHora(dato.HORA_ARRIBADA)}</td>`;
     row.innerHTML += '<td><img src="icons/espera.png" width="25px" height="25px"></td>';
     row.classList.add("fila-espera");
   } else {
     if (condicionRealitzats) {
-      row.innerHTML += `<td>${formatearHora(item.HORA_ARRIBADA)}</td>`;
+      row.innerHTML += `<td>${formatearHora(dato.HORA_ARRIBADA)}</td>`;
       row.innerHTML += '<td><i class="fa-solid fa-check fa-xl" style="color: #49bc50;"></i></i></td>';
       row.classList.add("realitzat");
     } else {
@@ -73,34 +73,34 @@ function datosC(item, filtroRealitzats, valorSelect) {
   return row;
 }
 
-function datosH(item) {
+function datosH(dato) {
   let row = document.createElement("tr");
-  row.id = `row_${item.NUMAGE}`;
+  row.id = `row_${dato.NHC}`;
   row.innerHTML = `
-    <td><b>${item.NHC}</b></td>
-    <td>${item.DATASOL}</td>
-    <td><b>${item.TERMINI}</b></td>
-    <td>${item.PACIENT}</td>
-    <td>${item.EDAT}</td>
-    <td>${item.PROVA}</td>
-    <td>${item.UBICACIO}</td>
-    <td><b>${traslado(item.TRASLLAT)}<b></td>
+    <td><b>${dato.NHC}</b></td>
+    <td>${dato.DATASOL}</td>
+    <td><b>${dato.TERMINI}</b></td>
+    <td>${dato.PACIENT}</td>
+    <td>${dato.EDAT}</td>
+    <td>${dato.PROVA}</td>
+    <td>${dato.UBICACIO}</td>
+    <td><b>${traslado(dato.TRASLLAT)}<b></td>
   `;
 
   return row;
 }
 
-function datosU(item) {
+function datosU(dato) {
   let row = document.createElement("tr");
-  row.id = `row_${item.NUMAGE}`;
+  row.id = `row_${dato.NHC}`;
   row.innerHTML = `
-    <td><b>${item.NHC}</b></td>
-    <td>${item.DATASOL}</td>
-    <td>${item.PACIENT}</td>
-    <td>${item.EDAT}</td>
-    <td>${item.PROVA}</td>
-    <td>${item.UBICACIO}</td>
-    <td>${traslado(item.TRASLLAT)}</td>
+    <td><b>${dato.NHC}</b></td>
+    <td>${dato.DATASOL}</td>
+    <td>${dato.PACIENT}</td>
+    <td>${dato.EDAT}</td>
+    <td>${dato.PROVA}</td>
+    <td>${dato.UBICACIO}</td>
+    <td>${traslado(dato.TRASLLAT)}</td>
   `;
 
   return row;
@@ -136,7 +136,7 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
   let valorSelectU;
 
   // Contador para C
-  contadorC = (valoresAPI.C.rows || []).filter(function (item) {
+  contadorC = (valoresAPI.C.rows || []).filter(function (dato) {
     valorSelectC = select.value;
 
     if (/^\d+$/.test(valorSelectC)) {
@@ -146,14 +146,14 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
     }
 
     // Condiciones para C
-    let condicionRealitzats = item.ID_AGENDES_HCS == ultimoValorNumericoC && item.HORA_CONSULTA != "0000";
-    let condicion1 = filtroRealitzats && item.ID_AGENDES_HCS == ultimoValorNumericoC;
-    let condicion2 = !filtroRealitzats && item.ID_AGENDES_HCS == ultimoValorNumericoC && item.HORA_CONSULTA == "0000";
+    let condicionRealitzats = dato.ID_AGENDES_HCS == ultimoValorNumericoC && dato.HORA_CONSULTA != "0000";
+    let condicion1 = filtroRealitzats && dato.ID_AGENDES_HCS == ultimoValorNumericoC;
+    let condicion2 = !filtroRealitzats && dato.ID_AGENDES_HCS == ultimoValorNumericoC && dato.HORA_CONSULTA == "0000";
 
     return !condicionRealitzats && (condicion1 || condicion2);
   });
 
-  contadorH = (valoresAPI.H.rows || []).filter(function (item) {
+  contadorH = (valoresAPI.H.rows || []).filter(function (dato) {
     valorSelectH = select.value;
 
     if (/^[a-zA-Z]+$/.test(valorSelectH)) {
@@ -166,11 +166,11 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
       }
     }
 
-    let condicion = item.TIPPRV == ultimoValorAlfabeticoH && item.PACIENT != null;
+    let condicion = dato.TIPPRV == ultimoValorAlfabeticoH && dato.PACIENT != null;
     return condicion;
   });
 
-  contadorU = (valoresAPI.U.rows || []).filter(function (item) {
+  contadorU = (valoresAPI.U.rows || []).filter(function (dato) {
     valorSelectU = select.value;
 
     if (/^[a-zA-Z]+$/.test(valorSelectU)) {
@@ -183,7 +183,7 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
       }
     }
 
-    let condicion = item.TIPPRV == ultimoValorAlfabeticoU && item.FDATASOL != null;
+    let condicion = dato.TIPPRV == ultimoValorAlfabeticoU && dato.FDATASOL != null;
     return condicion;
   });
 
@@ -193,23 +193,23 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
 
   // Resto de la lógica para la tabla C
   if (opcionUF === "C" && valoresAPI.C.rows) {
-    valoresAPI.C.rows.forEach((item) => {
-      if ((filtroRealitzats && item.ID_AGENDES_HCS == ultimoValorNumericoC) || (!filtroRealitzats && item.ID_AGENDES_HCS == ultimoValorNumericoC && item.HORA_CONSULTA == "0000")) {
-        let row = datosC(item, filtroRealitzats, ultimoValorNumericoC);
+    valoresAPI.C.rows.forEach((dato) => {
+      if ((filtroRealitzats && dato.ID_AGENDES_HCS == ultimoValorNumericoC) || (!filtroRealitzats && dato.ID_AGENDES_HCS == ultimoValorNumericoC && dato.HORA_CONSULTA == "0000")) {
+        let row = datosC(dato, filtroRealitzats, ultimoValorNumericoC);
         tbody.appendChild(row);
       }
     });
   } else if (opcionUF === "H" && valoresAPI.H.rows) {
-    valoresAPI.H.rows.forEach((item) => {
-      if (item.TIPPRV == ultimoValorAlfabeticoH) {
-        let row = datosH(item, ultimoValorAlfabeticoH);
+    valoresAPI.H.rows.forEach((dato) => {
+      if (dato.TIPPRV == ultimoValorAlfabeticoH) {
+        let row = datosH(dato, ultimoValorAlfabeticoH);
         tbody.appendChild(row);
       }
     });
   } else if (opcionUF === "U" && valoresAPI.U.rows) {
-    valoresAPI.U.rows.forEach((item) => {
-      if (item.TIPPRV == ultimoValorAlfabeticoU) {
-        let row = datosU(item, ultimoValorAlfabeticoU);
+    valoresAPI.U.rows.forEach((dato) => {
+      if (dato.TIPPRV == ultimoValorAlfabeticoU) {
+        let row = datosU(dato, ultimoValorAlfabeticoU);
         tbody.appendChild(row);
       }
     });
