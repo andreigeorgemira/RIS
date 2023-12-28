@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 let filtroRealitzats = false;
 let opcionUF = "C";
-let fechaSeleccionadaGlobal;
+let fechaSeleccionadaGlobal = new Date();
 
 let opcionesSelect = {
   C: null,
@@ -160,15 +160,11 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("overlay").addEventListener("click", cerrarModal);
 });
 
-let mesActual;
-let anoActual;
 let fecha = new Date();
+let mesActual = fecha.getMonth();
+let anoActual = fecha.getFullYear();
 
 function abrirModal() {
-  let fechaActual = new Date();
-  mesActual = fechaActual.getMonth();
-  anoActual = fechaActual.getFullYear();
-
   document.getElementById("modalCalendario").style.display = "block";
   document.getElementById("overlay").style.display = "block";
   crearCalendario();
@@ -240,7 +236,7 @@ function seleccionarFecha(dia) {
 
   const fechaFormateadaStr = `${mesStr}/${diaStr}/${anoStr}`;
 
-  fechaSeleccionadaGlobal = fechaFormateadaStr;
+  fechaSeleccionadaGlobal = fecha;
 
   vaciarTabla();
   obtenerDatosAPI(fechaFormateadaStr);
@@ -259,15 +255,13 @@ function fechaHoy() {
 }
 
 function diaAnterior() {
-  fecha.setDate(fecha.getDate() - 1);
-  console.log(fecha.getDate());
-  seleccionarFecha(fecha.getDate());
+  fechaSeleccionadaGlobal.setDate(fechaSeleccionadaGlobal.getDate() - 1);
+  seleccionarFecha(fechaSeleccionadaGlobal.getDate());
 }
 
 function diaSiguiente() {
-  fecha.setDate(fecha.getDate() + 1);
-  console.log(fecha.getDate());
-  seleccionarFecha(fecha.getDate());
+  fechaSeleccionadaGlobal.setDate(fechaSeleccionadaGlobal.getDate() + 1);
+  seleccionarFecha(fechaSeleccionadaGlobal.getDate());
 }
 
 function obtenerNombreMes(mes) {
