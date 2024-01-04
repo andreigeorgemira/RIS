@@ -26,6 +26,7 @@ export function obtenerDatosGetAgendesRAD(opcionUF) {
   }).then((data) => data.json());
 }
 
+// Función para realizar la solicitud a la API y guardar los datos
 export async function obtenerObservacionsTecnic(parametro) {
   try {
     const response = await fetch("https://localhost:7224/Radiologia/api/v4/ris/tecnic/GetObstecniques", {

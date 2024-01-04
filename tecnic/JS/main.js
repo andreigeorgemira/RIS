@@ -70,7 +70,7 @@ function obtenerDatosPeriodicos() {
   setTimeout(function () {
     obtenerDatosAPI(fechaSeleccionadaGlobal, false);
     obtenerDatosPeriodicos();
-  }, 5000);
+  }, 60000);
 }
 
 // Función para crear y actualizar la tabla
