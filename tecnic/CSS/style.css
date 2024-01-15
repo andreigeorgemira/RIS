@@ -90,17 +90,14 @@ a {
 }
 
 @keyframes dots {
-  0% {
+  33% {
     content: ".";
   }
-  33% {
+  66% {
     content: "..";
   }
-  66% {
-    content: "...";
-  }
   100% {
-    content: "";
+    content: "...";
   }
 }
 
