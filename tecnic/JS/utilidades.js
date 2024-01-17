@@ -1,4 +1,4 @@
-/* import { obtenerObservacionsTecnic } from "../API/llamadasAPI.js"; */
+import { obtenerObservacionsTecnic } from "../API/llamadasAPI.js";
 import { obtenerMasCitasPaciente, obtenerDoctores } from "../API/llamadasAPI.js";
 
 // Función para formatear la hora en formato HH:mm
@@ -107,6 +107,9 @@ export async function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar) {
   // Obtener datos del paciente
   let dato = valoresAPI.C.rows.find((item) => item.NHC === nhc_a_buscar);
   let numage = `${dato.NUMAGE}`;
+  let condicion1 = dato.HORA_ARRIBADA != "0000" && dato.HORA_CONSULTA == "0000";
+  let condicion2 = dato.HORA_ARRIBADA != "0000" && dato.HORA_CONSULTA != "0000";
+  let activado = false;
   let masCitas;
   let tieneMasCitas;
   let doctores;
@@ -140,6 +143,9 @@ export async function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar) {
   `;
   }
 
+  if (activado) {
+  }
+
   // Crear el contenido del overlay con los datos del paciente y las citas
   overlayDatos.innerHTML = `
   <div id="content" class="overlay-content">
@@ -162,66 +168,66 @@ export async function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar) {
         <div class="col-6 col-form-label">
           SOLICITANT
           <div class="col-12">
-            <input class="form-control" ${desactivado ? "" : "disabled"} />
+            <input class="form-control" disabled />
           </div>
         </div>
 
         <div class="col-6 col-form-label">
           NOMBRE D'ERRORS
           <div class="col-1">
-            <input class="form-control" ${desactivado ? "" : "disabled"} />
+            <input class="form-control" ${condicion1 ? "" : "disabled"} value="0"/>
           </div>
         </div>
 
         <div class="col-4 col-form-label">
           PROCÉS
           <div class="col-12">
-            <input class="form-control" ${desactivado ? "" : "disabled"} />
+            <input class="form-control" disabled />
           </div>
         </div>
 
         <div class="col-2 col-form-label">
           NHC
           <div class="col-12">
-            <input class="form-control" ${desactivado ? "" : "disabled"} value="${dato.NHC}"/>
+            <input class="form-control" disabled value="${dato.NHC}"/>
           </div>
         </div>
 
         <div class="col-6 col-form-label">
           DOCTOR
           <div class="col-12">
-            <select id="select" class="form-select" ${desactivado ? "" : "disabled"}></select>
+            <select id="select" class="form-select" ${condicion1 || condicion2 ? "" : "disabled"}></select>
           </div>
         </div>
 
         <div class="col-6 col-form-label">
           OBSERVACIONS MÈDIQUES
           <div class="col-12">
-            <textarea class="form-control" ${desactivado ? "" : "disabled"}></textarea>
+            <textarea class="form-control" disabled></textarea>
           </div>
         </div>
 
         <div class="col-6 col-form-label">
           OBSERVACIONS DEL TÈCNIC
           <div class="col-12">
-            <textarea class="form-control" ${desactivado ? "" : "disabled"}></textarea>
+            <textarea id="observacionsTecnic" class="form-control" ${condicion1 ? "" : "disabled"}></textarea>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-6 col-form-label">
-          <div class="col-12">
-            <table class="table table-hover">
-              <thead class="thead-inversed">
+          <div class="col-12 table-responsive">
+            <table class="tabla rounded-3 overflow-hidden" style="margin-bottom:0;">
+              <thead>
                 <tr>
-                  <th>PROVA</th>
-                  <th>PROJECCIO</th>
+                  <th style="width:40%;">PROVA</th>
+                  <th style="width:60%;">PROJECCIO</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td></td>
-                  <td></td>
+                  <td>HOLA</td>
+                  <td>HOLA HOLA HOLA HOLA HOLA</td>
                 </tr>
               </tbody>
             </table>
@@ -253,6 +259,12 @@ export async function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar) {
     </div>
   </div>
 `;
+
+  let textarea = document.getElementById("observacionsTecnic");
+
+  await obtenerObservacionsTecnic(numage).then((dato) => {
+    textarea.value = dato;
+  });
 
   // Obtener el elemento select del overlay
   let selectDoctor = document.getElementById("select");

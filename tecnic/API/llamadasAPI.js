@@ -26,7 +26,7 @@ export function obtenerDatosGetAgendesRAD(opcionUF) {
   }).then((data) => data.json());
 }
 
-/* // Función para realizar la solicitud a la API y guardar los datos
+// Función para realizar la solicitud a la API y guardar los datos
 export async function obtenerObservacionsTecnic(numage) {
   return fetch("https://localhost:7224/Radiologia/api/v4/ris/tecnic/GetObstecniques", {
     method: "POST",
@@ -36,12 +36,8 @@ export async function obtenerObservacionsTecnic(numage) {
     },
     mode: "cors",
     body: JSON.stringify({ center: "CMQR", num: numage }),
-  })
-    .then((data) => data.json())
-    .catch((error) => {
-      console.error("Error al realizar la petición:", error);
-    });
-} */
+  }).then((data) => data.json());
+}
 
 export function obtenerMasCitasPaciente(numage) {
   return fetch("https://localhost:7224/Radiologia/api/v4/ris/tecnic/HasMoreDates", {
