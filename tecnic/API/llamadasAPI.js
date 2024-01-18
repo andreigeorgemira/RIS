@@ -1,46 +1,58 @@
 import { fechaFormateada } from "../JS/utilidades.js";
 
+let url = "https://localhost:7224/Radiologia/api/v4/";
+
 // Función para realizar la solicitud a la API y guardar los datos
 export function obtenerDatosGetWorklistAPI(opcionUF, fecha = new Date()) {
-  return fetch("https://localhost:7224/Radiologia/api/v4/ris/tecnic/getWorklist", {
+  return fetch(url + "ris/tecnic/getWorklist", {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
     method: "POST",
     mode: "cors",
-    body: JSON.stringify({ center: "CMQR", uf: opcionUF, date: fechaFormateada(fecha) }),
-  }).then((data) => data.json());
+    body: JSON.stringify({
+      center: "CMQR",
+      uf: opcionUF,
+      date: fechaFormateada(fecha),
+    }),
+  }).then((respuesta) => respuesta.json());
 }
 
 // Función para realizar la solicitud a la API y guardar los datos
 export function obtenerDatosGetAgendesRAD(opcionUF) {
-  return fetch("https://localhost:7224/Radiologia/api/v4/ris/tecnic/GetAgendesRAD", {
+  return fetch(url + "ris/tecnic/GetAgendesRAD", {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
     method: "POST",
     mode: "cors",
-    body: JSON.stringify({ center: "CMQR", uf: opcionUF }),
-  }).then((data) => data.json());
+    body: JSON.stringify({
+      center: "CMQR",
+      uf: opcionUF,
+    }),
+  }).then((respuesta) => respuesta.json());
 }
 
 // Función para realizar la solicitud a la API y guardar los datos
-export async function obtenerObservacionsTecnic(numage) {
-  return fetch("https://localhost:7224/Radiologia/api/v4/ris/tecnic/GetObstecniques", {
+export function obtenerObservacionsTecnic(numage) {
+  return fetch(url + "ris/tecnic/GetObstecniques", {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json-patch+json",
     },
     mode: "cors",
-    body: JSON.stringify({ center: "CMQR", num: numage }),
-  }).then((data) => data.json());
+    body: JSON.stringify({
+      center: "CMQR",
+      num: numage,
+    }),
+  }).then((respuesta) => respuesta.json());
 }
 
 export function obtenerMasCitasPaciente(numage) {
-  return fetch("https://localhost:7224/Radiologia/api/v4/ris/tecnic/HasMoreDates", {
+  return fetch(url + "ris/tecnic/HasMoreDates", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -49,11 +61,11 @@ export function obtenerMasCitasPaciente(numage) {
       center: "CMQR",
       numage: numage,
     }),
-  }).then((response) => response.json());
+  }).then((respuesta) => respuesta.json());
 }
 
 export function obtenerDoctores() {
-  return fetch("https://localhost:7224/Radiologia/api/v4/ris/tecnic/getProfessionals", {
+  return fetch(url + "tecnic/getProfessionals", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -61,5 +73,18 @@ export function obtenerDoctores() {
     body: JSON.stringify({
       center: "CMQR",
     }),
-  }).then((response) => response.json());
+  }).then((respuesta) => respuesta.json());
+}
+
+export function obtenerDoctorAsignado(numage) {
+  return fetch(url + "ris/tecnic/getAssignedRad", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      center: "CMQR",
+      num: numage,
+    }),
+  }).then((respuesta) => respuesta.json());
 }

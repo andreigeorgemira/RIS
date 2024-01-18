@@ -1,5 +1,4 @@
-import { obtenerObservacionsTecnic } from "../API/llamadasAPI.js";
-import { obtenerMasCitasPaciente, obtenerDoctores } from "../API/llamadasAPI.js";
+import { obtenerObservacionsTecnic, obtenerMasCitasPaciente, obtenerDoctores, obtenerDoctorAsignado } from "../API/llamadasAPI.js";
 
 // Función para formatear la hora en formato HH:mm
 export function formatearHora(hora) {
@@ -22,11 +21,16 @@ export function fechaFormateada(fecha) {
   return fechaFormateada;
 }
 
-// Variable global para almacenar la última opción seleccionada en un select
-let lastSelectedOption = null;
+let ultimoValorNumericoC = null;
+let ultimoValorAlfabeticoH = null;
+let ultimoValorAlfabeticoU = null;
 
 // Función para poblar un elemento de tipo select con opciones provenientes de una API
-export function datosSelect(datosAPI, selectElement) {
+export function datosSelect(datosAPI, selectElement, opcionUF) {
+  console.log("Valor C " + ultimoValorNumericoC);
+  console.log("Valor H " + ultimoValorAlfabeticoH);
+  console.log("Valor U " + ultimoValorAlfabeticoU);
+  console.log(datosAPI);
   // Verificar que los datosAPI y rows existan
   if (!datosAPI || !datosAPI.rows) {
     // Manejar el caso de datosAPI nulo o sin propiedad 'rows'
@@ -37,35 +41,97 @@ export function datosSelect(datosAPI, selectElement) {
   selectElement.innerHTML = "";
 
   // Iterar sobre los elementos en 'rows' y crear opciones para el selector
-  datosAPI.rows.forEach((row) => {
+  datosAPI.forEach((row) => {
     // Verificar propiedades antes de acceder a ellas
     if (row.ID === "ALT" || !row.ID || !row.DESCRIPCIO) {
       // Omitir la opción si el ID es "ALT" o si faltan propiedades
       return;
     }
 
-    // Crear un elemento de opción
-    let optionElement = document.createElement("option");
+    if (opcionUF == "C") {
+      // Crear un elemento de opción
+      let optionElement = document.createElement("option");
 
-    // Asignar el valor y el texto del elemento de opción
-    optionElement.value = row.ID;
-    optionElement.textContent = row.DESCRIPCIO;
+      // Asignar el valor y el texto del elemento de opción
+      optionElement.value = row.ID;
+      optionElement.textContent = row.DESCRIPCIO;
 
-    // Marcar la opción con ID 580 como seleccionada por defecto
-    if (row.ID === 580 && lastSelectedOption === null) {
-      optionElement.selected = true;
-      lastSelectedOption = 580; // Actualizar la variable global
-    } else if (lastSelectedOption !== null && row.ID.toString() === lastSelectedOption.toString()) {
-      optionElement.selected = true; // Seleccionar la última opción almacenada
+      // Marcar la opción con ID 580 como seleccionada por defecto
+      if (row.ID === 580 && ultimoValorNumericoC === null) {
+        optionElement.selected = true;
+        ultimoValorNumericoC = 580; // Actualizar la variable global
+      } else if (ultimoValorNumericoC !== null && row.ID.toString() === ultimoValorNumericoC.toString()) {
+        optionElement.selected = true; // Seleccionar la última opción almacenada
+      }
+
+      // Añadir la opción al selector
+      selectElement.appendChild(optionElement);
     }
+    if (opcionUF == "H") {
+      // Crear un elemento de opción
+      let optionElement = document.createElement("option");
 
-    // Añadir la opción al selector
-    selectElement.appendChild(optionElement);
+      // Asignar el valor y el texto del elemento de opción
+      optionElement.value = row.ID;
+      optionElement.textContent = row.DESCRIPCIO;
+
+      // Marcar la opción con ID 580 como seleccionada por defecto
+      if (row.ID === 580 && ultimoValorAlfabeticoH === null) {
+        optionElement.selected = true;
+        ultimoValorAlfabeticoH = 580; // Actualizar la variable global
+      } else if (ultimoValorAlfabeticoH !== null && row.ID.toString() === ultimoValorAlfabeticoH.toString()) {
+        optionElement.selected = true; // Seleccionar la última opción almacenada
+      }
+
+      // Añadir la opción al selector
+      selectElement.appendChild(optionElement);
+    }
+    if (opcionUF == "U") {
+      // Crear un elemento de opción
+      let optionElement = document.createElement("option");
+
+      // Asignar el valor y el texto del elemento de opción
+      optionElement.value = row.ID;
+      optionElement.textContent = row.DESCRIPCIO;
+
+      // Marcar la opción con ID 580 como seleccionada por defecto
+      if (row.ID === 580 && ultimoValorAlfabeticoU === null) {
+        optionElement.selected = true;
+        ultimoValorAlfabeticoU = 580; // Actualizar la variable global
+      } else if (ultimoValorAlfabeticoU !== null && row.ID.toString() === ultimoValorAlfabeticoU.toString()) {
+        optionElement.selected = true; // Seleccionar la última opción almacenada
+      }
+
+      // Añadir la opción al selector
+      selectElement.appendChild(optionElement);
+    }
   });
 
   // Agregar un evento de cambio al selector para actualizar la opción seleccionada
   selectElement.addEventListener("change", function () {
-    lastSelectedOption = selectElement.value;
+    console.log(opcionUF);
+    if (opcionUF == "C") {
+      console.log("dentroC");
+      if (/^\d+$/.test(selectElement.value)) {
+        ultimoValorNumericoC = selectElement.value;
+      } else {
+        selectElement.value = ultimoValorNumericoC;
+      }
+    } else if (opcionUF == "H") {
+      console.log("dentroH");
+      if (/^[a-zA-Z]+$/.test(selectElement.value)) {
+        ultimoValorAlfabeticoH = selectElement.value;
+      } else {
+        selectElement.value = ultimoValorAlfabeticoH;
+      }
+    } else if (opcionUF == "U") {
+      console.log("dentroU");
+      if (/^[a-zA-Z]+$/.test(selectElement.value)) {
+        ultimoValorAlfabeticoU = selectElement.value;
+      } else {
+        selectElement.value = ultimoValorAlfabeticoU;
+      }
+    }
   });
 }
 
@@ -263,7 +329,11 @@ export async function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar) {
   let textarea = document.getElementById("observacionsTecnic");
 
   await obtenerObservacionsTecnic(numage).then((dato) => {
-    textarea.value = dato;
+    if (dato == "Object reference not set to an instance of an object.") {
+      textarea.value = "";
+    } else {
+      textarea.value = dato;
+    }
   });
 
   // Obtener el elemento select del overlay
@@ -282,6 +352,12 @@ export async function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar) {
       opcion.value = dato.USRHNET;
       opcion.text = dato.NOM;
       selectDoctor.appendChild(opcion);
+    });
+  }
+
+  if (condicion2) {
+    await obtenerDoctorAsignado(numage).then((dato) => {
+      opcion.value = dato;
     });
   }
 

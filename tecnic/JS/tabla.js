@@ -191,7 +191,6 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
   document.getElementById("totalHospitalitzacio").textContent = `(${contadorH.length})`;
   document.getElementById("totalUrgencies").textContent = `(${contadorU.length})`;
 
-  // Resto de la lógica para la tabla C
   if (opcionUF === "C" && valoresAPI.C.rows) {
     valoresAPI.C.rows.forEach((dato) => {
       if ((filtroRealitzats && dato.ID_AGENDES_HCS == ultimoValorNumericoC) || (!filtroRealitzats && dato.ID_AGENDES_HCS == ultimoValorNumericoC && dato.HORA_CONSULTA == "0000")) {

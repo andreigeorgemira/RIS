@@ -65,12 +65,53 @@ function obtenerDatosAPI(fechaSeleccionada, mostrarSpinner = true) {
   });
 }
 
+function obtenerDatosSelect() {
+  Promise.all([obtenerDatosGetAgendesRAD("C"), obtenerDatosGetAgendesRAD("H"), obtenerDatosGetAgendesRAD("U")]).then(([datosC, datosH, datosU]) => {
+    opcionesSelect.C = datosC.rows;
+    opcionesSelect.H = datosH.rows;
+    opcionesSelect.U = datosU.rows;
+    datosFiltradosSelect();
+  });
+}
+
 // Función para obtener datos periódicamente
 function obtenerDatosPeriodicos() {
   setTimeout(function () {
     obtenerDatosAPI(fechaSeleccionadaGlobal, false);
     obtenerDatosPeriodicos();
   }, 60000);
+}
+
+// Evento de clic en botones dentro de un contenedor
+let contenedor = document.querySelector(".mi-contenedor");
+contenedor.addEventListener("click", function (event) {
+  let boton = event.target.closest("button");
+  if (boton && contenedor.contains(boton)) {
+    opcionUF = obtenerValorUF(boton.value);
+    datosFiltradosSelect();
+    crearYActualizarTabla();
+
+    // Añadir y quitar la clase 'active' según el botón seleccionado
+    contenedor.querySelectorAll("button").forEach((btn) => {
+      btn.classList.remove("botonSeleccionado");
+    });
+    boton.classList.add("botonSeleccionado");
+  }
+});
+
+// Función para obtener el valor de UF (Unidad Funcional) según el botón seleccionado
+function obtenerValorUF(valor) {
+  switch (valor) {
+    case "programades":
+    case "altres":
+      return "C";
+    case "hospitalitzacio":
+      return "H";
+    case "urgencies":
+      return "U";
+    default:
+      return "C";
+  }
 }
 
 // Función para crear y actualizar la tabla
@@ -81,14 +122,7 @@ function crearYActualizarTabla() {
 
 // Función simplificada para manejar la selección de datos en el selector
 function datosFiltradosSelect() {
-  if (opcionesSelect[opcionUF]) {
-    datosSelect(opcionesSelect[opcionUF], select);
-  } else {
-    obtenerDatosGetAgendesRAD(opcionUF).then((datos) => {
-      opcionesSelect[opcionUF] = datos;
-      datosSelect(opcionesSelect[opcionUF], select);
-    });
-  }
+  datosSelect(opcionesSelect[opcionUF], select, opcionUF);
 }
 
 // Evento de clic en el botón de mostrar realizados
@@ -124,38 +158,6 @@ function eventoClic() {
       mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar);
     });
   });
-}
-
-// Evento de clic en botones dentro de un contenedor
-let contenedor = document.querySelector(".mi-contenedor");
-contenedor.addEventListener("click", function (event) {
-  let boton = event.target.closest("button");
-  if (boton && contenedor.contains(boton)) {
-    opcionUF = obtenerValorUF(boton.value);
-    datosFiltradosSelect();
-    crearYActualizarTabla();
-
-    // Añadir y quitar la clase 'active' según el botón seleccionado
-    contenedor.querySelectorAll("button").forEach((btn) => {
-      btn.classList.remove("botonSeleccionado");
-    });
-    boton.classList.add("botonSeleccionado");
-  }
-});
-
-// Función para obtener el valor de UF (Unidad Funcional) según el botón seleccionado
-function obtenerValorUF(valor) {
-  switch (valor) {
-    case "programades":
-    case "altres":
-      return "C";
-    case "hospitalitzacio":
-      return "H";
-    case "urgencies":
-      return "U";
-    default:
-      return "C";
-  }
 }
 
 /* 
@@ -363,4 +365,4 @@ __/\\\\\\\\\\\\\\\__/\\\\\\\\\\\__/\\\\\_____/\\\__________________/\\\\\\\\\___
 // Llamadas a funciones iniciales
 obtenerDatosPeriodicos();
 obtenerDatosAPI();
-datosFiltradosSelect();
+obtenerDatosSelect();
