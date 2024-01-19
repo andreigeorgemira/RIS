@@ -54,9 +54,9 @@ function obtenerDatosAPI(fechaSeleccionada, mostrarSpinner = true) {
 
   // Promesa para obtener datos de diferentes worklists
   Promise.all([obtenerDatosGetWorklistAPI("C", fecha), obtenerDatosGetWorklistAPI("H", fecha), obtenerDatosGetWorklistAPI("U", fecha)]).then(([datosC, datosH, datosU]) => {
-    valoresAPI.C = datosC;
-    valoresAPI.H = datosH;
-    valoresAPI.U = datosU;
+    valoresAPI.C = datosC.rows;
+    valoresAPI.H = datosH.rows;
+    valoresAPI.U = datosU.rows;
     crearYActualizarTabla();
 
     if (mostrarSpinner) {
@@ -122,7 +122,7 @@ function crearYActualizarTabla() {
 
 // Función simplificada para manejar la selección de datos en el selector
 function datosFiltradosSelect() {
-  datosSelect(opcionesSelect[opcionUF], select, opcionUF);
+  datosSelect(opcionesSelect, select, opcionUF);
 }
 
 // Evento de clic en el botón de mostrar realizados

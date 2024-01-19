@@ -136,7 +136,7 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
   let valorSelectU;
 
   // Contador para C
-  contadorC = (valoresAPI.C.rows || []).filter(function (dato) {
+  contadorC = (valoresAPI.C || []).filter(function (dato) {
     valorSelectC = select.value;
 
     if (/^\d+$/.test(valorSelectC)) {
@@ -153,7 +153,7 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
     return !condicionRealitzats && (condicion1 || condicion2);
   });
 
-  contadorH = (valoresAPI.H.rows || []).filter(function (dato) {
+  contadorH = (valoresAPI.H || []).filter(function (dato) {
     valorSelectH = select.value;
 
     if (/^[a-zA-Z]+$/.test(valorSelectH)) {
@@ -170,7 +170,7 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
     return condicion;
   });
 
-  contadorU = (valoresAPI.U.rows || []).filter(function (dato) {
+  contadorU = (valoresAPI.U || []).filter(function (dato) {
     valorSelectU = select.value;
 
     if (/^[a-zA-Z]+$/.test(valorSelectU)) {
@@ -191,22 +191,22 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
   document.getElementById("totalHospitalitzacio").textContent = `(${contadorH.length})`;
   document.getElementById("totalUrgencies").textContent = `(${contadorU.length})`;
 
-  if (opcionUF === "C" && valoresAPI.C.rows) {
-    valoresAPI.C.rows.forEach((dato) => {
+  if (opcionUF === "C" && valoresAPI.C) {
+    valoresAPI.C.forEach((dato) => {
       if ((filtroRealitzats && dato.ID_AGENDES_HCS == ultimoValorNumericoC) || (!filtroRealitzats && dato.ID_AGENDES_HCS == ultimoValorNumericoC && dato.HORA_CONSULTA == "0000")) {
         let row = datosC(dato, filtroRealitzats, ultimoValorNumericoC);
         tbody.appendChild(row);
       }
     });
-  } else if (opcionUF === "H" && valoresAPI.H.rows) {
-    valoresAPI.H.rows.forEach((dato) => {
+  } else if (opcionUF === "H" && valoresAPI.H) {
+    valoresAPI.H.forEach((dato) => {
       if (dato.TIPPRV == ultimoValorAlfabeticoH) {
         let row = datosH(dato, ultimoValorAlfabeticoH);
         tbody.appendChild(row);
       }
     });
-  } else if (opcionUF === "U" && valoresAPI.U.rows) {
-    valoresAPI.U.rows.forEach((dato) => {
+  } else if (opcionUF === "U" && valoresAPI.U) {
+    valoresAPI.U.forEach((dato) => {
       if (dato.TIPPRV == ultimoValorAlfabeticoU) {
         let row = datosU(dato, ultimoValorAlfabeticoU);
         tbody.appendChild(row);

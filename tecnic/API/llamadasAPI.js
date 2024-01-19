@@ -64,8 +64,8 @@ export function obtenerMasCitasPaciente(numage) {
   }).then((respuesta) => respuesta.json());
 }
 
-export function obtenerDoctores() {
-  return fetch(url + "tecnic/getProfessionals", {
+export function obtenerRadiologos() {
+  return fetch(url + "ris/tecnic/getProfessionals", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -76,7 +76,7 @@ export function obtenerDoctores() {
   }).then((respuesta) => respuesta.json());
 }
 
-export function obtenerDoctorAsignado(numage) {
+export function obtenerRadiologoAsignado(numage) {
   return fetch(url + "ris/tecnic/getAssignedRad", {
     method: "POST",
     headers: {

@@ -1,4 +1,4 @@
-import { obtenerObservacionsTecnic, obtenerMasCitasPaciente, obtenerDoctores, obtenerDoctorAsignado } from "../API/llamadasAPI.js";
+import { obtenerObservacionsTecnic, obtenerMasCitasPaciente, obtenerRadiologos, obtenerRadiologoAsignado } from "../API/llamadasAPI.js";
 
 // Función para formatear la hora en formato HH:mm
 export function formatearHora(hora) {
@@ -21,18 +21,18 @@ export function fechaFormateada(fecha) {
   return fechaFormateada;
 }
 
-let ultimoValorNumericoC = null;
-let ultimoValorAlfabeticoH = null;
-let ultimoValorAlfabeticoU = null;
+// Variable global para almacenar la última opción seleccionada en un select
+let lastSelectedOption = null;
+
+// Variables globales para almacenar los últimos valores seleccionados
+let ultimoValorNumericoC = 580;
+let ultimoValorAlfabeticoH = "RXS";
+let ultimoValorAlfabeticoU = "RXS";
 
 // Función para poblar un elemento de tipo select con opciones provenientes de una API
 export function datosSelect(datosAPI, selectElement, opcionUF) {
-  console.log("Valor C " + ultimoValorNumericoC);
-  console.log("Valor H " + ultimoValorAlfabeticoH);
-  console.log("Valor U " + ultimoValorAlfabeticoU);
-  console.log(datosAPI);
   // Verificar que los datosAPI y rows existan
-  if (!datosAPI || !datosAPI.rows) {
+  if (!datosAPI[opcionUF]) {
     // Manejar el caso de datosAPI nulo o sin propiedad 'rows'
     return;
   }
@@ -40,99 +40,68 @@ export function datosSelect(datosAPI, selectElement, opcionUF) {
   // Vaciar el contenido actual del select
   selectElement.innerHTML = "";
 
+  // Obtener el último valor almacenado para la opción seleccionada
+  let ultimoValorAlmacenado = obtenerUltimoValor(opcionUF);
+
   // Iterar sobre los elementos en 'rows' y crear opciones para el selector
-  datosAPI.forEach((row) => {
+  datosAPI[opcionUF].forEach((row) => {
     // Verificar propiedades antes de acceder a ellas
     if (row.ID === "ALT" || !row.ID || !row.DESCRIPCIO) {
       // Omitir la opción si el ID es "ALT" o si faltan propiedades
       return;
     }
 
-    if (opcionUF == "C") {
-      // Crear un elemento de opción
-      let optionElement = document.createElement("option");
+    // Crear un elemento de opción
+    let optionElement = document.createElement("option");
 
-      // Asignar el valor y el texto del elemento de opción
-      optionElement.value = row.ID;
-      optionElement.textContent = row.DESCRIPCIO;
+    // Asignar el valor y el texto del elemento de opción
+    optionElement.value = row.ID;
+    optionElement.textContent = row.DESCRIPCIO;
 
-      // Marcar la opción con ID 580 como seleccionada por defecto
-      if (row.ID === 580 && ultimoValorNumericoC === null) {
-        optionElement.selected = true;
-        ultimoValorNumericoC = 580; // Actualizar la variable global
-      } else if (ultimoValorNumericoC !== null && row.ID.toString() === ultimoValorNumericoC.toString()) {
-        optionElement.selected = true; // Seleccionar la última opción almacenada
-      }
-
-      // Añadir la opción al selector
-      selectElement.appendChild(optionElement);
+    // Seleccionar el último valor almacenado para la opción
+    if (row.ID === ultimoValorAlmacenado) {
+      optionElement.selected = true;
     }
-    if (opcionUF == "H") {
-      // Crear un elemento de opción
-      let optionElement = document.createElement("option");
 
-      // Asignar el valor y el texto del elemento de opción
-      optionElement.value = row.ID;
-      optionElement.textContent = row.DESCRIPCIO;
-
-      // Marcar la opción con ID 580 como seleccionada por defecto
-      if (row.ID === 580 && ultimoValorAlfabeticoH === null) {
-        optionElement.selected = true;
-        ultimoValorAlfabeticoH = 580; // Actualizar la variable global
-      } else if (ultimoValorAlfabeticoH !== null && row.ID.toString() === ultimoValorAlfabeticoH.toString()) {
-        optionElement.selected = true; // Seleccionar la última opción almacenada
-      }
-
-      // Añadir la opción al selector
-      selectElement.appendChild(optionElement);
-    }
-    if (opcionUF == "U") {
-      // Crear un elemento de opción
-      let optionElement = document.createElement("option");
-
-      // Asignar el valor y el texto del elemento de opción
-      optionElement.value = row.ID;
-      optionElement.textContent = row.DESCRIPCIO;
-
-      // Marcar la opción con ID 580 como seleccionada por defecto
-      if (row.ID === 580 && ultimoValorAlfabeticoU === null) {
-        optionElement.selected = true;
-        ultimoValorAlfabeticoU = 580; // Actualizar la variable global
-      } else if (ultimoValorAlfabeticoU !== null && row.ID.toString() === ultimoValorAlfabeticoU.toString()) {
-        optionElement.selected = true; // Seleccionar la última opción almacenada
-      }
-
-      // Añadir la opción al selector
-      selectElement.appendChild(optionElement);
-    }
+    // Añadir la opción al selector
+    selectElement.appendChild(optionElement);
   });
 
   // Agregar un evento de cambio al selector para actualizar la opción seleccionada
   selectElement.addEventListener("change", function () {
-    console.log(opcionUF);
-    if (opcionUF == "C") {
-      console.log("dentroC");
-      if (/^\d+$/.test(selectElement.value)) {
-        ultimoValorNumericoC = selectElement.value;
-      } else {
-        selectElement.value = ultimoValorNumericoC;
-      }
-    } else if (opcionUF == "H") {
-      console.log("dentroH");
-      if (/^[a-zA-Z]+$/.test(selectElement.value)) {
-        ultimoValorAlfabeticoH = selectElement.value;
-      } else {
-        selectElement.value = ultimoValorAlfabeticoH;
-      }
-    } else if (opcionUF == "U") {
-      console.log("dentroU");
-      if (/^[a-zA-Z]+$/.test(selectElement.value)) {
-        ultimoValorAlfabeticoU = selectElement.value;
-      } else {
-        selectElement.value = ultimoValorAlfabeticoU;
-      }
-    }
+    // Obtener el valor seleccionado y actualizar la variable global correspondiente
+    let valorSeleccionado = selectElement.value;
+    actualizarUltimoValor(opcionUF, valorSeleccionado);
   });
+}
+
+// Función auxiliar para obtener el último valor almacenado
+function obtenerUltimoValor(opcionUF) {
+  switch (opcionUF) {
+    case "C":
+      return ultimoValorNumericoC;
+    case "H":
+      return ultimoValorAlfabeticoH;
+    case "U":
+      return ultimoValorAlfabeticoU;
+    default:
+      return null;
+  }
+}
+
+// Función auxiliar para actualizar el último valor almacenado
+function actualizarUltimoValor(opcionUF, nuevoValor) {
+  switch (opcionUF) {
+    case "C":
+      ultimoValorNumericoC = nuevoValor;
+      break;
+    case "H":
+      ultimoValorAlfabeticoH = nuevoValor;
+      break;
+    case "U":
+      ultimoValorAlfabeticoU = nuevoValor;
+      break;
+  }
 }
 
 // Función para insertar el contenido del calendario en un elemento HTML
@@ -171,7 +140,7 @@ export function insertarCalendario(calendario) {
 // Función asincrónica para mostrar un overlay con información del paciente y sus citas
 export async function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar) {
   // Obtener datos del paciente
-  let dato = valoresAPI.C.rows.find((item) => item.NHC === nhc_a_buscar);
+  let dato = valoresAPI.C.find((item) => item.NHC === nhc_a_buscar);
   let numage = `${dato.NUMAGE}`;
   let condicion1 = dato.HORA_ARRIBADA != "0000" && dato.HORA_CONSULTA == "0000";
   let condicion2 = dato.HORA_ARRIBADA != "0000" && dato.HORA_CONSULTA != "0000";
@@ -329,11 +298,7 @@ export async function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar) {
   let textarea = document.getElementById("observacionsTecnic");
 
   await obtenerObservacionsTecnic(numage).then((dato) => {
-    if (dato == "Object reference not set to an instance of an object.") {
-      textarea.value = "";
-    } else {
-      textarea.value = dato;
-    }
+    textarea.value = dato;
   });
 
   // Obtener el elemento select del overlay
@@ -342,7 +307,7 @@ export async function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar) {
   // Obtener la lista de doctores si aún no se ha obtenido
   if (doctores == undefined) {
     // Obtener doctores de manera asincrónica
-    await obtenerDoctores().then((datos) => {
+    await obtenerRadiologos().then((datos) => {
       doctores = datos.rows;
     });
 
@@ -352,12 +317,6 @@ export async function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar) {
       opcion.value = dato.USRHNET;
       opcion.text = dato.NOM;
       selectDoctor.appendChild(opcion);
-    });
-  }
-
-  if (condicion2) {
-    await obtenerDoctorAsignado(numage).then((dato) => {
-      opcion.value = dato;
     });
   }
 
