@@ -88,3 +88,16 @@ export function obtenerRadiologoAsignado(numage) {
     }),
   }).then((respuesta) => respuesta.json());
 }
+
+export function obtenerEstudiosAnteriores(nhc) {
+  return fetch(url + "ris/radioleg/GetOldReports", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      center: "CMQR",
+      nhc: nhc,
+    }),
+  }).then((respuesta) => respuesta.json());
+}

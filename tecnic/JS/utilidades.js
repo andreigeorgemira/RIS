@@ -1,4 +1,4 @@
-import { obtenerObservacionsTecnic, obtenerMasCitasPaciente, obtenerRadiologos, obtenerRadiologoAsignado } from "../API/llamadasAPI.js";
+import { obtenerObservacionsTecnic, obtenerMasCitasPaciente, obtenerRadiologos, obtenerRadiologoAsignado, obtenerEstudiosAnteriores } from "../API/llamadasAPI.js";
 
 // Función para formatear la hora en formato HH:mm
 export function formatearHora(hora) {
@@ -20,9 +20,6 @@ export function fechaFormateada(fecha) {
 
   return fechaFormateada;
 }
-
-// Variable global para almacenar la última opción seleccionada en un select
-let lastSelectedOption = null;
 
 // Variables globales para almacenar los últimos valores seleccionados
 let ultimoValorNumericoC = 580;
@@ -137,52 +134,58 @@ export function insertarCalendario(calendario) {
   `;
 }
 
-// Función asincrónica para mostrar un overlay con información del paciente y sus citas
-export async function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar) {
-  // Obtener datos del paciente
-  let dato = valoresAPI.C.find((item) => item.NHC === nhc_a_buscar);
-  let numage = `${dato.NUMAGE}`;
+export function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar, opcionUF) {
+  console.log(valoresAPI);
+  console.log(opcionUF);
+  let dato = valoresAPI.find((item) => item.NHC.trim() === nhc_a_buscar);
+  let numage;
+  if (opcionUF == "C") {
+    numage = `${dato.NUMAGE}`;
+  } else {
+    numage = `${dato.NSOL}`;
+  }
   let condicion1 = dato.HORA_ARRIBADA != "0000" && dato.HORA_CONSULTA == "0000";
   let condicion2 = dato.HORA_ARRIBADA != "0000" && dato.HORA_CONSULTA != "0000";
-  let activado = false;
-  let masCitas;
-  let tieneMasCitas;
-  let doctores;
+  let masCitasPromise = obtenerMasCitasPaciente(numage).then((datos) => datos.rows);
+  let radiologoAsignadoPromise = obtenerRadiologoAsignado(numage);
+  let observacionsTecnicPromise = obtenerObservacionsTecnic(numage);
+  let radiologosPromise = obtenerRadiologos().then((datos) => datos.rows);
+  let estudiosAnterioresPromise = obtenerEstudiosAnteriores(nhc_a_buscar).then((dato) => dato.rows);
 
-  // Obtener citas adicionales del paciente de manera asincrónica
-  await obtenerMasCitasPaciente(numage).then((datos) => {
-    masCitas = datos.rows;
-    masCitas.length > 1 ? (tieneMasCitas = true) : (tieneMasCitas = false);
-  });
+  Promise.all([masCitasPromise, radiologoAsignadoPromise, observacionsTecnicPromise, radiologosPromise, estudiosAnterioresPromise]).then(([masCitas, radiologoAsignado, observacionsTecnic, doctores, estudiosAnteriores]) => {
+    let tieneMasCitas = masCitas.length > 1;
+    let listaCitas = "";
 
-  // Crear una lista de citas adicionales para mostrar en el overlay
-  let listaCitas = "";
-
-  if (tieneMasCitas) {
-    let ul = document.createElement("ul");
-    masCitas.forEach((dato) => {
-      let li = document.createElement("li");
-      li.textContent = `[${formatearHora(dato.HORA_VISITA)}] : ${dato.TIPUS}`;
-      ul.appendChild(li);
+    let unoCumpleCondicion = masCitas.some((cita) => {
+      return cita.HORA_ARRIBADA !== "0000" && cita.HORA_CONSULTA != "0000";
     });
 
-    listaCitas = `
-    <div class="alert alert-danger">
-      <div class="text-center">
-        <b>El pacient te més d'una prova pendent per avui</b>
-      </div>
-      <div class="text-left">
-        ${ul.innerHTML}
-      </div>
-    </div>
-  `;
-  }
+    if (tieneMasCitas) {
+      let ul = document.createElement("ul");
+      masCitas.forEach((cita) => {
+        let li = document.createElement("li");
+        li.textContent = `[${formatearHora(cita.HORA_VISITA)}] : ${cita.TIPUS}`;
+        ul.appendChild(li);
+      });
 
-  if (activado) {
-  }
+      listaCitas = `
+          <div class="alert alert-danger">
+            <div class="text-center">
+              <b>El paciente tiene más de una prueba pendiente para hoy</b>
+            </div>
+            <div class="text-left">
+              ${ul.innerHTML}
+            </div>
+          </div>
+        `;
+    }
 
-  // Crear el contenido del overlay con los datos del paciente y las citas
-  overlayDatos.innerHTML = `
+    if (observacionsTecnic == "Object reference not set to an instance of an object.") {
+      observacionsTecnic = "";
+    }
+
+    // Crear el contenido del overlay con los datos del paciente y las citas
+    overlayDatos.innerHTML = `
   <div id="content" class="overlay-content">
     <div id="head" class="modal-header">
       <h3 class="modal-title"><b>[${dato.NHC}]</b>${dato.APELLIDO1} ${dato.APELLIDO2}, ${dato.NOMBRE}</h3>
@@ -231,7 +234,7 @@ export async function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar) {
         <div class="col-6 col-form-label">
           DOCTOR
           <div class="col-12">
-            <select id="select" class="form-select" ${condicion1 || condicion2 ? "" : "disabled"}></select>
+            <select id="select" class="form-select" ${condicion1 || condicion2 || unoCumpleCondicion ? "" : "disabled"}></select>
           </div>
         </div>
 
@@ -259,10 +262,10 @@ export async function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar) {
                   <th style="width:60%;">PROJECCIO</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody style="background-color:#f5f7f7">
                 <tr>
-                  <td>HOLA</td>
-                  <td>HOLA HOLA HOLA HOLA HOLA</td>
+                  <td></td>
+                  <td></td>
                 </tr>
               </tbody>
             </table>
@@ -284,10 +287,11 @@ export async function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar) {
       <div class="row">
         <div class="col-12">
           <div class="col-12">
-            <span class="hand">Veure estudis anteriors</span>
+            <span class="cursor" id="verEstudiosAnteriores">Veure estudis anteriors</span>
           </div>
         </div>
       </div>
+      <hr>
       <div class="modal-footer">
         <button class="btn btn-secondary hand" id="tancar" type="button">Tancar</button>
       </div>
@@ -295,39 +299,96 @@ export async function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar) {
   </div>
 `;
 
-  let textarea = document.getElementById("observacionsTecnic");
+    let textarea = document.getElementById("observacionsTecnic");
+    textarea.value = observacionsTecnic;
 
-  await obtenerObservacionsTecnic(numage).then((dato) => {
-    textarea.value = dato;
-  });
+    let selectDoctor = document.getElementById("select");
 
-  // Obtener el elemento select del overlay
-  let selectDoctor = document.getElementById("select");
-
-  // Obtener la lista de doctores si aún no se ha obtenido
-  if (doctores == undefined) {
-    // Obtener doctores de manera asincrónica
-    await obtenerRadiologos().then((datos) => {
-      doctores = datos.rows;
-    });
-
-    // Poblar el select con opciones de doctores
-    doctores.forEach((dato) => {
+    doctores.forEach((doctor) => {
       let opcion = document.createElement("option");
-      opcion.value = dato.USRHNET;
-      opcion.text = dato.NOM;
+      opcion.value = doctor.USRHNET;
+      opcion.text = doctor.NOM;
+
+      if (radiologoAsignado !== "" && radiologoAsignado === doctor.USRHNET) {
+        opcion.selected = true;
+      }
+
       selectDoctor.appendChild(opcion);
     });
-  }
 
-  // Agregar eventos de cierre al botón de cierre
-  var botonesCerrar = document.querySelectorAll("#tancar");
-  botonesCerrar.forEach(function (cerrarBoton) {
-    cerrarBoton.addEventListener("click", cerrarOverlay);
+    var verEstudiosAnteriores = document.getElementById("verEstudiosAnteriores");
+    var tablaVisible = false;
+
+    verEstudiosAnteriores.addEventListener("click", function () {
+      if (tablaVisible) {
+        verEstudiosAnteriores.innerText = "Veure estudis anteriors";
+        let divTabla = document.getElementById("divTabla");
+        if (divTabla) {
+          divTabla.remove();
+        }
+      } else {
+        verEstudiosAnteriores.innerText = "Ocultar estudis anteriors";
+        let divTabla = document.createElement("div");
+        divTabla.classList.add("col-12", "table-responsive");
+        divTabla.id = "divTabla";
+
+        let tabla = document.createElement("table");
+        tabla.classList.add("tabla", "rounded-3", "overflow-hidden");
+
+        let thead = document.createElement("thead");
+        let trHead = document.createElement("tr");
+        trHead.innerHTML = `
+            <th style="width: 8%">NHC</th>
+            <th style="width: 12%">AN</th>
+            <th style="width: 10%">MODALITAT</th>
+            <th style="width: 40%">PROVA</th>
+            <th style="width: 20%">DATA</th>
+            <th style="width: 5%"></th>`;
+
+        let tbody = document.createElement("tbody");
+        tbody.style.backgroundColor = "#f5f7f7";
+
+        thead.appendChild(trHead);
+        tabla.appendChild(thead);
+        tabla.appendChild(tbody);
+        divTabla.appendChild(tabla);
+
+        estudiosAnteriores.sort((a, b) => new Date(b.DATA) - new Date(a.DATA));
+
+        estudiosAnteriores.forEach((dato) => {
+          let row = document.createElement("tr");
+          let fechaOriginal = dato.DATA;
+          let fecha = fechaFormateada(fechaOriginal.split("T")[0]);
+          let hora = fechaOriginal.split("T")[1].slice(0, 5);
+          let resultado = fecha + " " + hora;
+
+          row.innerHTML = `
+                <td>${dato.NHC}</td>
+                <td>${dato.EPISODI}</td>
+                <td>${dato.AMPLIADA}</td>
+                <td>${dato.DESCRIPCIO}</td>
+                <td>${resultado}</td>
+                <td style="cursor: pointer;" onclick="window.open('${dato.DOCUMENT}', '_blank');">
+                  <i class="fa-solid fa-lungs fa-xl" style="color: #000000;"></i>
+                </td>`;
+          tbody.appendChild(row);
+        });
+
+        verEstudiosAnteriores.parentElement.appendChild(divTabla);
+      }
+
+      tablaVisible = !tablaVisible;
+    });
+
+    // Agregar eventos de cierre al botón de cierre
+    var botonesCerrar = document.querySelectorAll("#tancar");
+    botonesCerrar.forEach(function (cerrarBoton) {
+      cerrarBoton.addEventListener("click", cerrarOverlay);
+    });
+
+    // Mostrar el overlay
+    overlayDatos.style.display = "flex";
   });
-
-  // Mostrar el overlay
-  overlayDatos.style.display = "flex";
 }
 
 // Función para cerrar el overlay

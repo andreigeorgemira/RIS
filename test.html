@@ -3,40 +3,52 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://kit.fontawesome.com/eb17a07343.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <title>Document</title>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-      }
-
-      .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
+      .tabla {
         width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        justify-content: center;
-        align-items: center;
-      }
-
-      .modal-content {
         background-color: white;
-        padding: 20px;
-        border-radius: 8px;
-        width: 80%;
-        max-width: 75%;
+        border-collapse: collapse;
+        margin-bottom: 15px;
       }
 
-      #tancar {
-        margin-top: 10px;
+      .tabla thead {
+        background-color: #697887;
+        color: white;
+      }
+
+      .tabla th,
+      .tabla td {
+        padding: 8px;
+      }
+
+      .tabla tbody tr {
         cursor: pointer;
+      }
+
+      .tabla tbody tr:hover {
+        background-color: lightgray;
       }
     </style>
   </head>
   <body>
+    <div class="col-12 table-responsive">
+      <table class="tabla rounded-3 overflow-hidden" style="margin-bottom: 0">
+        <thead>
+          <tr>
+            <th style="width: 10%">NHC</th>
+            <th style="width: 20%">AN</th>
+            <th style="width: 20%">MODALITAT</th>
+            <th style="width: 20%">PROVA</th>
+            <th style="width: 20%">DATA</th>
+            <th style="width: 5%"></th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
     <script src="test.js"></script>
   </body>
 </html>

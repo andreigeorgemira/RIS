@@ -155,7 +155,7 @@ function eventoClic() {
   filasTabla.forEach((fila) => {
     fila.addEventListener("click", function () {
       let nhc_a_buscar = fila.getAttribute("id");
-      mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar);
+      mostrarOverlay(overlayDatos, valoresAPI[opcionUF], nhc_a_buscar, opcionUF);
     });
   });
 }
