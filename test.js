@@ -1,32 +1,41 @@
+console.time("Tiempo de ejecución");
 let url = "https://localhost:7224/Radiologia/api/v4/";
-let nhc = "58073";
+let nsol = "196994";
 let valores;
-let tabla = document.getElementById("tbody");
 
-obtenerEstudiosAnteriores(nhc).then((dato) => {
-  valores = dato.rows;
-  valores.forEach((dato) => {
-    let row = document.createElement("tr");
-    row.innerHTML = `
-    <td>${dato.NHC}</td>
-    <td>${dato.EPISODI}</td>
-    <td>${dato.AMPLIADA}</td>
-    <td>${dato.DESCRIPCIO}</td>
-    <td>${dato.DATA}</td>
-    <td><a href="${dato.DOCUMENT}"> <i class="fa-solid fa-lungs fa-xl" style="color: #000000;"></i></a></td>`;
-    tabla.appendChild(row);
-  });
-});
+let tbodypruebas = document.getElementById("tbodyPruebas");
 
-function obtenerRadiologoAsignado(nhc) {
-  return fetch(url + "ris/radioleg/GetOldReports", {
+function obtenerEstudiosRagiologico(nsol) {
+  return fetch(url + "ris/tecnic/getstudy", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
       center: "CMQR",
-      nhc: nhc,
+      num: nsol,
+      tipo: "nsol",
     }),
   }).then((respuesta) => respuesta.json());
 }
+
+obtenerEstudiosRagiologico(nsol).then((datos) => {
+  valores = datos.rows;
+  tbodypruebas.innerHTML = "";
+
+  valores.forEach((valor) => {
+    let tr = document.createElement("tr");
+
+    let td1 = document.createElement("td");
+    td1.textContent = valor.PROVA.trim();
+    tr.appendChild(td1);
+
+    let td2 = document.createElement("td");
+    td2.textContent = valor.PROJECCIO.trim();
+    tr.appendChild(td2);
+
+    tbodypruebas.appendChild(tr);
+  });
+});
+
+console.timeEnd("Tiempo de ejecución");

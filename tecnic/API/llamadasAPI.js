@@ -101,3 +101,17 @@ export function obtenerEstudiosAnteriores(nhc) {
     }),
   }).then((respuesta) => respuesta.json());
 }
+
+export function obtenerEstudiosRagiologico(nsol) {
+  return fetch(url + "ris/tecnic/getstudy", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      center: "CMQR",
+      num: nsol,
+      tipo: "nsol",
+    }),
+  }).then((respuesta) => respuesta.json());
+}

@@ -1,4 +1,4 @@
-import { obtenerObservacionsTecnic, obtenerMasCitasPaciente, obtenerRadiologos, obtenerRadiologoAsignado, obtenerEstudiosAnteriores } from "../API/llamadasAPI.js";
+import { obtenerObservacionsTecnic, obtenerMasCitasPaciente, obtenerRadiologos, obtenerRadiologoAsignado, obtenerEstudiosAnteriores, obtenerEstudiosRagiologico } from "../API/llamadasAPI.js";
 
 // Función para formatear la hora en formato HH:mm
 export function formatearHora(hora) {
@@ -135,8 +135,6 @@ export function insertarCalendario(calendario) {
 }
 
 export function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar, opcionUF) {
-  console.log(valoresAPI);
-  console.log(opcionUF);
   let dato = valoresAPI.find((item) => item.NHC.trim() === nhc_a_buscar);
   let numage;
   if (opcionUF == "C") {
@@ -146,13 +144,14 @@ export function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar, opcionUF)
   }
   let condicion1 = dato.HORA_ARRIBADA != "0000" && dato.HORA_CONSULTA == "0000";
   let condicion2 = dato.HORA_ARRIBADA != "0000" && dato.HORA_CONSULTA != "0000";
-  let masCitasPromise = obtenerMasCitasPaciente(numage).then((datos) => datos.rows);
-  let radiologoAsignadoPromise = obtenerRadiologoAsignado(numage);
-  let observacionsTecnicPromise = obtenerObservacionsTecnic(numage);
-  let radiologosPromise = obtenerRadiologos().then((datos) => datos.rows);
-  let estudiosAnterioresPromise = obtenerEstudiosAnteriores(nhc_a_buscar).then((dato) => dato.rows);
+  const masCitasPromise = obtenerMasCitasPaciente(numage).then((datos) => datos.rows);
+  const radiologoAsignadoPromise = obtenerRadiologoAsignado(numage);
+  const observacionsTecnicPromise = obtenerObservacionsTecnic(numage);
+  const radiologosPromise = obtenerRadiologos().then((datos) => datos.rows);
+  const estudiosAnterioresPromise = obtenerEstudiosAnteriores(nhc_a_buscar).then((dato) => dato.rows);
+  const estudiosRagiologicoPromise = obtenerEstudiosRagiologico(numage).then((dato) => dato.rows);
 
-  Promise.all([masCitasPromise, radiologoAsignadoPromise, observacionsTecnicPromise, radiologosPromise, estudiosAnterioresPromise]).then(([masCitas, radiologoAsignado, observacionsTecnic, doctores, estudiosAnteriores]) => {
+  Promise.all([masCitasPromise, radiologoAsignadoPromise, observacionsTecnicPromise, radiologosPromise, estudiosAnterioresPromise, estudiosRagiologicoPromise]).then(([masCitas, radiologoAsignado, observacionsTecnic, doctores, estudiosAnteriores, estudiosRadiologico]) => {
     let tieneMasCitas = masCitas.length > 1;
     let listaCitas = "";
 
@@ -206,7 +205,7 @@ export function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar, opcionUF)
         <div class="col-6 col-form-label">
           SOLICITANT
           <div class="col-12">
-            <input class="form-control" disabled />
+            <input id="solicitant" class="form-control" disabled />
           </div>
         </div>
 
@@ -220,7 +219,7 @@ export function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar, opcionUF)
         <div class="col-4 col-form-label">
           PROCÉS
           <div class="col-12">
-            <input class="form-control" disabled />
+            <input id="proces" class="form-control" disabled />
           </div>
         </div>
 
@@ -241,7 +240,7 @@ export function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar, opcionUF)
         <div class="col-6 col-form-label">
           OBSERVACIONS MÈDIQUES
           <div class="col-12">
-            <textarea class="form-control" disabled></textarea>
+            <textarea id="observacionsMediques" class="form-control" disabled></textarea>
           </div>
         </div>
 
@@ -255,14 +254,14 @@ export function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar, opcionUF)
       <div class="row">
         <div class="col-6 col-form-label">
           <div class="col-12 table-responsive">
-            <table class="tabla rounded-3 overflow-hidden" style="margin-bottom:0;">
+            <table  class="tabla rounded-3 overflow-hidden" style="margin-bottom:0;">
               <thead>
                 <tr>
                   <th style="width:40%;">PROVA</th>
                   <th style="width:60%;">PROJECCIO</th>
                 </tr>
               </thead>
-              <tbody style="background-color:#f5f7f7">
+              <tbody id="tbodyPruebas" style="background-color:#f5f7f7">
                 <tr>
                   <td></td>
                   <td></td>
@@ -298,6 +297,10 @@ export function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar, opcionUF)
     </div>
   </div>
 `;
+
+    let solicitant = document.getElementById("solicitant");
+    let proces = document.getElementById("proces");
+    let observacionsMediques = document.getElementById("observacionsMediques");
 
     let textarea = document.getElementById("observacionsTecnic");
     textarea.value = observacionsTecnic;
@@ -380,12 +383,35 @@ export function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar, opcionUF)
       tablaVisible = !tablaVisible;
     });
 
+    let tbodypruebas = document.getElementById("tbodyPruebas");
+
+    if (estudiosRadiologico != "") {
+      tbodypruebas.innerHTML = "";
+    }
+
+    estudiosRadiologico.forEach((valor) => {
+      solicitant.value = valor.SOLICITANT;
+      proces.value = valor.PROCES;
+      observacionsMediques.value = valor.OBSERVACIONS;
+
+      let tr = document.createElement("tr");
+
+      let td1 = document.createElement("td");
+      td1.textContent = valor.PROVA.trim();
+      tr.appendChild(td1);
+
+      let td2 = document.createElement("td");
+      td2.textContent = valor.PROJECCIO.trim();
+      tr.appendChild(td2);
+
+      tbodypruebas.appendChild(tr);
+    });
+
     // Agregar eventos de cierre al botón de cierre
     var botonesCerrar = document.querySelectorAll("#tancar");
     botonesCerrar.forEach(function (cerrarBoton) {
       cerrarBoton.addEventListener("click", cerrarOverlay);
     });
-
     // Mostrar el overlay
     overlayDatos.style.display = "flex";
   });
