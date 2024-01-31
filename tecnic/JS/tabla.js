@@ -73,7 +73,8 @@ function datosC(dato, filtroRealitzats, valorSelect) {
   return row;
 }
 
-function datosH(dato) {
+function datosH(dato, filtroRealitzats, valorSelect) {
+  let condicionRealitzats = filtroRealitzats && dato.ESTAT == "3" && valorSelect == dato.TIPPRV;
   let row = document.createElement("tr");
   row.id = `${dato.NHC.trim()}`;
   row.innerHTML = `
@@ -86,11 +87,15 @@ function datosH(dato) {
     <td>${dato.UBICACIO}</td>
     <td><b>${traslado(dato.TRASLLAT)}<b></td>
   `;
+  if (condicionRealitzats) {
+    row.classList.add("realitzat");
+  }
 
   return row;
 }
 
-function datosU(dato) {
+function datosU(dato, filtroRealitzats, valorSelect) {
+  let condicionRealitzats = filtroRealitzats && dato.ESTAT == "3" && valorSelect == dato.TIPPRV;
   let row = document.createElement("tr");
   row.id = `${dato.NHC.trim()}`;
   row.innerHTML = `
@@ -102,6 +107,9 @@ function datosU(dato) {
     <td>${dato.UBICACIO}</td>
     <td>${traslado(dato.TRASLLAT)}</td>
   `;
+  if (condicionRealitzats) {
+    row.classList.add("realitzat");
+  }
 
   return row;
 }
@@ -166,8 +174,9 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
       }
     }
 
+    let condicionRealitzats = dato.TIPPRV == ultimoValorAlfabeticoH && dato.ESTAT == "3";
     let condicion = dato.TIPPRV == ultimoValorAlfabeticoH && dato.PACIENT != null;
-    return condicion;
+    return condicion && !condicionRealitzats;
   });
 
   contadorU = (valoresAPI.U || []).filter(function (dato) {
@@ -183,8 +192,9 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
       }
     }
 
+    let condicionRealitzats = dato.TIPPRV == ultimoValorAlfabeticoU && dato.ESTAT == "3";
     let condicion = dato.TIPPRV == ultimoValorAlfabeticoU && dato.FDATASOL != null;
-    return condicion;
+    return condicion && !condicionRealitzats;
   });
 
   document.getElementById("totalProgramades").textContent = `(${contadorC.length})`;
@@ -200,15 +210,15 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
     });
   } else if (opcionUF === "H" && valoresAPI.H) {
     valoresAPI.H.forEach((dato) => {
-      if (dato.TIPPRV == ultimoValorAlfabeticoH) {
-        let row = datosH(dato, ultimoValorAlfabeticoH);
+      if (dato.TIPPRV == ultimoValorAlfabeticoH && filtroRealitzats) {
+        let row = datosH(dato, filtroRealitzats, ultimoValorAlfabeticoH);
         tbody.appendChild(row);
       }
     });
   } else if (opcionUF === "U" && valoresAPI.U) {
     valoresAPI.U.forEach((dato) => {
-      if (dato.TIPPRV == ultimoValorAlfabeticoU) {
-        let row = datosU(dato, ultimoValorAlfabeticoU);
+      if (dato.TIPPRV == ultimoValorAlfabeticoU && filtroRealitzats) {
+        let row = datosU(dato, filtroRealitzats, ultimoValorAlfabeticoU);
         tbody.appendChild(row);
       }
     });

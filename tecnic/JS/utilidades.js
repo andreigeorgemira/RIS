@@ -137,13 +137,17 @@ export function insertarCalendario(calendario) {
 export function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar, opcionUF) {
   let dato = valoresAPI.find((item) => item.NHC.trim() === nhc_a_buscar);
   let numage;
+  let condicion1;
+  let condicion2;
   if (opcionUF == "C") {
     numage = `${dato.NUMAGE}`;
+    condicion1 = dato.HORA_ARRIBADA != "0000" && dato.HORA_CONSULTA == "0000";
+    condicion2 = dato.HORA_ARRIBADA != "0000" && dato.HORA_CONSULTA != "0000";
   } else {
     numage = `${dato.NSOL}`;
+    condicion1 = dato.ESTAT == "1";
+    condicion2 = dato.ESTAT == "3";
   }
-  let condicion1 = dato.HORA_ARRIBADA != "0000" && dato.HORA_CONSULTA == "0000";
-  let condicion2 = dato.HORA_ARRIBADA != "0000" && dato.HORA_CONSULTA != "0000";
   const masCitasPromise = obtenerMasCitasPaciente(numage).then((datos) => datos.rows);
   const radiologoAsignadoPromise = obtenerRadiologoAsignado(numage);
   const observacionsTecnicPromise = obtenerObservacionsTecnic(numage);
@@ -177,6 +181,37 @@ export function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar, opcionUF)
             </div>
           </div>
         `;
+    }
+
+    let html;
+    if (condicion1) {
+      html = `
+        <div class="d-flex flex-column-reverse">
+          <button class="btn btn-lg btn-success hand col-6 align-self-end" type="button">
+            <span>Reassignar</span>
+          </button>
+          <button class="btn btn-lg btn-warning hand col-6 align-self-end mb-3" type="button">
+            <span>Enviar a Worklist</span>
+          </button>
+        </div>
+      `;
+    } else if (condicion2 || unoCumpleCondicion) {
+      html = `
+        <div class="d-flex flex-column-reverse">
+          <button class="btn btn-lg btn-danger hand col-6 align-self-end" type="button">
+            <span>Informar incidència</span>
+          </button>
+          <button class="btn btn-lg btn-success hand col-6 align-self-end mb-3" type="button">
+            <span>Finalitzar Estudi</span>
+          </button>
+        </div>
+      `;
+    } else {
+      html = `
+        <button class="btn btn-lg mt-3 float-end btn-secondary hand col-6" type="button">
+          <span>Enviar a WorkList</span>
+        </button>
+      `;
     }
 
     if (observacionsTecnic == "Object reference not set to an instance of an object.") {
@@ -273,13 +308,11 @@ export function mostrarOverlay(overlayDatos, valoresAPI, nhc_a_buscar, opcionUF)
         <div class="col-6 text-right">
         ${
           tieneMasCitas
-            ? `${listaCitas}
-               <button class="btn btn-lg float-end btn-secondary hand col-6" type="button">
-                  <span>Enviar a WorkList</span>
-               </button>`
-            : `<button class="btn btn-lg mt-3 float-end btn-secondary hand col-6" type="button">
-                  <span>Enviar a WorkList</span>
-               </button>`
+            ? `
+              ${listaCitas}
+              ${html}
+            `
+            : html
         }
         </div>
       </div>
