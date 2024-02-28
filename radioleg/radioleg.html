@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Radioleg</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome CSS -->
+    <script src="https://kit.fontawesome.com/eb17a07343.js" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <link href="CSS/style.css" rel="stylesheet" />
+    <!--Echarts JS -->
+    <script src="https://fastly.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#"><img src="../logo.png" alt="Logo de la Empresa" height="50" /></a>
+
+      <ul class="navbar-nav mr-auto ml-auto">
+        <li class="nav-item cursor">
+          <a class="nav-link" id="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard </a>
+        </li>
+        <li class="nav-item cursor">
+          <a class="nav-link" id="pendents"><i class="fas fa-tasks"></i> Pendents </a>
+        </li>
+        <li class="nav-item cursor">
+          <a class="nav-link" id="lista"><i class="fas fa-list"></i> Lista de Treball </a>
+        </li>
+        <li class="nav-item cursor">
+          <a class="nav-link" id="estadistiques"><i class="fas fa-chart-bar"></i> Estadístiques </a>
+        </li>
+      </ul>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a id="EspecialidadUser"></a>
+        </li>
+        <li class="nav-item">
+          <a id="NombreUser"></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#"> Sortir <i class="fas fa-sign-out-alt"></i></a>
+        </li>
+      </ul>
+    </nav>
+
+    <div id="contenido"></div>
+    <script type="module" src="JS/main.js"></script>
+  </body>
+</html>

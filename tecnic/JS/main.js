@@ -1,7 +1,7 @@
 // Importación de funciones específicas desde módulos externos
 import { obtenerDatosGetWorklistAPI, obtenerDatosGetAgendesRAD } from "../API/llamadasAPI.js";
 import { crearTablaWorklist } from "./tabla.js";
-import { datosSelect, fechaFormateada, mostrarOverlay, insertarCalendario } from "./utilidades.js";
+import { datosSelect, fechaFormateada, creaccionOverlay, insertarCalendario } from "./utilidades.js";
 
 // Selección de elementos del DOM
 let tabla = document.getElementById("tabla");
@@ -9,6 +9,7 @@ let select = document.getElementById("filtro");
 let mostrarRealitzat = document.getElementById("mostrarRealitzat");
 let icono = document.getElementById("icono");
 let textoCalendario = document.getElementById("calendario");
+let tituloWEB = document.querySelector("title");
 
 // Evento que se ejecuta cuando el DOM ha cargado
 document.addEventListener("DOMContentLoaded", function () {
@@ -37,6 +38,9 @@ let valoresAPI = {
 // Recuperar el nombre de usuario y especialidad de la URL
 let urlParams = new URLSearchParams(window.location.search);
 let user = urlParams.get("user");
+if (user != null) {
+  tituloWEB.innerHTML += " " + user;
+}
 let especialidad = urlParams.get("especialidad");
 document.getElementById("NombreUser").innerHTML = "User " + user;
 document.getElementById("EspecialidadUser").innerHTML = "Especialidad  " + especialidad;
@@ -155,7 +159,7 @@ function eventoClic() {
   filasTabla.forEach((fila) => {
     fila.addEventListener("click", function () {
       let nhc_a_buscar = fila.getAttribute("id");
-      mostrarOverlay(overlayDatos, valoresAPI[opcionUF], nhc_a_buscar, opcionUF);
+      creaccionOverlay(overlayDatos, valoresAPI[opcionUF], nhc_a_buscar, opcionUF);
     });
   });
 }
@@ -257,7 +261,12 @@ function crearCalendario() {
 }
 
 // Función para seleccionar una fecha en el calendario
-function seleccionarFecha(dia) {
+function seleccionarFecha(dia, botonHoy = false) {
+  if (botonHoy) {
+    let fecha = new Date();
+    anoActual = fecha.getFullYear();
+    mesActual = fecha.getMonth();
+  }
   // Quitar la clase 'selected' del botón previamente seleccionado
   let botonAnterior = document.querySelector(`#customCalendar button.selected`);
   if (botonAnterior) {
@@ -300,7 +309,8 @@ function seleccionarFecha(dia) {
 // Función para seleccionar la fecha actual
 function fechaHoy() {
   let hoy = new Date();
-  seleccionarFecha(hoy.getDate());
+  let botonHoy = true;
+  seleccionarFecha(hoy.getDate(), botonHoy);
 }
 
 // Función para navegar al día anterior

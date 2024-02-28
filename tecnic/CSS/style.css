@@ -5,29 +5,29 @@ body {
   font-size: 0.97em;
 }
 
-html {
+body.scroll {
   overflow-y: scroll;
 }
 
-html::-webkit-scrollbar-track {
+body.overlay-abierto {
+  overflow-y: hidden;
+}
+
+body::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
   background-color: #f5f5f5;
 }
 
-html::-webkit-scrollbar {
+body::-webkit-scrollbar {
   width: 12px;
   background-color: #f5f5f5;
 }
 
-html::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #555;
-}
-
-body {
-  overflow-y: auto;
 }
 
 header {
@@ -52,8 +52,13 @@ a {
 .nav-item {
   margin-right: 10px;
 }
+
 .cursor {
   cursor: pointer;
+}
+
+input:disabled {
+  cursor: not-alloweds;
 }
 
 .modalSpinner {
@@ -120,11 +125,6 @@ a {
 
 .botonSeleccionado {
   background-color: lightsalmon; /* Cambia el color de fondo cuando está seleccionado */
-}
-
-.calendar {
-  float: left;
-  height: 20px;
 }
 
 .tabla {
@@ -299,13 +299,12 @@ a {
   display: block;
 }
 
-/* Estilo para el día actual y seleccionado */
 .custom-calendar button.selected {
-  background-color: #66b3ff; /* Puedes ajustar el color según tus preferencias */
+  background-color: #66b3ff;
 }
 
 .custom-calendar button:not(.selected):not(:empty):not(:nth-child(-n + 7)):hover {
-  background-color: #66b3ff; /* Mismo color que el día seleccionado */
+  background-color: #66b3ff;
 }
 
 .overlay {

@@ -1,0 +1,100 @@
+html,
+body {
+  background-color: white;
+  font-family: Verdana;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.total {
+  position: absolute;
+  font-size: 4.5vh;
+  font-weight: bold;
+  bottom: 30px;
+  right: 0;
+}
+
+.card {
+  background-color: rgb(104, 111, 133);
+}
+
+.card-body > * {
+  color: white;
+}
+
+.container {
+  width: 100%;
+}
+
+.grafico {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+#chart-container {
+  position: relative;
+  height: 45vh;
+  width: 50vw;
+  overflow: hidden;
+}
+
+.card-statics {
+  height: 20vh;
+  min-height: 150px;
+  width: 13vw;
+  min-width: 150px;
+  line-height: 20vh;
+}
+
+.stats {
+  padding: 2% 2% 2% 2%;
+}
+
+.top {
+  margin-top: -10vh;
+}
+
+#contenedor-grafico {
+  margin-top: -35vh;
+  margin-left: -10vw;
+  position: relative;
+  height: 60vh;
+  width: 60vw;
+  overflow: hidden;
+}
+.margin {
+  margin-top: 20vh;
+}
+.col-md-8 {
+  margin-top: -20vh;
+  margin-left: 4vw;
+}
+
+.radilogos {
+  height: 10vh;
+}
+
+.radilogos h5 {
+  font-size: 2.2vh;
+}
+.radilogos h6 {
+  font-size: 1.5vh;
+}
+
+.col {
+  padding: 5px;
+}
+
+.btn {
+  white-space: normal;
+}
+
+.botones {
+  background-color: lightgray;
+}
+
+.btn-activo {
+  background-color: green;
+}

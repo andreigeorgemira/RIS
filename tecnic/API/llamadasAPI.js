@@ -1,10 +1,10 @@
 import { fechaFormateada } from "../JS/utilidades.js";
 
-let url = "https://localhost:7224/Radiologia/api/v4/";
+const url = "https://localhost:7224/Radiologia/api/v4/ris";
 
 // Función para realizar la solicitud a la API y guardar los datos
 export function obtenerDatosGetWorklistAPI(opcionUF, fecha = new Date()) {
-  return fetch(url + "ris/tecnic/getWorklist", {
+  return fetch(url + "/tecnic/getWorklist", {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
@@ -21,7 +21,7 @@ export function obtenerDatosGetWorklistAPI(opcionUF, fecha = new Date()) {
 
 // Función para realizar la solicitud a la API y guardar los datos
 export function obtenerDatosGetAgendesRAD(opcionUF) {
-  return fetch(url + "ris/tecnic/GetAgendesRAD", {
+  return fetch(url + "/tecnic/GetAgendesRAD", {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
@@ -37,7 +37,7 @@ export function obtenerDatosGetAgendesRAD(opcionUF) {
 
 // Función para realizar la solicitud a la API y guardar los datos
 export function obtenerObservacionsTecnic(numage) {
-  return fetch(url + "ris/tecnic/GetObstecniques", {
+  return fetch(url + "/tecnic/GetObstecniques", {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -52,7 +52,7 @@ export function obtenerObservacionsTecnic(numage) {
 }
 
 export function obtenerMasCitasPaciente(numage) {
-  return fetch(url + "ris/tecnic/HasMoreDates", {
+  return fetch(url + "/tecnic/HasMoreDates", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -65,7 +65,7 @@ export function obtenerMasCitasPaciente(numage) {
 }
 
 export function obtenerRadiologos() {
-  return fetch(url + "ris/tecnic/getProfessionals", {
+  return fetch(url + "/tecnic/getProfessionals", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -77,7 +77,7 @@ export function obtenerRadiologos() {
 }
 
 export function obtenerRadiologoAsignado(numage) {
-  return fetch(url + "ris/tecnic/getAssignedRad", {
+  return fetch(url + "/tecnic/getAssignedRad", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -90,7 +90,7 @@ export function obtenerRadiologoAsignado(numage) {
 }
 
 export function obtenerEstudiosAnteriores(nhc) {
-  return fetch(url + "ris/radioleg/GetOldReports", {
+  return fetch(url + "/radioleg/GetOldReports", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -103,7 +103,7 @@ export function obtenerEstudiosAnteriores(nhc) {
 }
 
 export function obtenerEstudiosRagiologico(nsol) {
-  return fetch(url + "ris/tecnic/getstudy", {
+  return fetch(url + "/tecnic/getstudy", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

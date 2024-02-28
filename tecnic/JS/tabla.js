@@ -210,14 +210,14 @@ export function crearTablaWorklist(valoresAPI, select, filtroRealitzats, tabla, 
     });
   } else if (opcionUF === "H" && valoresAPI.H) {
     valoresAPI.H.forEach((dato) => {
-      if (dato.TIPPRV == ultimoValorAlfabeticoH && filtroRealitzats) {
+      if ((dato.TIPPRV == ultimoValorAlfabeticoH && filtroRealitzats) || (dato.TIPPRV == ultimoValorAlfabeticoH && !filtroRealitzats && dato.ESTAT != "3")) {
         let row = datosH(dato, filtroRealitzats, ultimoValorAlfabeticoH);
         tbody.appendChild(row);
       }
     });
   } else if (opcionUF === "U" && valoresAPI.U) {
     valoresAPI.U.forEach((dato) => {
-      if (dato.TIPPRV == ultimoValorAlfabeticoU && filtroRealitzats) {
+      if ((dato.TIPPRV == ultimoValorAlfabeticoU && filtroRealitzats) || (dato.TIPPRV == ultimoValorAlfabeticoU && !filtroRealitzats && dato.ESTAT != "3")) {
         let row = datosU(dato, filtroRealitzats, ultimoValorAlfabeticoU);
         tbody.appendChild(row);
       }
