@@ -1,6 +1,6 @@
 html,
 body {
-  background-color: white;
+  background-color: #ddd;
   font-family: Verdana;
 }
 
@@ -40,6 +40,14 @@ body {
   overflow: hidden;
 }
 
+#cartesEstadistiques {
+  margin-left: 5vw;
+}
+
+.h3-estadisitiques {
+  margin-left: 6vw;
+}
+
 .card-statics {
   height: 20vh;
   min-height: 150px;
@@ -57,7 +65,7 @@ body {
 }
 
 #contenedor-grafico {
-  margin-top: -35vh;
+  margin-top: -55vh;
   margin-left: -10vw;
   position: relative;
   height: 60vh;
@@ -72,15 +80,19 @@ body {
   margin-left: 4vw;
 }
 
-.radilogos {
+.radiologos {
   height: 10vh;
 }
 
-.radilogos h5 {
+.radiologos h5 {
   font-size: 2.2vh;
 }
-.radilogos h6 {
+.radiologos h6 {
   font-size: 1.5vh;
+}
+
+.h3-stats-radio {
+  margin-left: 1vw;
 }
 
 .col {
@@ -92,9 +104,10 @@ body {
 }
 
 .botones {
-  background-color: lightgray;
+  border: 2px black solid;
+  background-color: white;
 }
 
 .btn-activo {
-  background-color: green;
+  background-color: red;
 }

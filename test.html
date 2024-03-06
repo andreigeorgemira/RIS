@@ -12,247 +12,188 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+      html,
+      body {
+        background-color: #ddd;
+        font-family: Verdana;
+      }
+
+      .cursor {
+        cursor: pointer;
+      }
+
+      .total {
+        position: absolute;
+        font-size: 4.5vh;
+        font-weight: bold;
+        bottom: 30px;
+        right: 0;
+      }
+
+      .card {
+        background-color: rgb(104, 111, 133);
+      }
+
+      .card-body > * {
+        color: white;
+      }
+
+      .container {
+        width: 100%;
+      }
+
+      .grafico {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+      #chart-container {
+        position: relative;
+        height: 45vh;
+        width: 50vw;
+        overflow: hidden;
+      }
+
+      #cartesEstadistiques {
+        margin-left: 5vw;
+      }
+
+      .h3-estadisitiques {
+        margin-left: 6vw;
+      }
+
       .card-statics {
         height: 20vh;
         min-height: 150px;
         width: 13vw;
         min-width: 150px;
+        line-height: 20vh;
       }
+
       .stats {
         padding: 2% 2% 2% 2%;
       }
+
       .top {
-        margin-top: -100px;
+        margin-top: -10vh;
       }
-      #chart-container {
-        margin-top: -250px;
-        margin-left: -200px;
+
+      #contenedor-grafico {
+        margin-top: -55vh;
+        margin-left: -10vw;
         position: relative;
         height: 60vh;
         width: 60vw;
         overflow: hidden;
       }
       .margin {
-        margin-top: 200px;
+        margin-top: 20vh;
       }
       .col-md-8 {
-        margin-top: -200px;
+        margin-top: -20vh;
+        margin-left: 4vw;
+      }
+
+      .radiologos {
+        height: 10vh;
+      }
+
+      .radiologos h5 {
+        font-size: 2.2vh;
+      }
+      .radiologos h6 {
+        font-size: 1.5vh;
+      }
+
+      .h3-stats-radio {
+        margin-left: 1vw;
+      }
+
+      .col {
+        padding: 5px;
+      }
+
+      .btn {
+        white-space: normal;
+      }
+
+      .botones {
+        border: 2px black solid;
+        background-color: white;
+      }
+
+      .btn-activo {
+        background-color: red;
       }
     </style>
   </head>
   <body>
-    <div class="stats">
-      <div class="col-2">
-        <div>
-          <span class="input-label">Data Inici: </span>
-          <input id="inicio" class="form-control ng-pristine ng-valid ng-touched" type="date" />
-        </div>
-        <div>
-          <span class="input-label">Data Final: </span>
-          <input id="final" class="form-control ng-untouched ng-pristine ng-valid" type="date" />
-        </div>
-      </div>
-      <br />
-
-      <div class="container-fluid">
+    <div class="col-md-2">
+      <div class="d-grid gap-2">
         <div class="row">
-          <div class="col-md-2">
-            <div class="d-grid gap-2">
-              <div class="row mb-2">
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">CT</button>
-                </div>
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">DX</button>
-                </div>
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">US</button>
-                </div>
-              </div>
-              <div class="row mb-2">
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">MG</button>
-                </div>
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">PT</button>
-                </div>
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">NM</button>
-                </div>
-              </div>
-              <div class="row mb-2">
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">MR</button>
-                </div>
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">RF</button>
-                </div>
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">PX</button>
-                </div>
-              </div>
-              <div class="row mb-2">
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">OT</button>
-                </div>
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">XC</button>
-                </div>
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">DOC</button>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <button id="select" class="btn btn-primary btn-block" type="button">SELECCIONA TOTES</button>
-                </div>
-              </div>
-              <div class="row mt-2">
-                <div class="col">
-                  <button class="btn btn-warning btn-block" type="button">
-                    <i class="fa-solid fa-arrow-rotate-right fa-xl" style="color: #000000" aria-hidden="true"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
+          <div class="col">
+            <button class="btn botones btn-block btn-activo" type="button">CT</button>
           </div>
-
-          <div class="col-md-10 top">
-            <div class="d-flex justify-content-between">
-              <h3>&nbsp;&nbsp;Estadístiques</h3>
-            </div>
-            <div class="d-flex flex-wrap"></div>
+          <div class="col">
+            <button class="btn botones btn-block btn-activo" type="button">DX</button>
+          </div>
+          <div class="col">
+            <button class="btn botones btn-block" type="button">US</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button class="btn botones btn-block" type="button">MG</button>
+          </div>
+          <div class="col">
+            <button class="btn botones btn-block" type="button">PT</button>
+          </div>
+          <div class="col">
+            <button class="btn botones btn-block" type="button">NM</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button class="btn botones btn-block" type="button">MR</button>
+          </div>
+          <div class="col">
+            <button class="btn botones btn-block" type="button">RF</button>
+          </div>
+          <div class="col">
+            <button class="btn botones btn-block" type="button">PX</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button class="btn botones btn-block" type="button">OT</button>
+          </div>
+          <div class="col">
+            <button class="btn botones btn-block" type="button">XC</button>
+          </div>
+          <div class="col">
+            <button class="btn botones btn-block" type="button">DOC</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button id="select" class="btn btn-primary btn-block" type="button">SELECCIONA TOTES</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button class="btn btn-warning btn-block" type="button">
+              <i class="fa-solid fa-arrow-rotate-right fa-xl" style="color: #000000" aria-hidden="true"></i>
+            </button>
           </div>
         </div>
       </div>
     </div>
-
-    <hr />
-
-    <div class="stats margin">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-3">
-            <div class="d-grid">
-              <div class="row mb-2">
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">
-                    <h5>dato.TRACTE</h5>
-                    <h6>dato.COLEGIAT</h6>
-                  </button>
-                </div>
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">
-                    <h5>dato.TRACTE</h5>
-                    <h6>dato.COLEGIAT</h6>
-                  </button>
-                </div>
-              </div>
-              <div class="row mb-2">
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">
-                    <h5>dato.TRACTE</h5>
-                    <h6>dato.COLEGIAT</h6>
-                  </button>
-                </div>
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">
-                    <h5>dato.TRACTE</h5>
-                    <h6>dato.COLEGIAT</h6>
-                  </button>
-                </div>
-              </div>
-              <div class="row mb-2">
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">
-                    <h5>dato.TRACTE</h5>
-                    <h6>dato.COLEGIAT</h6>
-                  </button>
-                </div>
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">
-                    <h5>dato.TRACTE</h5>
-                    <h6>dato.COLEGIAT</h6>
-                  </button>
-                </div>
-              </div>
-              <div class="row mb-2">
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">
-                    <h5>dato.TRACTE</h5>
-                    <h6>dato.COLEGIAT</h6>
-                  </button>
-                </div>
-                <div class="col">
-                  <button class="btn btn-light btn-block" type="button">
-                    <h5>dato.TRACTE</h5>
-                    <h6>dato.COLEGIAT</h6>
-                  </button>
-                </div>
-              </div>
-              <div class="row mb-2 justify-content-center">
-                <div class="col-auto">
-                  <button class="btn btn-light" type="button">
-                    <h5>dato.TRACTE</h5>
-                    <h6>dato.COLEGIAT</h6>
-                  </button>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <button id="select" class="btn btn-primary btn-block" type="button">SELECCIONA TOTES</button>
-                </div>
-              </div>
-              <div class="row mt-2">
-                <div class="col">
-                  <button class="btn btn-danger btn-block" type="button">DESMARCAR TOTES</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-8">
-            <div class="d-flex justify-content-between">
-              <h3>&nbsp;&nbsp;Estadístiques per radiòleg</h3>
-            </div>
-            <div class="d-flex flex-wrap">
-              <div class="card m-2 card-statics">
-                <div class="card-body d-flex flex-column justify-content-center">
-                  <h1 class="card-title" id="total-realitzades">0</h1>
-                  <h6 class="card-text">Total Realitzades</h6>
-                </div>
-              </div>
-              <div class="card m-2 card-statics">
-                <div class="card-body d-flex flex-column justify-content-center">
-                  <h1 class="card-title" id="informades">0</h1>
-                  <h6 class="card-text">Informades</h6>
-                </div>
-              </div>
-              <div class="card m-2 card-statics">
-                <div class="card-body d-flex flex-column justify-content-center">
-                  <h1 class="card-title" id="pendents-informar">0</h1>
-                  <h6 class="card-text">Pendents d'informar</h6>
-                </div>
-              </div>
-              <div class="card m-2 card-statics">
-                <div class="card-body d-flex flex-column justify-content-center">
-                  <h1 class="card-title" id="no-realitzats">0</h1>
-                  <h6 class="card-text">No Realitzats</h6>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="container mt-4 grafico">
-            <div class="row justify-content-center">
-              <div class="col-md-6">
-                <div id="chart-container"></div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div class="col-md-10 top">
+      <div class="d-flex justify-content-between h3-estadisitiques">
+        <h3>Estadístiques</h3>
       </div>
+      <div id="cartesEstadistiques" class="d-flex flex-wrap"></div>
     </div>
-
     <script src="https://fastly.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script type="module" src="test.js"></script>
   </body>

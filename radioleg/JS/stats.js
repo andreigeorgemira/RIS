@@ -1,7 +1,7 @@
 import { obtenerEstadisticas, obtenerRadiologos } from "../API/llamadasAPI.js";
 
 export function crearContenido(body) {
-  body.innerHTML = `    <div class="stats">
+  body.innerHTML = `<div class="stats">
   <div class="col-2">
     <div>
       <span class="input-label">Data Inici: </span>
@@ -16,70 +16,9 @@ export function crearContenido(body) {
 
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-2">
-        <div class="d-grid gap-2">
-          <div class="row">
-            <div class="col">
-              <button class="btn botones btn-block" type="button">CT</button>
-            </div>
-            <div class="col">
-              <button class="btn btn-block" type="button">DX</button>
-            </div>
-            <div class="col">
-              <button class="btn btn-block" type="button">US</button>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <button class="btn btn-block" type="button">MG</button>
-            </div>
-            <div class="col">
-              <button class="btn btn-block" type="button">PT</button>
-            </div>
-            <div class="col">
-              <button class="btn btn-block" type="button">NM</button>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <button class="btn btn-block" type="button">MR</button>
-            </div>
-            <div class="col">
-              <button class="btn btn-block" type="button">RF</button>
-            </div>
-            <div class="col">
-              <button class="btn btn-block" type="button">PX</button>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <button class="btn btn-block" type="button">OT</button>
-            </div>
-            <div class="col">
-              <button class="btn btn-block" type="button">XC</button>
-            </div>
-            <div class="col">
-              <button class="btn btn-block" type="button">DOC</button>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <button id="select" class="btn btn-primary btn-block" type="button">SELECCIONA TOTES</button>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <button class="btn btn-warning btn-block" type="button">
-                <i class="fa-solid fa-arrow-rotate-right fa-xl" style="color: #000000" aria-hidden="true"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div class="col-md-10 top">
-        <div class="d-flex justify-content-between">
-          <h3>&nbsp;&nbsp;Estadístiques</h3>
+        <div class="d-flex justify-content-between h3-estadisitiques">
+          <h3>Estadístiques</h3>
         </div>
         <div id="cartesEstadistiques" class="d-flex flex-wrap">
         </div>
@@ -98,8 +37,8 @@ export function crearContenido(body) {
         </div>
       </div>
       <div class="col-md-8">
-        <div class="d-flex justify-content-between">
-          <h3>&nbsp;&nbsp;Estadístiques per radiòleg</h3>
+        <div class="d-flex justify-content-between h3-stats-radio">
+          <h3>Estadístiques per radiòleg</h3>
         </div>
         <div class="d-flex flex-wrap">
           <div class="card m-2 card-statics">
@@ -140,31 +79,150 @@ export function crearContenido(body) {
   </div>
 </div>`;
   establecerFechas();
+  generarBotones();
+}
+
+function generarBotones() {
+  var container = document.createElement("div");
+  container.className = "col-md-2";
+
+  var buttonContainer = document.createElement("div");
+  buttonContainer.className = "d-grid gap-2";
+
+  var rows = ["CT", "DX", "US", "MG", "PT", "NM", "MR", "RF", "PX", "OT", "XC", "DOC"];
+
+  for (var i = 0; i < rows.length; i += 3) {
+    var rowDiv = document.createElement("div");
+    rowDiv.className = "row";
+
+    for (var j = i; j < i + 3 && j < rows.length; j++) {
+      var colDiv = document.createElement("div");
+      colDiv.className = "col";
+
+      var button = document.createElement("button");
+      button.className = "btn botones btn-block";
+      button.type = "button";
+      button.textContent = rows[j];
+
+      if (rows[j] == "CT" || rows[j] == "DX") {
+        button.classList.add("btn-activo");
+      }
+
+      colDiv.appendChild(button);
+      rowDiv.appendChild(colDiv);
+    }
+
+    buttonContainer.appendChild(rowDiv);
+  }
+
+  var selectButtonDiv = document.createElement("div");
+  selectButtonDiv.className = "row";
+  var selectButtonCol = document.createElement("div");
+  selectButtonCol.className = "col";
+  var selectButton = document.createElement("button");
+  selectButton.id = "select";
+  selectButton.className = "btn btn-primary btn-block";
+  selectButton.type = "button";
+  selectButton.textContent = "SELECCIONA TOTES";
+
+  selectButtonCol.appendChild(selectButton);
+  selectButtonDiv.appendChild(selectButtonCol);
+  buttonContainer.appendChild(selectButtonDiv);
+
+  var rotateButtonDiv = document.createElement("div");
+  rotateButtonDiv.className = "row";
+  var rotateButtonCol = document.createElement("div");
+  rotateButtonCol.className = "col";
+  var rotateButton = document.createElement("button");
+  rotateButton.className = "btn btn-warning btn-block";
+  rotateButton.type = "button";
+  var icon = document.createElement("i");
+  icon.className = "fa-solid fa-arrow-rotate-right fa-xl";
+  icon.style.color = "#000000";
+  rotateButton.appendChild(icon);
+
+  rotateButtonCol.appendChild(rotateButton);
+  rotateButtonDiv.appendChild(rotateButtonCol);
+  buttonContainer.appendChild(rotateButtonDiv);
+
+  container.appendChild(buttonContainer);
+
+  var containerFluid = document.querySelector(".container-fluid .row");
+
+  var estadisticasDiv = document.querySelector(".container-fluid .row .col-md-10.top");
+
+  containerFluid.insertBefore(container, estadisticasDiv);
+}
+
+var estadisitcasAPI;
+var botonesSeleccionados = [];
+
+function toggleBotonActivo(boton, activados) {
+  if (activados) {
+    boton.classList.add("btn-activo");
+  } else {
+    boton.classList.remove("btn-activo");
+  }
+}
+
+function botonSeleccionado(boton, botonesSeleccionados) {
+  const modalidad = boton.textContent;
+  const index = botonesSeleccionados.indexOf(modalidad);
+  if (boton.classList.contains("btn-activo")) {
+    if (index === -1) {
+      if (modalidad === "DX") {
+        botonesSeleccionados.push("DX");
+        botonesSeleccionados.push("CR");
+      } else {
+        botonesSeleccionados.push(modalidad);
+      }
+    }
+  } else {
+    if (index !== -1) {
+      if (modalidad === "DX") {
+        botonesSeleccionados.splice("DX");
+        botonesSeleccionados.splice("CR");
+      } else {
+        botonesSeleccionados.splice(index, 1);
+      }
+    }
+  }
 }
 
 function botones() {
-  const buttons = document.querySelectorAll(".botones");
-
-  console.log(buttons);
+  const buttons = document.querySelectorAll(".botones:not(.radiologos)");
+  const botonSelect = document.getElementById("select");
+  var activados = false;
 
   buttons.forEach((button) => {
-    button.addEventListener("click", function () {
-      // Toggle active class
-      this.classList.toggle("btn-activo");
-
-      // Perform some action when button is clicked
-      if (this.classList.contains("btn-activo")) {
-        // Add your action here
-        console.log(`Button ${this.textContent} was clicked and is now active.`);
-      } else {
-        // Revert action when button is clicked again
-        console.log(`Button ${this.textContent} was clicked and is no longer active.`);
-      }
-    });
+    botonSeleccionado(button, botonesSeleccionados);
   });
+
+  function activarBotones() {
+    activados = !activados;
+    buttons.forEach((boton) => {
+      toggleBotonActivo(boton, activados);
+      botonSeleccionado(boton, botonesSeleccionados);
+    });
+    filtroEstadisticas(botonesSeleccionados);
+  }
+
+  function botonSeleccionadoIndividual(event) {
+    event.target.classList.toggle("btn-activo");
+    botonSeleccionado(event.target, botonesSeleccionados);
+    filtroEstadisticas(botonesSeleccionados);
+  }
+
+  botonSelect.addEventListener("click", activarBotones);
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", botonSeleccionadoIndividual);
+  });
+
+  filtroEstadisticas(botonesSeleccionados);
 }
 
-function establecerFechas() {
+async function establecerFechas() {
   var fechaInicio = document.getElementById("inicio");
   var fechaFinal = document.getElementById("final");
 
@@ -183,56 +241,65 @@ function establecerFechas() {
   let inicio = anioInicio + "-" + mesInicio + "-" + diaInicio;
   fechaInicio.value = inicio;
 
-  datosEstadisticas(inicio, final);
+  // Esperar a que se obtengan los valores de estadísticas
+  await obtenerValoresEstadisticas(inicio, final);
+
   insertarRadiologos();
   crearGrafica();
 }
 
-function datosEstadisticas(inicio, final) {
-  obtenerEstadisticas(inicio, final).then((dato) => {
-    var valores = dato.rows;
-    var totalValores = valores.length;
-    var completadaInformada = 0;
-    var informada = 0;
-    var completada = 0;
-    var programada = 0;
+async function obtenerValoresEstadisticas(inicio, final) {
+  try {
+    const dato = await obtenerEstadisticas(inicio, final);
+    estadisitcasAPI = dato.rows;
+  } catch (error) {
+    console.error("Error al obtener estadísticas:", error);
+  }
+}
 
-    valores.forEach((item) => {
-      switch (item.ESTAT) {
-        case "Completada":
-          completadaInformada++;
-          completada++;
-          break;
-        case "Informada":
-          completadaInformada++;
-          informada++;
-          break;
-        case "Programada":
-          programada++;
-          break;
-        default:
-          break;
-      }
-    });
+function filtroEstadisticas(modalidades) {
+  const datosFiltrados = estadisitcasAPI.filter((item) => modalidades.includes(item.MODALITAT));
+  var totalValores = datosFiltrados.length;
+  var completadaInformada = 0;
+  var informada = 0;
+  var completada = 0;
+  var programada = 0;
 
-    function generarCarta(valor, texto) {
-      return `<div class="card m-2 card-statics">
-                <div class="card-body d-flex flex-column justify-content-center">
-                  <h1 class="card-title">${valor}</h1>
-                  <h6 class="card-text">${texto}</h6>
-                </div>
-              </div>`;
+  datosFiltrados.forEach((item) => {
+    switch (item.ESTAT) {
+      case "Completada":
+        completadaInformada++;
+        completada++;
+        break;
+      case "Informada":
+        completadaInformada++;
+        informada++;
+        break;
+      case "Programada":
+        programada++;
+        break;
+      default:
+        break;
     }
-
-    var cartasHTML = "";
-    cartasHTML += generarCarta(totalValores, "Estudis Programats");
-    cartasHTML += generarCarta(completada + informada, "Total Realitzades");
-    cartasHTML += generarCarta(informada, "Informades");
-    cartasHTML += generarCarta(completada, "Pendents d'informar");
-    cartasHTML += generarCarta(programada, "No Realitzats");
-
-    document.getElementById("cartesEstadistiques").innerHTML = cartasHTML;
   });
+
+  var cartasHTML = "";
+  cartasHTML += generarCarta(totalValores, "Estudis Programats");
+  cartasHTML += generarCarta(completada + informada, "Total Realitzades");
+  cartasHTML += generarCarta(informada, "Informades");
+  cartasHTML += generarCarta(completada, "Pendents d'informar");
+  cartasHTML += generarCarta(programada, "No Realitzats");
+
+  document.getElementById("cartesEstadistiques").innerHTML = cartasHTML;
+}
+
+function generarCarta(valor, texto) {
+  return `<div class="card m-2 card-statics">
+            <div class="card-body d-flex flex-column justify-content-center">
+              <h1 class="card-title">${valor}</h1>
+              <h6 class="card-text">${texto}</h6>
+            </div>
+          </div>`;
 }
 
 function insertarRadiologos() {
@@ -256,7 +323,7 @@ function insertarRadiologos() {
         col.className = "col";
 
         const button = document.createElement("button");
-        button.className = "btn botones btn-block radilogos";
+        button.className = "btn botones btn-block radiologos";
         button.type = "button";
         button.innerHTML = `<h5>${radiologos[j].TRACTE}</h5><h6>${radiologos[j].COLEGIAT ?? ""}</h6>`;
 
@@ -267,14 +334,12 @@ function insertarRadiologos() {
       divRadiologos.appendChild(row);
     }
 
-    botones();
-
     const rowSelect = document.createElement("div");
     rowSelect.className = "row";
     const colSelect = document.createElement("div");
     colSelect.className = "col";
     const buttonSelect = document.createElement("button");
-    buttonSelect.id = "select";
+    buttonSelect.id = "selectRadiologos";
     buttonSelect.className = "btn btn-primary btn-block";
     buttonSelect.type = "button";
     buttonSelect.textContent = "SELECCIONA TOTES";
@@ -294,6 +359,7 @@ function insertarRadiologos() {
     rowDeselect.appendChild(colDeselect);
     divRadiologos.appendChild(rowDeselect);
   });
+  botones();
 }
 
 function crearGrafica() {

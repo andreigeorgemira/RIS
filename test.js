@@ -1,63 +1,68 @@
-var dom = document.getElementById("chart-container");
-var myChart = echarts.init(dom, null, {
-  renderer: "canvas",
-  useDirtyRect: false,
-});
+// Crear el contenedor principal
+var container = document.createElement("div");
+container.className = "col-md-2";
 
-var option;
+// Crear el contenedor de botones
+var buttonContainer = document.createElement("div");
+buttonContainer.className = "d-grid gap-2";
 
-const rawData = [
-  [100, 200, 300, 400, 500, 600, 700],
-  [150, 250, 350, 450, 550, 650, 750],
-];
+// Crear las filas de botones
+var rows = ["CT", "DX", "US", "MG", "PT", "NM", "MR", "RF", "PX", "OT", "XC", "DOC"];
 
-const totalData = [];
-for (let i = 0; i < rawData[0].length; ++i) {
-  let sum = 0;
-  for (let j = 0; j < rawData.length; ++j) {
-    sum += rawData[j][i];
+for (var i = 0; i < rows.length; i += 3) {
+  var rowDiv = document.createElement("div");
+  rowDiv.className = "row";
+
+  for (var j = i; j < i + 3 && j < rows.length; j++) {
+    var colDiv = document.createElement("div");
+    colDiv.className = "col";
+
+    var button = document.createElement("button");
+    button.className = "btn botones btn-block";
+    button.type = "button";
+    button.textContent = rows[j];
+
+    colDiv.appendChild(button);
+    rowDiv.appendChild(colDiv);
   }
-  totalData.push(sum);
-}
-const grid = {
-  left: 100,
-  right: 130,
-  top: 50,
-  bottom: 50,
-};
-const series = ["Video Ad", "Search Engine"].map((name, sid) => {
-  return {
-    name,
-    type: "bar",
-    stack: "total",
-    barWidth: "60%",
-    label: {
-      show: true,
-      formatter: (params) => Math.round(params.value * 1000) / 10 + "%",
-    },
-    data: rawData[sid].map((d, did) => (totalData[did] <= 0 ? 0 : d / totalData[did])),
-  };
-});
-option = {
-  legend: {
-    orient: "vertical",
-    right: 0,
-    top: "middle",
-    selectedMode: true,
-  },
-  grid,
-  yAxis: {
-    type: "value",
-  },
-  xAxis: {
-    type: "category",
-    data: ["doctor", "doctor", "doctor", "doctor", "doctor", "doctor", "doctor"],
-  },
-  series,
-};
 
-if (option && typeof option === "object") {
-  myChart.setOption(option);
+  buttonContainer.appendChild(rowDiv);
 }
 
-window.addEventListener("resize", myChart.resize);
+// Agregar botón "SELECCIONA TOTES"
+var selectButtonDiv = document.createElement("div");
+selectButtonDiv.className = "row";
+var selectButtonCol = document.createElement("div");
+selectButtonCol.className = "col";
+var selectButton = document.createElement("button");
+selectButton.id = "select";
+selectButton.className = "btn btn-primary btn-block";
+selectButton.type = "button";
+selectButton.textContent = "SELECCIONA TOTES";
+
+selectButtonCol.appendChild(selectButton);
+selectButtonDiv.appendChild(selectButtonCol);
+buttonContainer.appendChild(selectButtonDiv);
+
+// Agregar botón "Rotar"
+var rotateButtonDiv = document.createElement("div");
+rotateButtonDiv.className = "row";
+var rotateButtonCol = document.createElement("div");
+rotateButtonCol.className = "col";
+var rotateButton = document.createElement("button");
+rotateButton.className = "btn btn-warning btn-block";
+rotateButton.type = "button";
+var icon = document.createElement("i");
+icon.className = "fa-solid fa-arrow-rotate-right fa-xl";
+icon.style.color = "#000000";
+rotateButton.appendChild(icon);
+
+rotateButtonCol.appendChild(rotateButton);
+rotateButtonDiv.appendChild(rotateButtonCol);
+buttonContainer.appendChild(rotateButtonDiv);
+
+// Agregar el contenedor de botones al contenedor principal
+container.appendChild(buttonContainer);
+
+// Agregar el contenedor principal al cuerpo del documento
+document.body.appendChild(container);

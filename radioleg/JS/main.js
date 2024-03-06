@@ -1,7 +1,7 @@
-import { datosGrafica, stopUpdateGrafica } from "./dashboard.js";
+import { valoresAPI, stopUpdateGrafica } from "./dashboard.js";
 import { crearContenido } from "./stats.js";
 
-const body = document.getElementById("contenido");
+export const body = document.getElementById("contenido");
 
 // Recuperar el nombre de usuario y especialidad de la URL
 let urlParams = new URLSearchParams(window.location.search);
@@ -13,7 +13,7 @@ let especialidad = urlParams.get("especialidad");
 document.getElementById("NombreUser").innerHTML = "User " + user;
 document.getElementById("EspecialidadUser").innerHTML = "Especialidad  " + especialidad;
 
-document.addEventListener("DOMContentLoaded", loadContent("dashboard"));
+document.addEventListener("DOMContentLoaded", loadContent("estadistiques"));
 
 // Obtener referencias a los enlaces del menú
 const dashboardLink = document.getElementById("dashboard");
@@ -44,7 +44,8 @@ estadistiquesLink.addEventListener("click", function (event) {
 function loadContent(option) {
   switch (option) {
     case "dashboard":
-      datosGrafica(body);
+      vaciarContent(body);
+      valoresAPI(body);
       break;
     case "pendents":
       stopUpdateGrafica();

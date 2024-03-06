@@ -1,24 +1,35 @@
 import { obtenerDatosGrafica, obtenerEstudiosAno } from "../API/llamadasAPI.js";
+import { body } from "./main.js";
 
 function formatearNumero(numero) {
   return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-export async function datosGrafica(body) {
+var update = false;
+var valoresGrafica;
+
+export async function valoresAPI(body) {
   let datosGraficaPromise = await obtenerDatosGrafica().then((datos) => datos.rows);
   let estudiosAnoPromise = await obtenerEstudiosAno().then((datos) => datos.rows);
-  Promise.all([datosGraficaPromise, estudiosAnoPromise]).then(([valoresGrafica, estudiosAno]) => {
-    body.innerHTML = `<div id="estudios" class="container mt-4"></div>
-                      <div class="container mt-4 grafico">
-                        <div class="row justify-content-center">
-                          <div class="col-md-6">
-                            <div id="chart-container"></div>
-                          </div>
-                        </div>
-                      </div>`;
-    crearGrafica(valoresGrafica);
-    crearEstudios(estudiosAno);
-    updateGrafica();
+  Promise.all([datosGraficaPromise, estudiosAnoPromise]).then(([valoresGraficaAPI, estudiosAnoAPI]) => {
+    valoresGrafica = valoresGraficaAPI;
+    if (!update) {
+      body.innerHTML = `<div id="estudios" class="container mt-4"></div>
+      <div class="container mt-4 grafico">
+        <div class="row justify-content-center">
+          <div class="col-md-6">
+            <div id="chart-container"></div>
+          </div>
+        </div>
+      </div>`;
+      crearEstudios(estudiosAnoAPI);
+      crearGrafica();
+      updateGrafica();
+      update = true;
+    } else {
+      actualizarGrafica(valoresGrafica);
+      insertarValores(estudiosAnoAPI);
+    }
   });
 }
 
@@ -53,7 +64,48 @@ var option = {
   ],
 };
 
-function crearGrafica(valoresGrafica) {
+function crearGrafica() {
+  const option = {
+    series: [
+      {
+        data: [],
+        type: "pie",
+      },
+    ],
+    legend: {
+      orient: "vertical",
+      top: "middle",
+      right: 0,
+      textStyle: {
+        fontSize: "20px",
+      },
+      formatter: function (name) {
+        return name + ": 0 (0.00%)";
+      },
+    },
+  };
+
+  const dom = document.getElementById("chart-container");
+  const myChart = echarts.init(dom, null, {
+    renderer: "svg",
+    useDirtyRect: false,
+  });
+
+  const totalText = document.createElement("div");
+  totalText.classList.add("total");
+  dom.appendChild(totalText);
+  totalText.innerText = "Total: 0";
+
+  if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+  }
+
+  window.addEventListener("resize", myChart.resize);
+
+  actualizarGrafica(valoresGrafica);
+}
+
+function actualizarGrafica(valoresGrafica) {
   console.log(valoresGrafica);
   const sumaTotal = valoresGrafica.reduce((total, valor) => total + valor.value, 0);
 
@@ -83,28 +135,26 @@ function crearGrafica(valoresGrafica) {
     },
   };
 
-  var dom = document.getElementById("chart-container");
-  var myChart = echarts.init(dom, null, {
-    renderer: "svg",
-    useDirtyRect: false,
-  });
+  const dom = document.getElementById("chart-container");
+  const myChart = echarts.getInstanceByDom(dom);
 
-  var totalText = dom.querySelector(".total");
-  if (!totalText) {
-    totalText = document.createElement("div");
-    totalText.classList.add("total");
-    dom.appendChild(totalText);
+  const totalText = dom.querySelector(".total");
+  if (totalText) {
+    totalText.innerText = "Total: " + formatearNumero(sumaTotal);
   }
 
-  totalText.innerText = "Total: " + formatearNumero(sumaTotal);
-
-  if (option && typeof option === "object") {
+  if (option && typeof option === "object" && myChart) {
     myChart.setOption(option, true);
   }
 
-  window.addEventListener("resize", myChart.resize);
+  window.addEventListener("resize", () => {
+    if (myChart) {
+      myChart.resize();
+    }
+  });
 }
 
+// Función para crear la estructura HTML
 function crearEstudios(estudiosAno) {
   var estudios = document.getElementById("estudios");
   estudios.innerHTML = "";
@@ -113,6 +163,7 @@ function crearEstudios(estudiosAno) {
   titulo.classList.add("text-center");
   titulo.classList.add("mb-3");
   estudios.appendChild(titulo);
+
   for (let i = 0; i < 2; i++) {
     const nuevaFila = document.createElement("div");
     nuevaFila.classList.add("row");
@@ -123,12 +174,11 @@ function crearEstudios(estudiosAno) {
 
       const indice = i * 3 + j;
       if (indice < estudiosAno.length) {
-        const dato = estudiosAno[indice];
         nuevaColumna.innerHTML = `
               <div class="card mb-4">
                   <div class="card-body">
-                      <h1 class="card-title">${dato.value}</h1>
-                      <h6 class="card-text">${dato.name}</h6>
+                      <h1 class="card-title"></h1>
+                      <h6 class="card-text"></h6>
                   </div>
               </div>
           `;
@@ -139,13 +189,27 @@ function crearEstudios(estudiosAno) {
 
     estudios.appendChild(nuevaFila);
   }
+  insertarValores(estudiosAno);
+}
+
+// Función para insertar los valores dentro del HTML generado
+function insertarValores(estudiosAno) {
+  const cards = document.querySelectorAll("#estudios .card");
+  cards.forEach((card, index) => {
+    const dato = estudiosAno[index];
+    if (dato) {
+      card.querySelector(".card-title").textContent = dato.value;
+      card.querySelector(".card-text").textContent = dato.name;
+    }
+  });
 }
 
 let temporizador;
 
 function updateGrafica() {
   temporizador = setTimeout(function () {
-    datosGrafica();
+    valoresAPI();
+    actualizarGrafica(valoresGrafica);
     updateGrafica();
   }, 60000);
 }
