@@ -211,7 +211,7 @@ function updateGrafica() {
     valoresAPI();
     actualizarGrafica(valoresGrafica);
     updateGrafica();
-  }, 60000);
+  }, 5000);
 }
 
 export function stopUpdateGrafica() {

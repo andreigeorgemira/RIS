@@ -166,50 +166,64 @@ function toggleBotonActivo(boton, activados) {
 }
 
 function botonSeleccionado(boton, botonesSeleccionados) {
-  const modalidad = boton.textContent;
-  const index = botonesSeleccionados.indexOf(modalidad);
+  const modalidad = boton.textContent.trim();
+
   if (boton.classList.contains("btn-activo")) {
-    if (index === -1) {
-      if (modalidad === "DX") {
-        botonesSeleccionados.push("DX");
+    if (modalidad === "DX" && !botonesSeleccionados.includes("DX")) {
+      botonesSeleccionados.push("DX");
+      if (!botonesSeleccionados.includes("CR")) {
         botonesSeleccionados.push("CR");
-      } else {
-        botonesSeleccionados.push(modalidad);
       }
+    } else if (modalidad !== "DX" && !botonesSeleccionados.includes(modalidad)) {
+      botonesSeleccionados.push(modalidad);
     }
   } else {
-    if (index !== -1) {
-      if (modalidad === "DX") {
-        botonesSeleccionados.splice("DX");
-        botonesSeleccionados.splice("CR");
-      } else {
+    if (modalidad === "DX") {
+      const indexDX = botonesSeleccionados.indexOf("DX");
+      if (indexDX !== -1) {
+        botonesSeleccionados.splice(indexDX, 1);
+      }
+      const indexCR = botonesSeleccionados.indexOf("CR");
+      if (indexCR !== -1) {
+        botonesSeleccionados.splice(indexCR, 1);
+      }
+    } else {
+      const index = botonesSeleccionados.indexOf(modalidad);
+      if (index !== -1) {
         botonesSeleccionados.splice(index, 1);
       }
     }
   }
 }
 
+function verificarYActualizarBotonSelect(buttons, botonSelect) {
+  const todosActivos = Array.from(buttons).every((button) => button.classList.contains("btn-activo"));
+  botonSelect.textContent = todosActivos ? "DESMARCAR TOTES" : "SELECCIONA TOTES";
+}
+
 function botones() {
   const buttons = document.querySelectorAll(".botones:not(.radiologos)");
   const botonSelect = document.getElementById("select");
-  var activados = false;
 
   buttons.forEach((button) => {
     botonSeleccionado(button, botonesSeleccionados);
   });
 
   function activarBotones() {
-    activados = !activados;
+    const accionDesmarcar = botonSelect.textContent === "DESMARCAR TOTES";
+
     buttons.forEach((boton) => {
-      toggleBotonActivo(boton, activados);
+      toggleBotonActivo(boton, !accionDesmarcar);
       botonSeleccionado(boton, botonesSeleccionados);
     });
+    botonSelect.textContent = accionDesmarcar ? "SELECCIONA TOTES" : "DESMARCAR TOTES";
     filtroEstadisticas(botonesSeleccionados);
   }
 
   function botonSeleccionadoIndividual(event) {
     event.target.classList.toggle("btn-activo");
     botonSeleccionado(event.target, botonesSeleccionados);
+    verificarYActualizarBotonSelect(buttons, botonSelect);
     filtroEstadisticas(botonesSeleccionados);
   }
 
@@ -241,7 +255,6 @@ async function establecerFechas() {
   let inicio = anioInicio + "-" + mesInicio + "-" + diaInicio;
   fechaInicio.value = inicio;
 
-  // Esperar a que se obtengan los valores de estadísticas
   await obtenerValoresEstadisticas(inicio, final);
 
   insertarRadiologos();
