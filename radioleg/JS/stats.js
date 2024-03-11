@@ -40,31 +40,7 @@ export function crearContenido(body) {
         <div class="d-flex justify-content-between h3-stats-radio">
           <h3>Estadístiques per radiòleg</h3>
         </div>
-        <div class="d-flex flex-wrap">
-          <div class="card m-2 card-statics">
-            <div class="card-body d-flex flex-column justify-content-center">
-              <h1 class="card-title" id="total-realitzades">0</h1>
-              <h6 class="card-text">Total Realitzades</h6>
-            </div>
-          </div>
-          <div class="card m-2 card-statics">
-            <div class="card-body d-flex flex-column justify-content-center">
-              <h1 class="card-title" id="informades">0</h1>
-              <h6 class="card-text">Informades</h6>
-            </div>
-          </div>
-          <div class="card m-2 card-statics">
-            <div class="card-body d-flex flex-column justify-content-center">
-              <h1 class="card-title" id="pendents-informar">0</h1>
-              <h6 class="card-text">Pendents d'informar</h6>
-            </div>
-          </div>
-          <div class="card m-2 card-statics">
-            <div class="card-body d-flex flex-column justify-content-center">
-              <h1 class="card-title" id="no-realitzats">0</h1>
-              <h6 class="card-text">No Realitzats</h6>
-            </div>
-          </div>
+        <div id="cartesEstadistiquesRadioleg" class="d-flex flex-wrap">
         </div>
       </div>
 
@@ -134,12 +110,9 @@ function generarBotones() {
   var rotateButtonCol = document.createElement("div");
   rotateButtonCol.className = "col";
   var rotateButton = document.createElement("button");
-  rotateButton.className = "btn btn-warning btn-block";
+  rotateButton.className = "btn btn-danger btn-block";
   rotateButton.type = "button";
-  var icon = document.createElement("i");
-  icon.className = "fa-solid fa-arrow-rotate-right fa-xl";
-  icon.style.color = "#000000";
-  rotateButton.appendChild(icon);
+  rotateButton.textContent = "DESMARCAR TOTES";
 
   rotateButtonCol.appendChild(rotateButton);
   rotateButtonDiv.appendChild(rotateButtonCol);
@@ -154,7 +127,7 @@ function generarBotones() {
   containerFluid.insertBefore(container, estadisticasDiv);
 }
 
-var estadisitcasAPI;
+var estadisticasAPI;
 var botonesSeleccionados = [];
 
 function toggleBotonActivo(boton, activados) {
@@ -218,6 +191,7 @@ function botones() {
     });
     botonSelect.textContent = accionDesmarcar ? "SELECCIONA TOTES" : "DESMARCAR TOTES";
     filtroEstadisticas(botonesSeleccionados);
+    filtroRadiologos(botonesSeleccionados, botonesSeleccionadosRadiologos);
   }
 
   function botonSeleccionadoIndividual(event) {
@@ -225,6 +199,7 @@ function botones() {
     botonSeleccionado(event.target, botonesSeleccionados);
     verificarYActualizarBotonSelect(buttons, botonSelect);
     filtroEstadisticas(botonesSeleccionados);
+    filtroRadiologos(botonesSeleccionados, botonesSeleccionadosRadiologos);
   }
 
   botonSelect.addEventListener("click", activarBotones);
@@ -234,12 +209,110 @@ function botones() {
   });
 
   filtroEstadisticas(botonesSeleccionados);
+  filtroRadiologos(botonesSeleccionados, botonesSeleccionadosRadiologos);
+}
+
+var botonesSeleccionadosRadiologos = []; // Este array almacenará los radiólogos seleccionados
+
+function toggleBotonActivoRadiologs(boton) {
+  boton.classList.toggle("btn-activo");
+  actualizarBotonesSeleccionadosRadiologos(boton);
+}
+
+function actualizarBotonesSeleccionadosRadiologos(boton) {
+  const textoBoton = boton.querySelector("h5").textContent.trim();
+  const radiologoEncontrado = radiologos.find((radiologo) => radiologo.TRACTE === textoBoton);
+
+  if (boton.classList.contains("btn-activo")) {
+    if (radiologoEncontrado && !botonesSeleccionadosRadiologos.includes(radiologoEncontrado.USRHNET)) {
+      botonesSeleccionadosRadiologos.push(radiologoEncontrado.USRHNET);
+    }
+  } else {
+    const index = botonesSeleccionadosRadiologos.indexOf(radiologoEncontrado.USRHNET);
+    if (index > -1) {
+      botonesSeleccionadosRadiologos.splice(index, 1);
+    }
+  }
+}
+
+function botonesRadiologos() {
+  const botones = document.querySelectorAll(".botones.radiologos");
+  const botonSelect = document.getElementById("selectRadiologos");
+  const botonDeselect = document.getElementById("deselectRadiologos");
+
+  // Función para seleccionar todos los botones
+  function selectBotones() {
+    botones.forEach((boton) => {
+      boton.classList.add("btn-activo");
+      actualizarBotonesSeleccionadosRadiologos(boton);
+      filtroRadiologos(botonesSeleccionados, botonesSeleccionadosRadiologos);
+    });
+  }
+
+  // Función para deseleccionar todos los botones
+  function deselectBotones() {
+    botones.forEach((boton) => {
+      boton.classList.remove("btn-activo");
+      actualizarBotonesSeleccionadosRadiologos(boton);
+      filtroRadiologos(botonesSeleccionados, botonesSeleccionadosRadiologos);
+    });
+  }
+
+  // Evento para el botón de seleccionar
+  botonSelect.addEventListener("click", selectBotones);
+
+  // Evento para el botón de deseleccionar
+  botonDeselect.addEventListener("click", deselectBotones);
+
+  let botonActivo = document.querySelector(".botones.radiologos.btn-activo");
+
+  if (botonActivo) {
+    actualizarBotonesSeleccionadosRadiologos(botonActivo);
+  }
+
+  botones.forEach(function (boton) {
+    boton.addEventListener("click", function () {
+      toggleBotonActivoRadiologs(this);
+      filtroRadiologos(botonesSeleccionados, botonesSeleccionadosRadiologos);
+    });
+  });
+}
+
+function filtroRadiologos(modalidades, radiologos) {
+  const datosFiltrados = estadisticasAPI.filter((item) => modalidades.includes(item.MODALITAT) && (radiologos.includes(item.METGE_RESPONSABLE) || radiologos.includes(item.METGESIGNAT)));
+
+  var informada = 0;
+  var completada = 0;
+  var programada = 0;
+
+  datosFiltrados.forEach((item) => {
+    switch (item.ESTAT) {
+      case "Completada":
+        completada++;
+        break;
+      case "Informada":
+        informada++;
+        break;
+      case "Programada":
+        programada++;
+        break;
+      default:
+        break;
+    }
+  });
+
+  var cartasHTML = "";
+  cartasHTML += generarCarta(completada + informada, "Total Realitzades");
+  cartasHTML += generarCarta(informada, "Informades");
+  cartasHTML += generarCarta(completada, "Pendents d'informar");
+  cartasHTML += generarCarta(programada, "No Realitzats");
+
+  document.getElementById("cartesEstadistiquesRadioleg").innerHTML = cartasHTML;
 }
 
 async function establecerFechas() {
   var fechaInicio = document.getElementById("inicio");
   var fechaFinal = document.getElementById("final");
-
   var fechaActual = new Date();
 
   var dia = ("0" + fechaActual.getDate()).slice(-2);
@@ -257,21 +330,28 @@ async function establecerFechas() {
 
   await obtenerValoresEstadisticas(inicio, final);
 
+  async function cambioFechas() {
+    let nuevaFechaInicio = fechaInicio.value;
+    let nuevaFechaFinal = fechaFinal.value;
+    await obtenerValoresEstadisticas(nuevaFechaInicio, nuevaFechaFinal);
+    filtroEstadisticas(botonesSeleccionados);
+  }
+
+  // Añadir event listener de cambio a fechaInicio y fechaFinal
+  fechaInicio.addEventListener("change", cambioFechas);
+  fechaFinal.addEventListener("change", cambioFechas);
+
   insertarRadiologos();
   crearGrafica();
 }
 
 async function obtenerValoresEstadisticas(inicio, final) {
-  try {
-    const dato = await obtenerEstadisticas(inicio, final);
-    estadisitcasAPI = dato.rows;
-  } catch (error) {
-    console.error("Error al obtener estadísticas:", error);
-  }
+  const dato = await obtenerEstadisticas(inicio, final);
+  estadisticasAPI = dato.rows;
 }
 
 function filtroEstadisticas(modalidades) {
-  const datosFiltrados = estadisitcasAPI.filter((item) => modalidades.includes(item.MODALITAT));
+  const datosFiltrados = estadisticasAPI.filter((item) => modalidades.includes(item.MODALITAT));
   var totalValores = datosFiltrados.length;
   var completadaInformada = 0;
   var informada = 0;
@@ -315,11 +395,13 @@ function generarCarta(valor, texto) {
           </div>`;
 }
 
+var radiologos;
+
 function insertarRadiologos() {
   var divRadiologos = document.getElementById("radiologos");
 
   obtenerRadiologos().then((datos) => {
-    var radiologos = datos.rows;
+    radiologos = datos.rows;
     const totalRadiologos = radiologos.length;
 
     divRadiologos.innerHTML = "";
@@ -340,6 +422,9 @@ function insertarRadiologos() {
         button.type = "button";
         button.innerHTML = `<h5>${radiologos[j].TRACTE}</h5><h6>${radiologos[j].COLEGIAT ?? ""}</h6>`;
 
+        if (radiologos[j].TRACTE.trim() == "_ No Aplica _") {
+          button.classList.add("btn-activo");
+        }
         col.appendChild(button);
         row.appendChild(col);
       }
@@ -365,14 +450,16 @@ function insertarRadiologos() {
     const colDeselect = document.createElement("div");
     colDeselect.className = "col";
     const buttonDeselect = document.createElement("button");
+    buttonDeselect.id = "deselectRadiologos";
     buttonDeselect.className = "btn btn-danger btn-block";
     buttonDeselect.type = "button";
     buttonDeselect.textContent = "DESMARCAR TOTES";
     colDeselect.appendChild(buttonDeselect);
     rowDeselect.appendChild(colDeselect);
     divRadiologos.appendChild(rowDeselect);
+    botonesRadiologos();
+    botones();
   });
-  botones();
 }
 
 function crearGrafica() {

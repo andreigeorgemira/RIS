@@ -83,14 +83,6 @@ input:disabled {
   animation: spin 1s linear infinite;
 }
 
-#mensaje-container {
-  position: relative;
-  font-size: 18px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-}
-
 #mensaje {
   margin-left: 10px;
   white-space: nowrap;

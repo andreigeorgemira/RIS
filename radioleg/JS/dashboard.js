@@ -1,19 +1,18 @@
 import { obtenerDatosGrafica, obtenerEstudiosAno } from "../API/llamadasAPI.js";
-import { body } from "./main.js";
 
 function formatearNumero(numero) {
   return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-var update = false;
 var valoresGrafica;
 
-export async function valoresAPI(body) {
+export async function valoresAPI(body, update = true) {
   let datosGraficaPromise = await obtenerDatosGrafica().then((datos) => datos.rows);
   let estudiosAnoPromise = await obtenerEstudiosAno().then((datos) => datos.rows);
   Promise.all([datosGraficaPromise, estudiosAnoPromise]).then(([valoresGraficaAPI, estudiosAnoAPI]) => {
     valoresGrafica = valoresGraficaAPI;
-    if (!update) {
+    console.log(update);
+    if (update) {
       body.innerHTML = `<div id="estudios" class="container mt-4"></div>
       <div class="container mt-4 grafico">
         <div class="row justify-content-center">
@@ -25,7 +24,6 @@ export async function valoresAPI(body) {
       crearEstudios(estudiosAnoAPI);
       crearGrafica();
       updateGrafica();
-      update = true;
     } else {
       actualizarGrafica(valoresGrafica);
       insertarValores(estudiosAnoAPI);
@@ -205,13 +203,13 @@ function insertarValores(estudiosAno) {
 }
 
 let temporizador;
+var update = false;
 
 function updateGrafica() {
   temporizador = setTimeout(function () {
-    valoresAPI();
-    actualizarGrafica(valoresGrafica);
+    valoresAPI(null, update);
     updateGrafica();
-  }, 5000);
+  }, 60000);
 }
 
 export function stopUpdateGrafica() {
