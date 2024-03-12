@@ -17,18 +17,12 @@ document.addEventListener("DOMContentLoaded", loadContent("estadistiques"));
 
 // Obtener referencias a los enlaces del menú
 const dashboardLink = document.getElementById("dashboard");
-const pendentsLink = document.getElementById("pendents");
 const listaLink = document.getElementById("lista");
 const estadistiquesLink = document.getElementById("estadistiques");
 
 dashboardLink.addEventListener("click", function (event) {
   event.preventDefault();
   loadContent("dashboard");
-});
-
-pendentsLink.addEventListener("click", function (event) {
-  event.preventDefault();
-  loadContent("pendents");
 });
 
 listaLink.addEventListener("click", function (event) {
@@ -46,10 +40,6 @@ function loadContent(option) {
     case "dashboard":
       vaciarContent(body);
       valoresAPI(body);
-      break;
-    case "pendents":
-      stopUpdateGrafica();
-      vaciarContent(body);
       break;
     case "lista":
       stopUpdateGrafica();

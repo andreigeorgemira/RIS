@@ -110,6 +110,8 @@ function generarBotones() {
   var rotateButtonCol = document.createElement("div");
   rotateButtonCol.className = "col";
   var rotateButton = document.createElement("button");
+  rotateButton.id = "deselect";
+  rotateButton.disabled = true;
   rotateButton.className = "btn btn-danger btn-block";
   rotateButton.type = "button";
   rotateButton.textContent = "DESMARCAR TOTES";
@@ -130,16 +132,15 @@ function generarBotones() {
 var estadisticasAPI;
 var botonesSeleccionados = [];
 
-function toggleBotonActivo(boton, activados) {
-  if (activados) {
-    boton.classList.add("btn-activo");
-  } else {
-    boton.classList.remove("btn-activo");
-  }
+function toggleBotonActivo(boton) {
+  boton.classList.toggle("btn-activo");
+  botonSeleccionado(boton);
 }
 
-function botonSeleccionado(boton, botonesSeleccionados) {
+function botonSeleccionado(boton) {
+  console.log(boton);
   const modalidad = boton.textContent.trim();
+  console.log(modalidad);
 
   if (boton.classList.contains("btn-activo")) {
     if (modalidad === "DX" && !botonesSeleccionados.includes("DX")) {
@@ -169,50 +170,77 @@ function botonSeleccionado(boton, botonesSeleccionados) {
   }
 }
 
-function verificarYActualizarBotonSelect(buttons, botonSelect) {
-  const todosActivos = Array.from(buttons).every((button) => button.classList.contains("btn-activo"));
-  botonSelect.textContent = todosActivos ? "DESMARCAR TOTES" : "SELECCIONA TOTES";
-}
-
 function botones() {
-  const buttons = document.querySelectorAll(".botones:not(.radiologos)");
+  const botones = document.querySelectorAll(".botones:not(.radiologos)");
   const botonSelect = document.getElementById("select");
+  const botonDeselect = document.getElementById("deselect");
 
-  buttons.forEach((button) => {
-    botonSeleccionado(button, botonesSeleccionados);
-  });
-
-  function activarBotones() {
-    const accionDesmarcar = botonSelect.textContent === "DESMARCAR TOTES";
-
-    buttons.forEach((boton) => {
-      toggleBotonActivo(boton, !accionDesmarcar);
-      botonSeleccionado(boton, botonesSeleccionados);
+  function selectBotones() {
+    botonSelect.disabled = true;
+    botones.forEach((boton) => {
+      boton.classList.add("btn-activo");
+      botonSeleccionado(boton);
+      filtroEstadisticas(botonesSeleccionados);
     });
-    botonSelect.textContent = accionDesmarcar ? "SELECCIONA TOTES" : "DESMARCAR TOTES";
-    filtroEstadisticas(botonesSeleccionados);
-    filtroRadiologos(botonesSeleccionados, botonesSeleccionadosRadiologos);
+    botonDeselect.disabled = false;
   }
 
-  function botonSeleccionadoIndividual(event) {
-    event.target.classList.toggle("btn-activo");
-    botonSeleccionado(event.target, botonesSeleccionados);
-    verificarYActualizarBotonSelect(buttons, botonSelect);
-    filtroEstadisticas(botonesSeleccionados);
-    filtroRadiologos(botonesSeleccionados, botonesSeleccionadosRadiologos);
+  function deselectBotones() {
+    botonDeselect.disabled = true;
+    botones.forEach((boton) => {
+      boton.classList.remove("btn-activo");
+      botonSeleccionado(boton);
+      filtroEstadisticas(botonesSeleccionados);
+    });
+    botonSelect.disabled = false;
   }
 
-  botonSelect.addEventListener("click", activarBotones);
+  function todosBotonesSeleccionados() {
+    return Array.from(botones).every((boton) => boton.classList.contains("btn-activo"));
+  }
 
-  buttons.forEach((button) => {
-    button.addEventListener("click", botonSeleccionadoIndividual);
+  botonSelect.addEventListener("click", function () {
+    selectBotones();
+    if (todosBotonesSeleccionados()) {
+      botonSelect.disabled = true;
+    }
   });
+
+  botonDeselect.addEventListener("click", function () {
+    deselectBotones();
+    if (!todosBotonesSeleccionados()) {
+      botonDeselect.disabled = true;
+    }
+  });
+
+  botones.forEach(function (boton) {
+    boton.addEventListener("click", function () {
+      toggleBotonActivo(this);
+      filtroEstadisticas(botonesSeleccionados);
+
+      if (todosBotonesSeleccionados()) {
+        botonSelect.disabled = true;
+        botonDeselect.disabled = false;
+      } else {
+        botonSelect.disabled = false;
+        botonDeselect.disabled = true;
+      }
+    });
+  });
+
+  let botonActivo = document.querySelectorAll(".botones.btn-activo:not(.radiologos)");
+
+  if (botonActivo) {
+    botonActivo.forEach((boton) => {
+      botonSeleccionado(boton);
+    });
+  }
 
   filtroEstadisticas(botonesSeleccionados);
   filtroRadiologos(botonesSeleccionados, botonesSeleccionadosRadiologos);
 }
 
-var botonesSeleccionadosRadiologos = []; // Este array almacenará los radiólogos seleccionados
+var botonesSeleccionadosRadiologos = [];
 
 function toggleBotonActivoRadiologs(boton) {
   boton.classList.toggle("btn-activo");
@@ -240,29 +268,43 @@ function botonesRadiologos() {
   const botonSelect = document.getElementById("selectRadiologos");
   const botonDeselect = document.getElementById("deselectRadiologos");
 
-  // Función para seleccionar todos los botones
   function selectBotones() {
+    botonSelect.disabled = true;
     botones.forEach((boton) => {
       boton.classList.add("btn-activo");
       actualizarBotonesSeleccionadosRadiologos(boton);
       filtroRadiologos(botonesSeleccionados, botonesSeleccionadosRadiologos);
     });
+    botonDeselect.disabled = false;
   }
 
-  // Función para deseleccionar todos los botones
   function deselectBotones() {
+    botonDeselect.disabled = true;
     botones.forEach((boton) => {
       boton.classList.remove("btn-activo");
       actualizarBotonesSeleccionadosRadiologos(boton);
       filtroRadiologos(botonesSeleccionados, botonesSeleccionadosRadiologos);
     });
+    botonSelect.disabled = false;
   }
 
-  // Evento para el botón de seleccionar
-  botonSelect.addEventListener("click", selectBotones);
+  function todosBotonesSeleccionados() {
+    return Array.from(botones).every((boton) => boton.classList.contains("btn-activo"));
+  }
 
-  // Evento para el botón de deseleccionar
-  botonDeselect.addEventListener("click", deselectBotones);
+  botonSelect.addEventListener("click", function () {
+    selectBotones();
+    if (todosBotonesSeleccionados()) {
+      botonSelect.disabled = true;
+    }
+  });
+
+  botonDeselect.addEventListener("click", function () {
+    deselectBotones();
+    if (!todosBotonesSeleccionados()) {
+      botonDeselect.disabled = true;
+    }
+  });
 
   let botonActivo = document.querySelector(".botones.radiologos.btn-activo");
 
@@ -274,6 +316,14 @@ function botonesRadiologos() {
     boton.addEventListener("click", function () {
       toggleBotonActivoRadiologs(this);
       filtroRadiologos(botonesSeleccionados, botonesSeleccionadosRadiologos);
+
+      if (todosBotonesSeleccionados()) {
+        botonSelect.disabled = true;
+        botonDeselect.disabled = false;
+      } else {
+        botonSelect.disabled = false;
+        botonDeselect.disabled = true;
+      }
     });
   });
 }
@@ -308,6 +358,8 @@ function filtroRadiologos(modalidades, radiologos) {
   cartasHTML += generarCarta(programada, "No Realitzats");
 
   document.getElementById("cartesEstadistiquesRadioleg").innerHTML = cartasHTML;
+
+  crearGrafica(informada, completada, programada, radiologos);
 }
 
 async function establecerFechas() {
@@ -337,12 +389,10 @@ async function establecerFechas() {
     filtroEstadisticas(botonesSeleccionados);
   }
 
-  // Añadir event listener de cambio a fechaInicio y fechaFinal
   fechaInicio.addEventListener("change", cambioFechas);
   fechaFinal.addEventListener("change", cambioFechas);
 
   insertarRadiologos();
-  crearGrafica();
 }
 
 async function obtenerValoresEstadisticas(inicio, final) {
@@ -418,6 +468,7 @@ function insertarRadiologos() {
         col.className = "col";
 
         const button = document.createElement("button");
+        button;
         button.className = "btn botones btn-block radiologos";
         button.type = "button";
         button.innerHTML = `<h5>${radiologos[j].TRACTE}</h5><h6>${radiologos[j].COLEGIAT ?? ""}</h6>`;
@@ -451,6 +502,7 @@ function insertarRadiologos() {
     colDeselect.className = "col";
     const buttonDeselect = document.createElement("button");
     buttonDeselect.id = "deselectRadiologos";
+    buttonDeselect.disabled = true;
     buttonDeselect.className = "btn btn-danger btn-block";
     buttonDeselect.type = "button";
     buttonDeselect.textContent = "DESMARCAR TOTES";
@@ -462,7 +514,11 @@ function insertarRadiologos() {
   });
 }
 
-function crearGrafica() {
+function crearGrafica(informada, completada, programada, radiologos) {
+  console.log(informada);
+  console.log(completada);
+  console.log(programada);
+  console.log(radiologos);
   var dom = document.getElementById("contenedor-grafico");
   var myChart = echarts.init(dom, null, {
     renderer: "canvas",
@@ -471,10 +527,7 @@ function crearGrafica() {
 
   var option;
 
-  const rawData = [
-    [100, 200, 300, 400, 500, 600, 700],
-    [150, 250, 350, 450, 550, 650, 750],
-  ];
+  const rawData = [[informada], [completada], [programada]];
 
   const totalData = [];
   for (let i = 0; i < rawData[0].length; ++i) {
@@ -490,7 +543,7 @@ function crearGrafica() {
     top: 50,
     bottom: 50,
   };
-  const series = ["Video Ad", "Search Engine"].map((name, sid) => {
+  const series = ["Informades", "Pendents", "No realitzats"].map((name, sid) => {
     return {
       name,
       type: "bar",
@@ -516,7 +569,7 @@ function crearGrafica() {
     },
     xAxis: {
       type: "category",
-      data: ["doctor", "doctor", "doctor", "doctor", "doctor", "doctor", "doctor"],
+      data: radiologos,
     },
     series,
   };
