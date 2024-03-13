@@ -135,6 +135,7 @@ var botonesSeleccionados = [];
 function toggleBotonActivo(boton) {
   boton.classList.toggle("btn-activo");
   botonSeleccionado(boton);
+  filtroRadiologos(botonesSeleccionados, botonesSeleccionadosRadiologos);
 }
 
 function botonSeleccionado(boton) {
@@ -181,6 +182,7 @@ function botones() {
       boton.classList.add("btn-activo");
       botonSeleccionado(boton);
       filtroEstadisticas(botonesSeleccionados);
+      filtroRadiologos(botonesSeleccionados, botonesSeleccionadosRadiologos);
     });
     botonDeselect.disabled = false;
   }
@@ -191,6 +193,7 @@ function botones() {
       boton.classList.remove("btn-activo");
       botonSeleccionado(boton);
       filtroEstadisticas(botonesSeleccionados);
+      filtroRadiologos(botonesSeleccionados, botonesSeleccionadosRadiologos);
     });
     botonSelect.disabled = false;
   }
@@ -328,38 +331,60 @@ function botonesRadiologos() {
   });
 }
 
+let datosPorRadiologo = {};
+
 function filtroRadiologos(modalidades, radiologos) {
+  datosPorRadiologo = {};
+
   const datosFiltrados = estadisticasAPI.filter((item) => modalidades.includes(item.MODALITAT) && (radiologos.includes(item.METGE_RESPONSABLE) || radiologos.includes(item.METGESIGNAT)));
 
-  var informada = 0;
-  var completada = 0;
-  var programada = 0;
-
   datosFiltrados.forEach((item) => {
+    let nombreRadiologo;
+    if (radiologos.includes(item.METGE_RESPONSABLE)) {
+      nombreRadiologo = item.METGE_RESPONSABLE;
+    } else if (radiologos.includes(item.METGESIGNAT)) {
+      nombreRadiologo = item.METGESIGNAT;
+    } else {
+      return;
+    }
+
+    if (!datosPorRadiologo[nombreRadiologo]) {
+      datosPorRadiologo[nombreRadiologo] = {
+        informadas: 0,
+        completadas: 0,
+        programadas: 0,
+      };
+    }
+
     switch (item.ESTAT) {
       case "Completada":
-        completada++;
+        datosPorRadiologo[nombreRadiologo].completadas++;
         break;
       case "Informada":
-        informada++;
+        datosPorRadiologo[nombreRadiologo].informadas++;
         break;
       case "Programada":
-        programada++;
+        datosPorRadiologo[nombreRadiologo].programadas++;
         break;
       default:
         break;
     }
   });
 
-  var cartasHTML = "";
-  cartasHTML += generarCarta(completada + informada, "Total Realitzades");
-  cartasHTML += generarCarta(informada, "Informades");
-  cartasHTML += generarCarta(completada, "Pendents d'informar");
-  cartasHTML += generarCarta(programada, "No Realitzats");
+  let total = { informadas: 0, completadas: 0, programadas: 0 };
+  Object.values(datosPorRadiologo).forEach((estadisticas) => {
+    total.informadas += estadisticas.informadas;
+    total.completadas += estadisticas.completadas;
+    total.programadas += estadisticas.programadas;
+  });
 
-  document.getElementById("cartesEstadistiquesRadioleg").innerHTML = cartasHTML;
+  const totalRealizadas = total.informadas + total.completadas;
+  const cartasHTML = generarCarta(totalRealizadas, "Total Realitzades") + generarCarta(total.informadas, "Informades") + generarCarta(total.completadas, "Pendents d'informar") + generarCarta(total.programadas, "No Realitzats");
 
-  crearGrafica(informada, completada, programada, radiologos);
+  const contenedorCartas = document.getElementById("cartesEstadistiquesRadioleg");
+  contenedorCartas.innerHTML = cartasHTML;
+
+  crearGrafica(total.informadas, total.completadas, total.programadas, Object.keys(datosPorRadiologo));
 }
 
 async function establecerFechas() {
@@ -387,6 +412,7 @@ async function establecerFechas() {
     let nuevaFechaFinal = fechaFinal.value;
     await obtenerValoresEstadisticas(nuevaFechaInicio, nuevaFechaFinal);
     filtroEstadisticas(botonesSeleccionados);
+    filtroRadiologos(botonesSeleccionados, botonesSeleccionadosRadiologos);
   }
 
   fechaInicio.addEventListener("change", cambioFechas);
@@ -514,11 +540,7 @@ function insertarRadiologos() {
   });
 }
 
-function crearGrafica(informada, completada, programada, radiologos) {
-  console.log(informada);
-  console.log(completada);
-  console.log(programada);
-  console.log(radiologos);
+function crearGrafica(informadaTotal, completadaTotal, programadaTotal, radiologos) {
   var dom = document.getElementById("contenedor-grafico");
   var myChart = echarts.init(dom, null, {
     renderer: "canvas",
@@ -527,35 +549,39 @@ function crearGrafica(informada, completada, programada, radiologos) {
 
   var option;
 
-  const rawData = [[informada], [completada], [programada]];
-
-  const totalData = [];
-  for (let i = 0; i < rawData[0].length; ++i) {
-    let sum = 0;
-    for (let j = 0; j < rawData.length; ++j) {
-      sum += rawData[j][i];
-    }
-    totalData.push(sum);
-  }
   const grid = {
     left: 100,
     right: 130,
     top: 50,
     bottom: 50,
   };
+
+  // Preparar los datos de cada radiólogo para cada tipo de estadística
+  const informadaData = radiologos.map((radiologo) => (datosPorRadiologo[radiologo] ? datosPorRadiologo[radiologo].informadas : 0));
+  const completadaData = radiologos.map((radiologo) => (datosPorRadiologo[radiologo] ? datosPorRadiologo[radiologo].completadas : 0));
+  const programadaData = radiologos.map((radiologo) => (datosPorRadiologo[radiologo] ? datosPorRadiologo[radiologo].programadas : 0));
+
   const series = ["Informades", "Pendents", "No realitzats"].map((name, sid) => {
     return {
       name,
       type: "bar",
       stack: "total",
-      barWidth: "60%",
-      label: {
-        show: true,
-        formatter: (params) => Math.round(params.value * 1000) / 10 + "%",
-      },
-      data: rawData[sid].map((d, did) => (totalData[did] <= 0 ? 0 : d / totalData[did])),
+      barWidth: "90%",
+      data: radiologos.map((radiologo, index) => {
+        switch (name) {
+          case "Informades":
+            return informadaData[index];
+          case "Pendents":
+            return completadaData[index];
+          case "No realitzats":
+            return programadaData[index];
+          default:
+            return 0;
+        }
+      }),
     };
   });
+
   option = {
     legend: {
       orient: "vertical",
@@ -572,6 +598,20 @@ function crearGrafica(informada, completada, programada, radiologos) {
       data: radiologos,
     },
     series,
+    tooltip: {
+      trigger: "axis",
+      axisPointer: {
+        type: "shadow",
+      },
+      formatter: function (params) {
+        const radiologo = params[0].name;
+        let tooltipContent = radiologo + "<br/>";
+        params.forEach(function (item) {
+          tooltipContent += item.seriesName + ": " + item.data + "<br/>";
+        });
+        return tooltipContent;
+      },
+    },
   };
 
   if (option && typeof option === "object") {
