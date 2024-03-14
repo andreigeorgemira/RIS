@@ -1,4 +1,5 @@
-import { obtenerEstadisticas, obtenerRadiologos } from "../API/llamadasAPI.js";
+import { obtenerEstadisticas, obtenerRadiologos, obtenerExcelRadiologia } from "../API/llamadasAPI.js";
+import { formatearFechaExcel } from "../JS/utilidades.js";
 
 export function crearContenido(body) {
   body.innerHTML = `<div class="stats">
@@ -52,6 +53,11 @@ export function crearContenido(body) {
         </div>
       </div>
     </div>
+  </div>
+</div>
+<div class="mb-5 d-flex justify-content-center excel">
+  <div>
+    <span><i class="far fa-file-excel"></i> Generar Excel (Totes les proves del període)</span>
   </div>
 </div>`;
   establecerFechas();
@@ -139,9 +145,7 @@ function toggleBotonActivo(boton) {
 }
 
 function botonSeleccionado(boton) {
-  console.log(boton);
   const modalidad = boton.textContent.trim();
-  console.log(modalidad);
 
   if (boton.classList.contains("btn-activo")) {
     if (modalidad === "DX" && !botonesSeleccionados.includes("DX")) {
@@ -384,7 +388,7 @@ function filtroRadiologos(modalidades, radiologos) {
   const contenedorCartas = document.getElementById("cartesEstadistiquesRadioleg");
   contenedorCartas.innerHTML = cartasHTML;
 
-  crearGrafica(total.informadas, total.completadas, total.programadas, Object.keys(datosPorRadiologo));
+  crearGrafica(Object.keys(datosPorRadiologo));
 }
 
 async function establecerFechas() {
@@ -417,6 +421,12 @@ async function establecerFechas() {
 
   fechaInicio.addEventListener("change", cambioFechas);
   fechaFinal.addEventListener("change", cambioFechas);
+
+  const generarExcelButton = document.querySelector(".excel span");
+
+  generarExcelButton.addEventListener("click", function () {
+    obtenerExcelRadiologia(formatearFechaExcel(fechaInicio.value), formatearFechaExcel(fechaFinal.value));
+  });
 
   insertarRadiologos();
 }
@@ -540,7 +550,7 @@ function insertarRadiologos() {
   });
 }
 
-function crearGrafica(informadaTotal, completadaTotal, programadaTotal, radiologos) {
+function crearGrafica(radiologos) {
   var dom = document.getElementById("contenedor-grafico");
   var myChart = echarts.init(dom, null, {
     renderer: "canvas",
@@ -599,16 +609,9 @@ function crearGrafica(informadaTotal, completadaTotal, programadaTotal, radiolog
     },
     series,
     tooltip: {
-      trigger: "axis",
-      axisPointer: {
-        type: "shadow",
-      },
+      trigger: "item",
       formatter: function (params) {
-        const radiologo = params[0].name;
-        let tooltipContent = radiologo + "<br/>";
-        params.forEach(function (item) {
-          tooltipContent += item.seriesName + ": " + item.data + "<br/>";
-        });
+        let tooltipContent = `${params.name}<br/>${params.seriesName}: ${params.value}`;
         return tooltipContent;
       },
     },

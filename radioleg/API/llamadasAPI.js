@@ -57,3 +57,25 @@ export function obtenerRadiologos() {
     }),
   }).then((respuesta) => respuesta.json());
 }
+
+export function obtenerExcelRadiologia(fromDate, toDate) {
+  const url = `https://localhost:7224/Radiologia/api/v4/ris/statistics/GetExcel/CMQR/${fromDate}/${toDate}`;
+
+  return fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.blob())
+    .then((blob) => {
+      // Crear un enlace temporal para descargar el archivo
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `CMQR_report_${fromDate}-${toDate}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    });
+}
