@@ -420,7 +420,7 @@ function mostrarOverlayBase(overlayDatos, dato, condicion1, condicion2, unoCumpl
     </div>
     <hr>
     <div class="modal-footer">
-      <button class="btn btn-secondary hand" id="tancar" type="button">Tancar</button>
+      <button class="btn btn-danger hand" id="tancar" type="button">Tancar</button>
     </div>
   </div>
 </div>`;

@@ -16,7 +16,16 @@ export function obtenerDatosGetWorklistAPI(opcionUF, fecha = new Date()) {
       uf: opcionUF,
       date: fechaFormateada(fecha),
     }),
-  }).then((respuesta) => respuesta.json());
+  })
+    .then((respuesta) => {
+      if (!respuesta.ok) {
+        throw new Error("Error al obtener getWorklist");
+      }
+      return respuesta.json();
+    })
+    .catch((error) => {
+      mostrarError(error.message);
+    });
 }
 
 // Función para realizar la solicitud a la API y guardar los datos
@@ -32,7 +41,16 @@ export function obtenerDatosGetAgendesRAD(opcionUF) {
       center: "CMQR",
       uf: opcionUF,
     }),
-  }).then((respuesta) => respuesta.json());
+  })
+    .then((respuesta) => {
+      if (!respuesta.ok) {
+        throw new Error("Error al obtener GetAgendesRAD");
+      }
+      return respuesta.json();
+    })
+    .catch((error) => {
+      mostrarError(error.message);
+    });
 }
 
 // Función para realizar la solicitud a la API y guardar los datos
@@ -48,7 +66,16 @@ export function obtenerObservacionsTecnic(numage) {
       center: "CMQR",
       num: numage,
     }),
-  }).then((respuesta) => respuesta.json());
+  })
+    .then((respuesta) => {
+      if (!respuesta.ok) {
+        throw new Error("Error al obtener GetObstecniques");
+      }
+      return respuesta.json();
+    })
+    .catch((error) => {
+      mostrarError(error.message);
+    });
 }
 
 export function obtenerMasCitasPaciente(numage) {
@@ -61,7 +88,16 @@ export function obtenerMasCitasPaciente(numage) {
       center: "CMQR",
       numage: numage,
     }),
-  }).then((respuesta) => respuesta.json());
+  })
+    .then((respuesta) => {
+      if (!respuesta.ok) {
+        throw new Error("Error al obtener HasMoreDates");
+      }
+      return respuesta.json();
+    })
+    .catch((error) => {
+      mostrarError(error.message);
+    });
 }
 
 export function obtenerRadiologos() {
@@ -73,7 +109,16 @@ export function obtenerRadiologos() {
     body: JSON.stringify({
       center: "CMQR",
     }),
-  }).then((respuesta) => respuesta.json());
+  })
+    .then((respuesta) => {
+      if (!respuesta.ok) {
+        throw new Error("Error al obtener getProfessionals");
+      }
+      return respuesta.json();
+    })
+    .catch((error) => {
+      mostrarError(error.message);
+    });
 }
 
 export function obtenerRadiologoAsignado(numage) {
@@ -86,7 +131,16 @@ export function obtenerRadiologoAsignado(numage) {
       center: "CMQR",
       num: numage,
     }),
-  }).then((respuesta) => respuesta.json());
+  })
+    .then((respuesta) => {
+      if (!respuesta.ok) {
+        throw new Error("Error al obtener getAssignedRad");
+      }
+      return respuesta.json();
+    })
+    .catch((error) => {
+      mostrarError(error.message);
+    });
 }
 
 export function obtenerEstudiosAnteriores(nhc) {
@@ -99,7 +153,16 @@ export function obtenerEstudiosAnteriores(nhc) {
       center: "CMQR",
       nhc: nhc,
     }),
-  }).then((respuesta) => respuesta.json());
+  })
+    .then((respuesta) => {
+      if (!respuesta.ok) {
+        throw new Error("Error al obtener GetOldReports");
+      }
+      return respuesta.json();
+    })
+    .catch((error) => {
+      mostrarError(error.message);
+    });
 }
 
 export function obtenerEstudiosRagiologico(nsol) {
@@ -113,5 +176,22 @@ export function obtenerEstudiosRagiologico(nsol) {
       num: nsol,
       tipo: "nsol",
     }),
-  }).then((respuesta) => respuesta.json());
+  })
+    .then((respuesta) => {
+      if (!respuesta.ok) {
+        throw new Error("Error al obtener getstudy");
+      }
+      return respuesta.json();
+    })
+    .catch((error) => {
+      mostrarError(error.message);
+    });
+}
+
+function mostrarError(mensaje) {
+  Swal.fire({
+    icon: "error",
+    title: "¡Ups!",
+    text: mensaje,
+  });
 }

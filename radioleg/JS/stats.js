@@ -2,7 +2,7 @@ import { obtenerEstadisticas, obtenerRadiologos, obtenerExcelRadiologia } from "
 import { formatearFechaExcel } from "../JS/utilidades.js";
 
 export function crearContenido(body) {
-  body.innerHTML = `<div class="stats">
+  body.innerHTML += `<div class="stats">
   <div class="col-2">
     <div>
       <span class="input-label">Data Inici: </span>
@@ -57,10 +57,11 @@ export function crearContenido(body) {
 </div>
 <div class="mb-5 d-flex justify-content-center excel">
   <div>
-    <span><i class="far fa-file-excel"></i> Generar Excel (Totes les proves del període)</span>
+    <span class="cursor"><i class="far fa-file-excel"></i> Generar Excel (Totes les proves del període)</span>
   </div>
 </div>`;
   establecerFechas();
+  insertarRadiologos();
   generarBotones();
 }
 
@@ -392,6 +393,9 @@ function filtroRadiologos(modalidades, radiologos) {
 }
 
 async function establecerFechas() {
+  var modalSpinner = document.getElementById("modalSpinner");
+  modalSpinner.style.display = "flex";
+
   var fechaInicio = document.getElementById("inicio");
   var fechaFinal = document.getElementById("final");
   var fechaActual = new Date();
@@ -412,11 +416,13 @@ async function establecerFechas() {
   await obtenerValoresEstadisticas(inicio, final);
 
   async function cambioFechas() {
+    modalSpinner.style.display = "flex";
     let nuevaFechaInicio = fechaInicio.value;
     let nuevaFechaFinal = fechaFinal.value;
     await obtenerValoresEstadisticas(nuevaFechaInicio, nuevaFechaFinal);
     filtroEstadisticas(botonesSeleccionados);
     filtroRadiologos(botonesSeleccionados, botonesSeleccionadosRadiologos);
+    modalSpinner.style.display = "none";
   }
 
   fechaInicio.addEventListener("change", cambioFechas);
@@ -427,8 +433,10 @@ async function establecerFechas() {
   generarExcelButton.addEventListener("click", function () {
     obtenerExcelRadiologia(formatearFechaExcel(fechaInicio.value), formatearFechaExcel(fechaFinal.value));
   });
+  botonesRadiologos();
+  botones();
 
-  insertarRadiologos();
+  modalSpinner.style.display = "none";
 }
 
 async function obtenerValoresEstadisticas(inicio, final) {
@@ -545,8 +553,6 @@ function insertarRadiologos() {
     colDeselect.appendChild(buttonDeselect);
     rowDeselect.appendChild(colDeselect);
     divRadiologos.appendChild(rowDeselect);
-    botonesRadiologos();
-    botones();
   });
 }
 

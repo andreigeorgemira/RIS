@@ -1,7 +1,9 @@
 import { valoresAPI, stopUpdateGrafica } from "./dashboard.js";
 import { crearContenido } from "./stats.js";
 
-export const body = document.getElementById("contenido");
+const body = document.getElementById("contenido");
+// Obtener el div modalSpinner
+var modalSpinner = document.getElementById("modalSpinner");
 
 // Recuperar el nombre de usuario y especialidad de la URL
 let urlParams = new URLSearchParams(window.location.search);
@@ -13,7 +15,7 @@ let especialidad = urlParams.get("especialidad");
 document.getElementById("NombreUser").innerHTML = "User " + user;
 document.getElementById("EspecialidadUser").innerHTML = "Especialidad  " + especialidad;
 
-document.addEventListener("DOMContentLoaded", loadContent("estadistiques"));
+document.addEventListener("DOMContentLoaded", loadContent("dashboard"));
 
 // Obtener referencias a los enlaces del menú
 const dashboardLink = document.getElementById("dashboard");
@@ -38,21 +40,22 @@ estadistiquesLink.addEventListener("click", function (event) {
 function loadContent(option) {
   switch (option) {
     case "dashboard":
-      vaciarContent(body);
+      vaciarContent();
       valoresAPI(body);
       break;
     case "lista":
       stopUpdateGrafica();
-      vaciarContent(body);
+      vaciarContent();
       break;
     case "estadistiques":
       stopUpdateGrafica();
-      vaciarContent(body);
+      vaciarContent();
       crearContenido(body);
       break;
   }
 }
 
-function vaciarContent(body) {
+function vaciarContent() {
   body.innerHTML = "";
+  body.appendChild(modalSpinner);
 }

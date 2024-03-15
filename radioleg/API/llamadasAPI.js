@@ -13,7 +13,16 @@ export function obtenerDatosGrafica() {
     body: JSON.stringify({
       center: "CMQR",
     }),
-  }).then((respuesta) => respuesta.json());
+  })
+    .then((respuesta) => {
+      if (!respuesta.ok) {
+        throw new Error("Error al obtener los datos de la gráfica");
+      }
+      return respuesta.json();
+    })
+    .catch((error) => {
+      mostrarError(error.message);
+    });
 }
 
 export function obtenerEstudiosAno() {
@@ -27,7 +36,16 @@ export function obtenerEstudiosAno() {
     body: JSON.stringify({
       center: "CMQR",
     }),
-  }).then((respuesta) => respuesta.json());
+  })
+    .then((respuesta) => {
+      if (!respuesta.ok) {
+        throw new Error("Error al obtener los datos de los estudios");
+      }
+      return respuesta.json();
+    })
+    .catch((error) => {
+      mostrarError(error.message);
+    });
 }
 
 export function obtenerEstadisticas(dataInici, dataFi) {
@@ -43,7 +61,16 @@ export function obtenerEstadisticas(dataInici, dataFi) {
       datainici: formatearFecha(dataInici),
       datafi: formatearFecha(dataFi),
     }),
-  }).then((respuesta) => respuesta.json());
+  })
+    .then((respuesta) => {
+      if (!respuesta.ok) {
+        throw new Error("Error al obtener los datos de las estadisticas");
+      }
+      return respuesta.json();
+    })
+    .catch((error) => {
+      mostrarError(error.message);
+    });
 }
 
 export function obtenerRadiologos() {
@@ -55,7 +82,16 @@ export function obtenerRadiologos() {
     body: JSON.stringify({
       center: "CMQR",
     }),
-  }).then((respuesta) => respuesta.json());
+  })
+    .then((respuesta) => {
+      if (!respuesta.ok) {
+        throw new Error("Error al obtener los radiologos");
+      }
+      return respuesta.json();
+    })
+    .catch((error) => {
+      mostrarError(error.message);
+    });
 }
 
 export function obtenerExcelRadiologia(fromDate, toDate) {
@@ -67,7 +103,12 @@ export function obtenerExcelRadiologia(fromDate, toDate) {
       "Content-Type": "application/json",
     },
   })
-    .then((response) => response.blob())
+    .then((respuesta) => {
+      if (!respuesta.ok) {
+        throw new Error("Error descargar el fichero");
+      }
+      return respuesta.blob();
+    })
     .then((blob) => {
       // Crear un enlace temporal para descargar el archivo
       const url = window.URL.createObjectURL(new Blob([blob]));
@@ -77,5 +118,16 @@ export function obtenerExcelRadiologia(fromDate, toDate) {
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
+    })
+    .catch((error) => {
+      mostrarError(error.message);
     });
+}
+
+function mostrarError(mensaje) {
+  Swal.fire({
+    icon: "error",
+    title: "¡Ups!",
+    text: mensaje,
+  });
 }

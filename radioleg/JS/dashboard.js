@@ -6,14 +6,15 @@ function formatearNumero(numero) {
 
 var valoresGrafica;
 
-export async function valoresAPI(body, update = true) {
-  let datosGraficaPromise = await obtenerDatosGrafica().then((datos) => datos.rows);
-  let estudiosAnoPromise = await obtenerEstudiosAno().then((datos) => datos.rows);
+export function valoresAPI(body, update = true) {
+  // Iniciar las operaciones asíncronas sin el await aquí
+  let datosGraficaPromise = obtenerDatosGrafica().then((datos) => datos.rows);
+  let estudiosAnoPromise = obtenerEstudiosAno().then((datos) => datos.rows);
+
   Promise.all([datosGraficaPromise, estudiosAnoPromise]).then(([valoresGraficaAPI, estudiosAnoAPI]) => {
     valoresGrafica = valoresGraficaAPI;
-    console.log(update);
     if (update) {
-      body.innerHTML = `<div id="estudios" class="container mt-4"></div>
+      body.innerHTML += `<div id="estudios" class="container mt-4"></div>
       <div class="container mt-4 grafico">
         <div class="row justify-content-center">
           <div class="col-md-6">
@@ -104,7 +105,6 @@ function crearGrafica() {
 }
 
 function actualizarGrafica(valoresGrafica) {
-  console.log(valoresGrafica);
   const sumaTotal = valoresGrafica.reduce((total, valor) => total + valor.value, 0);
 
   const datosFormateados = valoresGrafica.map((valor) => ({
@@ -173,7 +173,7 @@ function crearEstudios(estudiosAno) {
       const indice = i * 3 + j;
       if (indice < estudiosAno.length) {
         nuevaColumna.innerHTML = `
-              <div class="card mb-4">
+              <div class="card mb-4 estudios">
                   <div class="card-body">
                       <h1 class="card-title"></h1>
                       <h6 class="card-text"></h6>

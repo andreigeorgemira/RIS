@@ -1,8 +1,8 @@
 html,
 body {
-  background-color: lightgray;
+  background-color: #ddd;
   font-family: Verdana;
-  font-size: 0.97em;
+  font-size: 1em;
 }
 
 body.scroll {
@@ -16,12 +16,10 @@ body.overlay-abierto {
 body::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
-  background-color: #f5f5f5;
 }
 
 body::-webkit-scrollbar {
   width: 12px;
-  background-color: #f5f5f5;
 }
 
 body::-webkit-scrollbar-thumb {
@@ -29,11 +27,13 @@ body::-webkit-scrollbar-thumb {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #555;
 }
-
 header {
-  background-color: #005187;
-  color: white;
-  font-weight: bold;
+  background-color: #343a40;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.nav-item:hover {
+  color: rgba(255, 255, 255, 0.8);
 }
 
 a {
@@ -41,7 +41,11 @@ a {
 }
 
 .mi-contenedor button {
-  margin-right: 10px; /* o el valor que desees */
+  margin-right: 10px;
+}
+
+.mi-contenedor button:hover {
+  background-color: rgb(99, 167, 99);
 }
 
 .icon {
@@ -116,7 +120,7 @@ input:disabled {
 }
 
 .botonSeleccionado {
-  background-color: lightsalmon; /* Cambia el color de fondo cuando está seleccionado */
+  background-color: rgb(99, 167, 99);
 }
 
 .tabla {

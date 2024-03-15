@@ -2,6 +2,68 @@ html,
 body {
   background-color: #ddd;
   font-family: Verdana;
+  font-size: 1em;
+}
+
+.modalSpinner {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  z-index: 1000;
+  background-color: #ddd;
+}
+
+.spinner {
+  margin-top: 200px;
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+#mensaje {
+  margin-top: 213px;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
+.dot-animation:after {
+  content: ".";
+  position: absolute;
+  animation: dots 1.5s infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dots {
+  33% {
+    content: ".";
+  }
+  66% {
+    content: "..";
+  }
+  100% {
+    content: "...";
+  }
+}
+
+#contenido {
+  position: relative;
+  height: 100%;
+  overflow: auto;
 }
 
 .cursor {
@@ -109,10 +171,9 @@ body {
 }
 
 .btn-activo {
-  background-color: red;
+  background-color: rgb(99, 167, 99);
 }
 
 .excel {
   font-size: 2.2vh;
-  cursor: pointer;
 }
