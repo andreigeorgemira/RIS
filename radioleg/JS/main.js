@@ -8,12 +8,15 @@ var modalSpinner = document.getElementById("modalSpinner");
 // Recuperar el nombre de usuario y especialidad de la URL
 let urlParams = new URLSearchParams(window.location.search);
 let user = urlParams.get("user");
-if (user != null) {
-  tituloWEB.innerHTML += " " + user;
-}
 let especialidad = urlParams.get("especialidad");
-document.getElementById("NombreUser").innerHTML = "User " + user;
-document.getElementById("EspecialidadUser").innerHTML = "Especialidad  " + especialidad;
+
+if (user == null) {
+  user = "";
+  especialidad = "";
+} else {
+  document.getElementById("NombreUser").innerHTML = "User " + user;
+  document.getElementById("EspecialidadUser").innerHTML = "Especialidad  " + especialidad;
+}
 
 document.addEventListener("DOMContentLoaded", loadContent("dashboard"));
 

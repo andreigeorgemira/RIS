@@ -88,7 +88,7 @@ function datosH(dato, filtroRealitzats, valorSelect) {
     <td><b>${traslado(dato.TRASLLAT)}<b></td>
   `;
   if (condicionRealitzats) {
-    row.classList.add("realitzat");
+    row.classList.add("realitzat-rojo");
   }
 
   return row;
@@ -108,7 +108,7 @@ function datosU(dato, filtroRealitzats, valorSelect) {
     <td>${traslado(dato.TRASLLAT)}</td>
   `;
   if (condicionRealitzats) {
-    row.classList.add("realitzat");
+    row.classList.add("realitzat-rojo");
   }
 
   return row;

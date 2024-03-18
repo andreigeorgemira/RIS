@@ -602,7 +602,7 @@ function crearGrafica(radiologos) {
     legend: {
       orient: "vertical",
       right: 0,
-      top: "middle",
+      top: "top",
       selectedMode: true,
     },
     grid,

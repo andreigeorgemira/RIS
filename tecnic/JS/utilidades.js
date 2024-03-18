@@ -93,13 +93,10 @@ function actualizarUltimoValor(opcionUF, nuevoValor) {
       ultimoValorNumericoC = nuevoValor;
       break;
     case "H":
+      ultimoValorAlfabeticoH = nuevoValor;
+      break;
     case "U":
-      // Verificar si el nuevo valor es alfabético
-      if (opcionUF == "H") {
-        ultimoValorAlfabeticoH = nuevoValor;
-      } else {
-        ultimoValorAlfabeticoU = nuevoValor;
-      }
+      ultimoValorAlfabeticoU = nuevoValor;
       break;
   }
 }
