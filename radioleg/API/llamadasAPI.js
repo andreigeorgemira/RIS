@@ -94,10 +94,10 @@ export function obtenerRadiologos() {
     });
 }
 
-export function obtenerExcelRadiologia(fromDate, toDate) {
+export function obtenerExcelRadiologia(fromDate, toDate, ventana) {
   const url = `https://localhost:7224/Radiologia/api/v4/ris/statistics/GetExcel/CMQR/${fromDate}/${toDate}`;
 
-  return fetch(url, {
+  fetch(url, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -105,17 +105,17 @@ export function obtenerExcelRadiologia(fromDate, toDate) {
   })
     .then((respuesta) => {
       if (!respuesta.ok) {
-        throw new Error("Error descargar el fichero");
+        throw new Error("Error al descargar el fichero");
       }
       return respuesta.blob();
     })
     .then((blob) => {
       // Crear un enlace temporal para descargar el archivo
       const url = window.URL.createObjectURL(new Blob([blob]));
-      const a = document.createElement("a");
+      const a = ventana.document.createElement("a");
       a.href = url;
       a.download = `CMQR_report_${fromDate}-${toDate}.xlsx`;
-      document.body.appendChild(a);
+      ventana.document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
     })

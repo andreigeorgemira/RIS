@@ -431,8 +431,15 @@ async function establecerFechas() {
   const generarExcelButton = document.querySelector(".excel");
 
   generarExcelButton.addEventListener("click", function () {
-    obtenerExcelRadiologia(formatearFechaExcel(fechaInicio.value), formatearFechaExcel(fechaFinal.value));
+    // Abrir una nueva ventana
+    const nuevaVentana = window.open("", "_blank");
+    // Mostrar el mensaje "Descargando fichero" en la nueva ventana
+    nuevaVentana.document.body.innerHTML = "<h1>Generant informe...</h1>";
+
+    // Llamar a la función para obtener el Excel y pasar la referencia de la nueva ventana
+    obtenerExcelRadiologia(formatearFechaExcel(fechaInicio.value), formatearFechaExcel(fechaFinal.value), nuevaVentana);
   });
+
   botonesRadiologos();
   botones();
 
