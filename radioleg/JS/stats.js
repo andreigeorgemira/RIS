@@ -55,9 +55,9 @@ export function crearContenido(body) {
     </div>
   </div>
 </div>
-<div class="mb-5 d-flex justify-content-center excel">
+<div class="mb-5 d-flex justify-content-center">
   <div>
-    <span class="cursor"><i class="far fa-file-excel"></i> Generar Excel (Totes les proves del període)</span>
+    <span class="cursor excel"><i class="far fa-file-excel"></i> Generar Excel (Totes les proves del període)</span>
   </div>
 </div>`;
   establecerFechas();
@@ -428,7 +428,7 @@ async function establecerFechas() {
   fechaInicio.addEventListener("change", cambioFechas);
   fechaFinal.addEventListener("change", cambioFechas);
 
-  const generarExcelButton = document.querySelector(".excel span");
+  const generarExcelButton = document.querySelector(".excel");
 
   generarExcelButton.addEventListener("click", function () {
     obtenerExcelRadiologia(formatearFechaExcel(fechaInicio.value), formatearFechaExcel(fechaFinal.value));

@@ -1,6 +1,6 @@
 html,
 body {
-  background-color: #ddd;
+  background-color: rgb(228, 228, 228);
   font-family: Verdana;
   font-size: 1em;
 }
@@ -153,6 +153,10 @@ input:disabled {
   color: gray;
 }
 
+.rojo {
+  background-color: #edd7d7;
+}
+
 .realitzat-rojo {
   background-color: #edd7d7;
   text-decoration: line-through;
@@ -298,7 +302,7 @@ input:disabled {
 }
 
 .dropdown-content button:hover {
-  background-color: #ddd;
+  background-color: ligthgray;
 }
 
 .dropdown:hover .dropdown-content {

@@ -107,6 +107,7 @@ function datosU(dato, filtroRealitzats, valorSelect) {
     <td>${dato.UBICACIO}</td>
     <td>${traslado(dato.TRASLLAT)}</td>
   `;
+  row.classList.add("rojo");
   if (condicionRealitzats) {
     row.classList.add("realitzat-rojo");
   }

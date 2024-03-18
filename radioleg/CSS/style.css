@@ -1,6 +1,6 @@
 html,
 body {
-  background-color: #ddd;
+  background-color: rgb(228, 228, 228);
   font-family: Verdana;
   font-size: 1em;
 }
@@ -14,7 +14,7 @@ body {
   height: 100%;
   justify-content: center;
   z-index: 1000;
-  background-color: #ddd;
+  background-color: rgb(228, 228, 228);
 }
 
 .spinner {
@@ -176,4 +176,12 @@ body {
 
 .excel {
   font-size: 2.2vh;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  border: 2px solid;
+}
+
+.excel:hover {
+  background-color: rgb(99, 167, 99);
 }
