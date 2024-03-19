@@ -1,7 +1,10 @@
+// Importar la función formatearFecha del módulo utilidades.js
 import { formatearFecha } from "../JS/utilidades.js";
 
+// URL base para las solicitudes de datos
 const url = "https://localhost:7224/Radiologia/api/v4/ris/statistics";
 
+// Función para obtener los datos para la gráfica de modalidad
 export function obtenerDatosGrafica() {
   return fetch(url + "/getmodality", {
     headers: {
@@ -25,6 +28,7 @@ export function obtenerDatosGrafica() {
     });
 }
 
+// Función para obtener el recuento de estudios por año
 export function obtenerEstudiosAno() {
   return fetch(url + "/getcounters", {
     headers: {
@@ -48,6 +52,7 @@ export function obtenerEstudiosAno() {
     });
 }
 
+// Función para obtener estadísticas en un rango de fechas
 export function obtenerEstadisticas(dataInici, dataFi) {
   return fetch(url + "/GetDashboard", {
     headers: {
@@ -73,6 +78,7 @@ export function obtenerEstadisticas(dataInici, dataFi) {
     });
 }
 
+// Función para obtener la lista de radiólogos
 export function obtenerRadiologos() {
   return fetch(url + "/getProfessionals", {
     method: "POST",
@@ -94,7 +100,9 @@ export function obtenerRadiologos() {
     });
 }
 
+// Función para descargar un archivo Excel de radiología
 export function obtenerExcelRadiologia(fromDate, toDate, ventana) {
+  // URL para la descarga del archivo Excel
   const url = `https://localhost:7224/Radiologia/api/v4/ris/statistics/GetExcel/CMQR/${fromDate}/${toDate}`;
 
   fetch(url, {
@@ -124,6 +132,7 @@ export function obtenerExcelRadiologia(fromDate, toDate, ventana) {
     });
 }
 
+// Función auxiliar para mostrar un mensaje de error
 function mostrarError(mensaje) {
   Swal.fire({
     icon: "error",

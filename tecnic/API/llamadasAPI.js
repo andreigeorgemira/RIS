@@ -1,8 +1,10 @@
+// Importar la función fechaFormateada del módulo utilidades.js
 import { fechaFormateada } from "../JS/utilidades.js";
 
+// URL base para las solicitudes de la API de Radiología
 const url = "https://localhost:7224/Radiologia/api/v4/ris";
 
-// Función para realizar la solicitud a la API y guardar los datos
+// Función para obtener datos de la lista de trabajo según la opción de UF y fecha
 export function obtenerDatosGetWorklistAPI(opcionUF, fecha = new Date()) {
   return fetch(url + "/tecnic/getWorklist", {
     headers: {
@@ -14,7 +16,7 @@ export function obtenerDatosGetWorklistAPI(opcionUF, fecha = new Date()) {
     body: JSON.stringify({
       center: "CMQR",
       uf: opcionUF,
-      date: fechaFormateada(fecha),
+      date: fechaFormateada(fecha), // Formatear la fecha antes de enviarla
     }),
   })
     .then((respuesta) => {
@@ -28,7 +30,7 @@ export function obtenerDatosGetWorklistAPI(opcionUF, fecha = new Date()) {
     });
 }
 
-// Función para realizar la solicitud a la API y guardar los datos
+// Función para obtener datos de agendes RAD según la opción de UF
 export function obtenerDatosGetAgendesRAD(opcionUF) {
   return fetch(url + "/tecnic/GetAgendesRAD", {
     headers: {
@@ -53,7 +55,7 @@ export function obtenerDatosGetAgendesRAD(opcionUF) {
     });
 }
 
-// Función para realizar la solicitud a la API y guardar los datos
+// Función para obtener observaciones técnicas según el número de agendamiento
 export function obtenerObservacionsTecnic(numage) {
   return fetch(url + "/tecnic/GetObstecniques", {
     method: "POST",
@@ -78,6 +80,7 @@ export function obtenerObservacionsTecnic(numage) {
     });
 }
 
+// Función para obtener más citas de un paciente según su número de agendamiento
 export function obtenerMasCitasPaciente(numage) {
   return fetch(url + "/tecnic/HasMoreDates", {
     method: "POST",
@@ -100,6 +103,7 @@ export function obtenerMasCitasPaciente(numage) {
     });
 }
 
+// Función para obtener la lista de radiólogos
 export function obtenerRadiologos() {
   return fetch(url + "/tecnic/getProfessionals", {
     method: "POST",
@@ -121,6 +125,7 @@ export function obtenerRadiologos() {
     });
 }
 
+// Función para obtener el radiólogo asignado a un número de agendamiento
 export function obtenerRadiologoAsignado(numage) {
   return fetch(url + "/tecnic/getAssignedRad", {
     method: "POST",
@@ -143,6 +148,7 @@ export function obtenerRadiologoAsignado(numage) {
     });
 }
 
+// Función para obtener estudios anteriores de un paciente según su NHC
 export function obtenerEstudiosAnteriores(nhc) {
   return fetch(url + "/radioleg/GetOldReports", {
     method: "POST",
@@ -165,6 +171,7 @@ export function obtenerEstudiosAnteriores(nhc) {
     });
 }
 
+// Función para obtener estudios radiológicos según su número de solicitud
 export function obtenerEstudiosRagiologico(nsol) {
   return fetch(url + "/tecnic/getstudy", {
     method: "POST",
@@ -188,6 +195,7 @@ export function obtenerEstudiosRagiologico(nsol) {
     });
 }
 
+// Función auxiliar para mostrar un mensaje de error
 function mostrarError(mensaje) {
   Swal.fire({
     icon: "error",

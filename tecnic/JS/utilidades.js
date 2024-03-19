@@ -1,3 +1,4 @@
+// Importar funciones desde el módulo llamadasAPI.js
 import { obtenerObservacionsTecnic, obtenerMasCitasPaciente, obtenerRadiologos, obtenerRadiologoAsignado, obtenerEstudiosAnteriores, obtenerEstudiosRagiologico } from "../API/llamadasAPI.js";
 
 // Función para formatear la hora en formato HH:mm
@@ -7,14 +8,16 @@ export function formatearHora(hora) {
 
 // Función para formatear la fecha en formato dd/mm/aaaa
 export function fechaFormateada(fecha) {
+  // Convertir la fecha a un objeto Date
   let fechaOriginal = new Date(fecha);
+  // Obtener el día, mes y año
   let dia = fechaOriginal.getDate();
-  let mes = fechaOriginal.getMonth() + 1;
+  let mes = fechaOriginal.getMonth() + 1; // Los meses van de 0 a 11, se suma 1 para obtener el mes correcto
   let anio = fechaOriginal.getFullYear();
 
   // Formatear siempre en el orden "dd/mm/aaaa"
-  let diaFormateado = dia.toString().padStart(2, "0");
-  let mesFormateado = mes.toString().padStart(2, "0");
+  let diaFormateado = dia.toString().padStart(2, "0"); // Asegurarse de que el día tenga dos dígitos
+  let mesFormateado = mes.toString().padStart(2, "0"); // Asegurarse de que el mes tenga dos dígitos
 
   let fechaFormateada = `${diaFormateado}/${mesFormateado}/${anio}`;
 
@@ -87,6 +90,7 @@ function obtenerUltimoValor(opcionUF) {
   }
 }
 
+// Función auxiliar para actualizar el último valor almacenado
 function actualizarUltimoValor(opcionUF, nuevoValor) {
   switch (opcionUF) {
     case "C":
@@ -134,23 +138,31 @@ export function insertarCalendario(calendario) {
   `;
 }
 
+// Función para crear un overlay con información detallada sobre un paciente
 export function creaccionOverlay(overlayDatos, valoresAPI, nhc_a_buscar, opcionUF) {
+  // Encontrar el dato del paciente correspondiente al número de historial clínico
   let dato = valoresAPI.find((item) => item.NHC.trim() === nhc_a_buscar);
   let numage;
   let condicion1;
   let condicion2;
   let unoCumpleCondicion = false;
 
+  // Determinar qué tipo de opción UF (C,H, U) se está utilizando y establecer las condiciones en función de eso
   if (opcionUF == "C") {
+    // Si es "C", utilizar el número de age (edad)
     numage = `${dato.NUMAGE}`;
+    // Definir las condiciones para verificar el estado de la cita
     condicion1 = dato.HORA_ARRIBADA != "0000" && dato.HORA_CONSULTA == "0000";
     condicion2 = dato.HORA_ARRIBADA != "0000" && dato.HORA_CONSULTA != "0000";
   } else {
+    // Si es cualquier otra cosa, utilizar el número de sol (solución)
     numage = `${dato.NSOL}`;
+    // Definir las condiciones para verificar el estado de la cita
     condicion1 = dato.ESTAT == "1";
     condicion2 = dato.ESTAT == "3";
   }
 
+  // Promesas para obtener datos adicionales del paciente y pruebas médicas
   const masCitasPromise = obtenerMasCitasPaciente(numage).then((datos) => datos.rows);
   const radiologoAsignadoPromise = obtenerRadiologoAsignado(numage);
   const observacionsTecnicPromise = obtenerObservacionsTecnic(numage);
@@ -158,11 +170,15 @@ export function creaccionOverlay(overlayDatos, valoresAPI, nhc_a_buscar, opcionU
   const estudiosAnterioresPromise = obtenerEstudiosAnteriores(nhc_a_buscar).then((dato) => dato.rows);
   const estudiosRagiologicoPromise = obtenerEstudiosRagiologico(numage).then((dato) => dato.rows);
 
+  // Mostrar la información básica del paciente en el overlay
   mostrarOverlayBase(overlayDatos, dato, condicion1, condicion2, unoCumpleCondicion);
 
+  // Obtener el elemento HTML para mostrar si el paciente tiene más citas
   let divTieneMasCitas = document.getElementById("tieneMasCitas");
+  // Generar los botones de acuerdo a las condiciones de la cita
   generarBotones(divTieneMasCitas, condicion1, condicion2, unoCumpleCondicion);
 
+  // Promesa para obtener datos de citas adicionales
   new Promise(() => {
     masCitasPromise.then((datos) => {
       let masCitas = datos;
@@ -195,47 +211,60 @@ export function creaccionOverlay(overlayDatos, valoresAPI, nhc_a_buscar, opcionU
       }
     });
 
+    // Promesa para obtener datos adicionales del paciente y pruebas médicas
     Promise.all([radiologoAsignadoPromise, observacionsTecnicPromise, radiologosPromise, estudiosAnterioresPromise, estudiosRagiologicoPromise]).then(([radiologoAsignado, observacionsTecnic, doctores, estudiosAnteriores, estudiosRadiologico]) => {
+      // Manejar el caso en el que observacionsTecnic sea nulo
       if (observacionsTecnic == "Object reference not set to an instance of an object.") {
         observacionsTecnic = "";
       }
 
+      // Obtener elementos HTML para actualizar la información del médico solicitante y pruebas médicas
       let solicitant = document.getElementById("solicitant");
       let proces = document.getElementById("proces");
       let observacionsMediques = document.getElementById("observacionsMediques");
 
+      // Obtener el textarea para las observaciones técnicas y establecer su valor
       let textarea = document.getElementById("observacionsTecnic");
       textarea.value = observacionsTecnic;
 
+      // Obtener el select para los médicos y poblarlo con opciones
       let selectDoctor = document.getElementById("select");
 
+      // Iterar sobre los doctores y añadir opciones al select
       doctores.forEach((doctor) => {
         let opcion = document.createElement("option");
         opcion.value = doctor.USRHNET;
         opcion.text = doctor.NOM;
 
+        // Seleccionar el médico asignado, si lo hay
         if (radiologoAsignado !== "" && radiologoAsignado === doctor.USRHNET) {
           opcion.selected = true;
         }
 
+        // Añadir la opción al select
         selectDoctor.appendChild(opcion);
+        // Actualizar el estado del select basado en las condiciones de la cita
         actualizarDisabled(selectDoctor, condicion1, condicion2, unoCumpleCondicion);
       });
 
+      // Obtener el botón para mostrar/ocultar estudios anteriores
       var verEstudiosAnteriores = document.getElementById("verEstudiosAnteriores");
       var tablaVisible = false;
 
+      // Añadir un event listener al botón para mostrar/ocultar estudios anteriores
       verEstudiosAnteriores.addEventListener("click", function () {
         mostrarEstudiosAnteriores(tablaVisible, verEstudiosAnteriores, estudiosAnteriores);
         tablaVisible = !tablaVisible;
       });
 
+      // Obtener el tbody para las pruebas médicas y vaciarlo si hay pruebas anteriores
       let tbodypruebas = document.getElementById("tbodyPruebas");
 
       if (estudiosRadiologico != "") {
         tbodypruebas.innerHTML = "";
       }
 
+      // Iterar sobre los estudios radiológicos y mostrar la información en la tabla
       estudiosRadiologico.forEach((valor) => {
         solicitant.value = valor.SOLICITANT;
         proces.value = valor.PROCES;
@@ -257,14 +286,17 @@ export function creaccionOverlay(overlayDatos, valoresAPI, nhc_a_buscar, opcionU
   });
 }
 
+// Función para mostrar u ocultar la tabla de estudios anteriores
 function mostrarEstudiosAnteriores(tablaVisible, verEstudiosAnteriores, estudiosAnteriores) {
   if (tablaVisible) {
+    // Si la tabla está visible, ocultarla y cambiar el texto del botón
     verEstudiosAnteriores.innerText = "Veure estudis anteriors";
     let divTabla = document.getElementById("divTabla");
     if (divTabla) {
       divTabla.remove();
     }
   } else {
+    // Si la tabla no está visible, mostrarla y cambiar el texto del botón
     verEstudiosAnteriores.innerText = "Ocultar estudis anteriors";
     let divTabla = document.createElement("div");
     divTabla.classList.add("col-12", "table-responsive");
@@ -291,8 +323,10 @@ function mostrarEstudiosAnteriores(tablaVisible, verEstudiosAnteriores, estudios
     tabla.appendChild(tbody);
     divTabla.appendChild(tabla);
 
+    // Ordenar los estudios anteriores por fecha descendente
     estudiosAnteriores.sort((a, b) => new Date(b.DATA) - new Date(a.DATA));
 
+    // Iterar sobre los estudios anteriores y agregar filas a la tabla
     estudiosAnteriores.forEach((dato) => {
       let row = document.createElement("tr");
       let fechaOriginal = dato.DATA;
@@ -312,13 +346,18 @@ function mostrarEstudiosAnteriores(tablaVisible, verEstudiosAnteriores, estudios
       tbody.appendChild(row);
     });
 
+    // Agregar la tabla al DOM
     verEstudiosAnteriores.parentElement.appendChild(divTabla);
   }
 }
 
+// Función para mostrar la información básica del paciente en el overlay
 function mostrarOverlayBase(overlayDatos, dato, condicion1, condicion2, unoCumpleCondicion) {
+  // Remover la capacidad de hacer scroll y agregar una clase para el overlay abierto
   document.body.classList.remove("scroll");
   document.body.classList.add("overlay-abierto");
+
+  // Crear el contenido básico del overlay con la información del paciente
   let overlayBase = `<div id="content" class="overlay-content">
   <div id="head" class="modal-header">
     <h3 class="modal-title"><b>[${dato.NHC}]</b>${dato.APELLIDO1} ${dato.APELLIDO2}, ${dato.NOMBRE}</h3>
@@ -421,6 +460,7 @@ function mostrarOverlayBase(overlayDatos, dato, condicion1, condicion2, unoCumpl
     </div>
   </div>
 </div>`;
+
   overlayDatos.innerHTML = overlayBase;
   overlayDatos.style.display = "flex";
   // Agregar eventos de cierre al botón de cierre
@@ -430,9 +470,11 @@ function mostrarOverlayBase(overlayDatos, dato, condicion1, condicion2, unoCumpl
   });
 }
 
+// Función para generar los botones de acuerdo a las condiciones de la cita
 function generarBotones(htmlInsert, condicion1, condicion2, unoCumpleCondicion) {
   let botones;
   if (condicion1) {
+    // Si se cumple la condición 1, mostrar botones de reasignar y enviar a worklist
     botones = `
       <div class="d-flex flex-column">
         <button class="btn btn-lg btn-success hand col-6 align-self-end mt-3" type="button">
@@ -444,6 +486,7 @@ function generarBotones(htmlInsert, condicion1, condicion2, unoCumpleCondicion) 
       </div>
     `;
   } else if (condicion2 || unoCumpleCondicion) {
+    // Si se cumple la condición 2 o al menos una de las citas cumple la condición, mostrar botones de informar incidencia y reasignar
     botones = `
       <div class="d-flex flex-column">
         <button class="btn btn-lg btn-danger hand col-6 align-self-end mt-3" type="button">
@@ -455,6 +498,7 @@ function generarBotones(htmlInsert, condicion1, condicion2, unoCumpleCondicion) 
       </div>
     `;
   } else {
+    // Si no se cumplen las condiciones anteriores, mostrar solo el botón de enviar a worklist
     botones = `
       <button class="btn btn-lg mt-3 float-end btn-secondary hand col-6" type="button">
         <span>Enviar a WorkList</span>
@@ -464,14 +508,17 @@ function generarBotones(htmlInsert, condicion1, condicion2, unoCumpleCondicion) 
   htmlInsert.insertAdjacentHTML("beforeend", botones);
 }
 
+// Función para actualizar el estado disabled de un select según las condiciones de la cita
 function actualizarDisabled(select, condicion1, condicion2, unoCumpleCondicion) {
   if (select) {
+    // Deshabilitar el select si no se cumplen las condiciones
     select.disabled = !(condicion1 || condicion2 || unoCumpleCondicion);
   }
 }
 
 // Función para cerrar el overlay
 function cerrarOverlay() {
+  // Remover la clase de overlay abierto y restaurar la capacidad de hacer scroll
   document.body.classList.remove("overlay-abierto");
   document.body.classList.add("scroll");
   var overlayFooterBoton = overlayDatos.querySelector("#tancar");

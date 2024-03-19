@@ -1,3 +1,8 @@
+/**
+ * Función para formatear una fecha en el formato "dd/mm/yyyy".
+ * @param {Date} fecha - La fecha a formatear.
+ * @returns {string} La fecha formateada en formato "dd/mm/yyyy".
+ */
 export function formatearFecha(fecha) {
   var fechaObjeto = new Date(fecha);
 
@@ -12,6 +17,11 @@ export function formatearFecha(fecha) {
   return fechaFormateada;
 }
 
+/**
+ * Función para formatear una fecha en el formato "dd-mm-yyyy".
+ * @param {Date} fecha - La fecha a formatear.
+ * @returns {string} La fecha formateada en formato "dd-mm-yyyy".
+ */
 export function formatearFechaExcel(fecha) {
   var fechaObjeto = new Date(fecha);
 

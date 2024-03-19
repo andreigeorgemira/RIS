@@ -163,13 +163,18 @@ input:disabled {
   color: gray;
 }
 
-.realitzat-rojo:hover {
+.realitzat-rojo:hover,
+.rojo:hover {
   background-color: #ebb5b5 !important;
 }
 
 .fila-espera {
   background-color: #aac7a4;
   font-weight: bold;
+}
+
+.fila-espera:hover {
+  background-color: #7aac6f !important;
 }
 
 .modal-content {
