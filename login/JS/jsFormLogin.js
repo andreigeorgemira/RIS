@@ -52,16 +52,16 @@ function validarForm() {
 
       // Sí dentro del str el booleano contesta true entro
       if (objetoXMLaStr.includes("true")) {
-        if (especialidad == "tecnico") {
+        if (especialidad == "tecnic") {
           //si especialidad es técnico lo mando al apartado de técnico
 
           //redirection y mano el por post user name y especialidad
           location.href = "../tecnic/tecnic.html?user=" + user + "&especialidad=" + especialidad;
-        } else if (especialidad == "Radiologo") {
+        } else if (especialidad == "radioleg") {
           //si especialidad es técnico lo mando al apartado de Radiologo
 
           location.href = "../radioleg/radioleg.html?user=" + user + "&especialidad=" + especialidad;
-        } else if (especialidad == "Radiofisico") {
+        } else if (especialidad == "radiofisic") {
           //si especialidad es técnico lo mando al apartado de Radiofisico
 
           location.href = "../radiofisic/radiofisic.html?user=" + user + "&especialidad=" + especialidad;

@@ -1,4 +1,16 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // Recuperar el nombre de usuario y especialidad de la URL
+  let urlParams = new URLSearchParams(window.location.search);
+  let user = urlParams.get("user");
+  let especialidad = urlParams.get("especialidad");
+
+  if (user == null) {
+    user = "";
+    especialidad = "";
+  } else {
+    document.getElementById("user").innerHTML = especialidad + " - " + user;
+  }
+
   //recojo eventos
   var clickCalendario = document.getElementById("iconoCalenadrio"); //click sobre el icono del calendario
   var inputFecha = document.getElementById("fecha"); //evento sobre el input de fecha

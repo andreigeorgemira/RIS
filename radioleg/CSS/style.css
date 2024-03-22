@@ -5,6 +5,11 @@ body {
   font-size: 1em;
 }
 
+header {
+  background-color: #343a40;
+  color: rgba(255, 255, 255, 0.5);
+}
+
 .modalSpinner {
   display: none;
   position: absolute;
@@ -31,6 +36,18 @@ body {
   margin-top: 213px;
   margin-left: 10px;
   white-space: nowrap;
+}
+
+.nav-item:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.nav-item {
+  margin-right: 10px;
+}
+
+a {
+  all: unset !important;
 }
 
 .dot-animation:after {

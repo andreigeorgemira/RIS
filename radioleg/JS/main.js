@@ -18,9 +18,7 @@ if (user == null) {
   user = "";
   especialidad = "";
 } else {
-  // Mostrar el nombre de usuario y especialidad en la página
-  document.getElementById("NombreUser").innerHTML = "User " + user;
-  document.getElementById("EspecialidadUser").innerHTML = "Especialidad  " + especialidad;
+  document.getElementById("user").innerHTML = especialidad + " - " + user;
 }
 
 // Escuchar el evento de carga del contenido al cargar el DOM

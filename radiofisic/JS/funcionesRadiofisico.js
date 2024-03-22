@@ -53,7 +53,7 @@ function mostrarDatosInicio(responseData) {
   //creamos un bucle para que inserte los datos, utilizo slice para que me muestre los datos de inicio de 0 a 25
   responseData[0].rows.slice(0, 25).forEach((datos) => {
     contador++;
-    //creo una nueva fila
+    //creo una nueva
     const tr = document.createElement("tr");
     //console.log(datosFiltrados.rows[0]);
     //crear y añadir celdas a las filsa ALERTA -> FALTA -> + info  y Generar informe   INFORME

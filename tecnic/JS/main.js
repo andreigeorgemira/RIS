@@ -44,8 +44,7 @@ if (user == null) {
   user = "";
   especialidad = "";
 } else {
-  document.getElementById("NombreUser").innerHTML = "User " + user;
-  document.getElementById("EspecialidadUser").innerHTML = "Especialidad  " + especialidad;
+  document.getElementById("user").innerHTML = especialidad + " - " + user;
 }
 
 // Referencia al elemento de carga

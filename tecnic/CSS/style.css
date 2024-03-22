@@ -27,6 +27,7 @@ body::-webkit-scrollbar-thumb {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #555;
 }
+
 header {
   background-color: #343a40;
   color: rgba(255, 255, 255, 0.5);
@@ -34,6 +35,10 @@ header {
 
 .nav-item:hover {
   color: rgba(255, 255, 255, 0.8);
+}
+
+.nav-item {
+  margin-right: 10px;
 }
 
 a {
@@ -51,10 +56,6 @@ a {
 .icon {
   width: 25px;
   height: 25px;
-}
-
-.nav-item {
-  margin-right: 10px;
 }
 
 .cursor {
