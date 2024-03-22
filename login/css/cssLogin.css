@@ -18,6 +18,10 @@ option {
   zoom: 1.15;
 }
 
+strong {
+  color: white;
+}
+
 .container {
   /*medida de todo*/
   margin-top: 200px;
@@ -25,7 +29,7 @@ option {
 }
 
 .card-body {
-  background-color: rgb(133, 133, 161);
+  background-color: rgb(80, 88, 112);
   border-radius: 30px;
 }
 
