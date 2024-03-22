@@ -11,179 +11,30 @@
     <script src="https://kit.fontawesome.com/eb17a07343.js" crossorigin="anonymous"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-      html,
-      body {
-        background-color: #ddd;
-        font-family: Verdana;
-      }
-
-      .cursor {
-        cursor: pointer;
-      }
-
-      .total {
-        position: absolute;
-        font-size: 4.5vh;
-        font-weight: bold;
-        bottom: 30px;
-        right: 0;
-      }
-
-      .card {
-        background-color: rgb(104, 111, 133);
-      }
-
-      .card-body > * {
-        color: white;
-      }
-
-      .container {
-        width: 100%;
-      }
-
-      .grafico {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-      }
-      #chart-container {
-        position: relative;
-        height: 45vh;
-        width: 50vw;
-        overflow: hidden;
-      }
-
-      #cartesEstadistiques {
-        margin-left: 5vw;
-      }
-
-      .h3-estadisitiques {
-        margin-left: 6vw;
-      }
-
-      .card-statics {
-        height: 20vh;
-        min-height: 150px;
-        width: 13vw;
-        min-width: 150px;
-        line-height: 20vh;
-      }
-
-      .stats {
-        padding: 2% 2% 2% 2%;
-      }
-
-      .top {
-        margin-top: -10vh;
-      }
-
-      #contenedor-grafico {
-        margin-top: -55vh;
-        margin-left: -10vw;
-        position: relative;
-        height: 60vh;
-        width: 60vw;
-        overflow: hidden;
-      }
-      .margin {
-        margin-top: 20vh;
-      }
-      .col-md-8 {
-        margin-top: -20vh;
-        margin-left: 4vw;
-      }
-
-      .radiologos {
-        height: 10vh;
-      }
-
-      .radiologos h5 {
-        font-size: 2.2vh;
-      }
-      .radiologos h6 {
-        font-size: 1.5vh;
-      }
-
-      .h3-stats-radio {
-        margin-left: 1vw;
-      }
-
-      .col {
-        padding: 5px;
-      }
-
-      .btn {
-        white-space: normal;
-      }
-
-      .botones {
-        border: 2px black solid;
-        background-color: white;
-      }
-
-      .btn-activo {
-        background-color: red;
-      }
-    </style>
   </head>
   <body>
-    <div class="stats">
-      <div class="col-2">
-        <div>
-          <span class="input-label">Data Inici: </span>
-          <input id="inicio" class="form-control ng-pristine ng-valid ng-touched" type="date" />
-        </div>
-        <div>
-          <span class="input-label">Data Final: </span>
-          <input id="final" class="form-control ng-untouched ng-pristine ng-valid" type="date" />
-        </div>
-      </div>
-      <br />
+    <style>
+      .fondo-verde {
+        background-color: green;
+      }
+    </style>
 
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-10 top">
-            <div class="d-flex justify-content-between h3-estadisitiques">
-              <h3>Estadístiques</h3>
-            </div>
-            <div id="cartesEstadistiques" class="d-flex flex-wrap"></div>
-          </div>
-        </div>
-      </div>
+    <div class="container mt-5">
+      <h2 class="text-center mb-4">Datos Ordenados</h2>
+      <input type="text" id="filtroInput" placeholder="Filtrar por texto específico" />
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Descripción</th>
+          </tr>
+        </thead>
+        <tbody id="datosBody">
+          <!-- Aquí se insertarán los datos -->
+        </tbody>
+      </table>
     </div>
 
-    <hr />
-
-    <div class="stats margin">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-3">
-            <div id="radiologos" class="d-grid"></div>
-          </div>
-          <div class="col-md-8">
-            <div class="d-flex justify-content-between h3-stats-radio">
-              <h3>Estadístiques per radiòleg</h3>
-            </div>
-            <div id="cartesEstadistiquesRadioleg" class="d-flex flex-wrap"></div>
-          </div>
-
-          <div class="container mt-4">
-            <div class="row justify-content-center">
-              <div class="col-md-6">
-                <div id="contenedor-grafico"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <span> <i class="fa-regular fa-file-excel"></i>Generar Excel </span>
-    </div>
-
-    <script src="https://fastly.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script type="module" src="test.js"></script>
   </body>
 </html>

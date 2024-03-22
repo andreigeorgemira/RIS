@@ -1,0 +1,71 @@
+html,
+body {
+  background-color: lightgrey;
+  font-family: Verdana;
+  font-size: 0.97em;
+}
+
+header {
+  background-color: #b2b772;
+  color: white;
+  font-weight: bold;
+}
+
+a {
+  all: unset;
+}
+
+.nav-item {
+  margin-right: 10px;
+}
+
+.form-group {
+  max-width: 45px;
+  min-width: 45px;
+}
+
+.navbar-brand img {/*Estilos logo */
+    margin-left: 20px;
+    height: 50px;
+}
+.bi-calendar-date:hover {/* Estilo icono calendario */
+    cursor: pointer;
+    color: #007bff; 
+}
+
+.tabla {
+  width: 100%;
+  background-color: white;
+  border-collapse: collapse;
+}
+
+.tabla thead {
+  background-color: #697887;
+  color: white;
+}
+
+.tabla th,
+.tabla td {
+  padding: 8px;
+}
+
+.tabla tbody tr {
+  cursor: pointer;
+}
+
+.tabla tbody tr:hover {
+  background-color: lightgray;
+}
+
+.realitzat {
+  text-decoration: line-through;
+}
+
+.fila-espera {
+  background-color: #aac7a4;
+  font-weight: bold;
+}
+
+li{
+  list-style: none;
+}

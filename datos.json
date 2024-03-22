@@ -1,0 +1,610 @@
+[
+  {
+    "ID": "64",
+    "DESCRIPTION": "CR Telemetria columna normal"
+  },
+  {
+    "ID": "82",
+    "DESCRIPTION": "CT COLL NORMAL"
+  },
+  {
+    "ID": "312",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA PEUS"
+  },
+  {
+    "ID": "342",
+    "DESCRIPTION": "NM GAMMAGRAFIA SALIVAR"
+  },
+  {
+    "ID": "358",
+    "DESCRIPTION": "NM GAMMAGRAFIA DE TIROIDES MULTINODULAR"
+  },
+  {
+    "ID": "4",
+    "DESCRIPTION": "01 EPOC"
+  },
+  {
+    "ID": "286",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA TOTAL"
+  },
+  {
+    "ID": "318",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA PTM NORMAL"
+  },
+  {
+    "ID": "364",
+    "DESCRIPTION": "NM GAMMAGRAFIA DE TIROIDES NÒDUL AUTÒNOM + TT"
+  },
+  {
+    "ID": "314",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA PTG AFLUIXAMENT"
+  },
+  {
+    "ID": "406",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA TOTAL M1 CONEGUDES, SENSE CANVIS"
+  },
+  {
+    "ID": "412",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA TOTAL NO M1 EXTRAVASAT"
+  },
+  {
+    "ID": "414",
+    "DESCRIPTION": "NM GAMMAGRAFIA/SPECT DE VENTILACIÓ/PERFUSIÓ PULMONAR"
+  },
+  {
+    "ID": "78",
+    "DESCRIPTION": "CT CRANI SIMPLE ATRÒFIA."
+  },
+  {
+    "ID": "70",
+    "DESCRIPTION": "RF ESOFAGOFRAMA NORMAL"
+  },
+  {
+    "ID": "326",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA RASTREIG OA"
+  },
+  {
+    "ID": "320",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA RASTREIG EEII"
+  },
+  {
+    "ID": "350",
+    "DESCRIPTION": "NM GAMMAGRAFIA DE TIROIDES BINODULAR"
+  },
+  {
+    "ID": "42",
+    "DESCRIPTION": "CR Cistografia normal"
+  },
+  {
+    "ID": "328",
+    "DESCRIPTION": "NM GAMMAGRAFIA DE PARATIROIDES NORMAL"
+  },
+  {
+    "ID": "374",
+    "DESCRIPTION": "NM LIMFOGAMMAGRAFIA, TUMORECTOMIA RADIOGUIADA (ROLL) I DETECCIÓ INTRAOPERATÒRIA RADIOGUIADA DE GANGLI SENTINELLA"
+  },
+  {
+    "ID": "46",
+    "DESCRIPTION": "CR Urografia normal"
+  },
+  {
+    "ID": "270",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA + GAMMAGRAFIA AMB LEUCÒCITS AUTÒLEGS MARCATS"
+  },
+  {
+    "ID": "330",
+    "DESCRIPTION": "NM PET-CT NORMAL"
+  },
+  {
+    "ID": "292",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA + SPECT"
+  },
+  {
+    "ID": "334",
+    "DESCRIPTION": "NM GAMMAGRAFIA PULMONAR DE PERFUSIÓ QUANTIFICADA"
+  },
+  {
+    "ID": "322",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA RASTREIG EEII + LATERALS GENOLLS"
+  },
+  {
+    "ID": "338",
+    "DESCRIPTION": "NM RASTREIG CORPORAL AMB I131 ESTIMULAT AMB TSH RECOMBINANT"
+  },
+  {
+    "ID": "316",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA PTM AFLUIXAMENT"
+  },
+  {
+    "ID": "360",
+    "DESCRIPTION": "NM GAMMAGRAFIA DE TIROIDES MULTINODULAR + TT"
+  },
+  {
+    "ID": "408",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA TOTAL M1 DISSEMINADES"
+  },
+  {
+    "ID": "74",
+    "DESCRIPTION": "CT CRANI SIMPLE NORMAL"
+  },
+  {
+    "ID": "416",
+    "DESCRIPTION": "NM GAMMAGRAFIA DE PARATIROIDES + TIROIDES"
+  },
+  {
+    "ID": "80",
+    "DESCRIPTION": "CT CRANI LEUCOPATIA"
+  },
+  {
+    "ID": "56",
+    "DESCRIPTION": "CR Histerosalpingografia normal"
+  },
+  {
+    "ID": "62",
+    "DESCRIPTION": "CR RX abdomen normal"
+  },
+  {
+    "ID": "54",
+    "DESCRIPTION": "CR Enema opac diverticles"
+  },
+  {
+    "ID": "310",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA PELVIS PTM NORMAL"
+  },
+  {
+    "ID": "384",
+    "DESCRIPTION": "NM RENOGRAMA ISOTÒPIC + CISTOGAMMAGRAFIA INDIRECTA OBSTRUCCIÓ NO RVU"
+  },
+  {
+    "ID": "10",
+    "DESCRIPTION": "RM Normal (Deterioro Cognitivo)"
+  },
+  {
+    "ID": "282",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA + GAMMAGRAFIA AMB LEUCÒCITS MARCATS + GAMMAGRAFIA MEDUL·LAR"
+  },
+  {
+    "ID": "348",
+    "DESCRIPTION": "NM GAMMAGRAFIA DE TIROIDES A CORRELACIONAR AMB ECO PAAF"
+  },
+  {
+    "ID": "336",
+    "DESCRIPTION": "NM GAMMAGRAFIA + SPECT PULMONAR DE PERFUSIÓ QUANTIFICADA"
+  },
+  {
+    "ID": "324",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA RASTREIG NORMAL"
+  },
+  {
+    "ID": "332",
+    "DESCRIPTION": "NM PET-FDG COS SENCER"
+  },
+  {
+    "ID": "362",
+    "DESCRIPTION": "NM GAMMAGRAFIA DE TIROIDES NORMAL"
+  },
+  {
+    "ID": "366",
+    "DESCRIPTION": "NM GAMMAGRAFIA DE TIROIDES POLIMORFO"
+  },
+  {
+    "ID": "352",
+    "DESCRIPTION": "NM GAMMAGRAFIA DE TIROIDES DIFUSA"
+  },
+  {
+    "ID": "340",
+    "DESCRIPTION": "NM TUMORECTOMIA RADIOGUIADA"
+  },
+  {
+    "ID": "372",
+    "DESCRIPTION": "NM VENTRICULOGRAFIA ISOTÒPICA EN EQUILIBRI"
+  },
+  {
+    "ID": "376",
+    "DESCRIPTION": "NM LIMFOGAMMAGRAFIA, TUMORECTOMIA RADIOGUIADA (ROLL) I DETECCIÓ INTRAOPERATÒRIA RADIOGUIADA DE GANGLI SENTINELLA 2"
+  },
+  {
+    "ID": "346",
+    "DESCRIPTION": "NM ESTUDI DE PERFUSIÓ MIOCÀRDICA (ESFORÇ-REPÒS)"
+  },
+  {
+    "ID": "354",
+    "DESCRIPTION": "NM GAMMAGRAFIA DE TIROIDES DIFUSA + TT"
+  },
+  {
+    "ID": "370",
+    "DESCRIPTION": "NM BUIDAMENT GÀSTRIC"
+  },
+  {
+    "ID": "308",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA PELVIS"
+  },
+  {
+    "ID": "344",
+    "DESCRIPTION": "NM SPECT DE PERFUSIÓ CEREBRAL"
+  },
+  {
+    "ID": "66",
+    "DESCRIPTION": "CR RX Waters normal"
+  },
+  {
+    "ID": "290",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA TOTAL PAGET"
+  },
+  {
+    "ID": "60",
+    "DESCRIPTION": "CR Tòrax normal"
+  },
+  {
+    "ID": "356",
+    "DESCRIPTION": "NM GAMMAGRAFIA DE TIROIDES HIPERT PER AMIODARONA"
+  },
+  {
+    "ID": "380",
+    "DESCRIPTION": "NM RENOGRAMA ISOTÒPIC + CISTOGAMMAGRAFIA INDIRECTA NO OBSTRUCCIÓ NO RVU"
+  },
+  {
+    "ID": "144",
+    "DESCRIPTION": "RF ÈNEMA OPAC DIVERTICLES"
+  },
+  {
+    "ID": "116",
+    "DESCRIPTION": "DX OSTEO-ARTICULAR NORMAL"
+  },
+  {
+    "ID": "382",
+    "DESCRIPTION": "NM RENOGRAMA ISOTÒPIC + CISTOGAMMAGRAFIA INDIRECTA NO OBSTRUCCIÓ RVU"
+  },
+  {
+    "ID": "98",
+    "DESCRIPTION": "CT TORACO-ABDOMINAL CONTRAST NORMAL"
+  },
+  {
+    "ID": "68",
+    "DESCRIPTION": "CR RX Espondilosi lumbar"
+  },
+  {
+    "ID": "118",
+    "DESCRIPTION": "DX TÒRAX NORMAL"
+  },
+  {
+    "ID": "48",
+    "DESCRIPTION": "CR Trànsit complet normal"
+  },
+  {
+    "ID": "402",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA TOTAL NO M1 PRÒSTATA"
+  },
+  {
+    "ID": "88",
+    "DESCRIPTION": "CT PENYALS COLESTEATOMA"
+  },
+  {
+    "ID": "104",
+    "DESCRIPTION": "MG MAMOGRAFIA BI-RADS 1"
+  },
+  {
+    "ID": "404",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA TOTAL M1 CONEGUDES, LLEU PROGRESSIÓ"
+  },
+  {
+    "ID": "84",
+    "DESCRIPTION": "CT CERVICO-TORACIC NORMAL"
+  },
+  {
+    "ID": "106",
+    "DESCRIPTION": "MG MAMOGRAFIA DENSA BI-RADS 1"
+  },
+  {
+    "ID": "410",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA TOTAL M1 DUBTOSA COMPARAR RM"
+  },
+  {
+    "ID": "58",
+    "DESCRIPTION": "CR Rx Osteoarticular normal"
+  },
+  {
+    "ID": "108",
+    "DESCRIPTION": "MG MAMOGRAFIA BI-RADS 2"
+  },
+  {
+    "ID": "477",
+    "DESCRIPTION": "GENERICA"
+  },
+  {
+    "ID": "76",
+    "DESCRIPTION": "CT CRANI CONTRAST NORMAL"
+  },
+  {
+    "ID": "2",
+    "DESCRIPTION": "00 TX Normal"
+  },
+  {
+    "ID": "110",
+    "DESCRIPTION": "MG MAMOGRAFIA DENSA BI-RADS 2"
+  },
+  {
+    "ID": "100",
+    "DESCRIPTION": "CT DENTASCAN MANDIBULAR"
+  },
+  {
+    "ID": "378",
+    "DESCRIPTION": "NM LIMFOGAMMAGRAFIA I DETECCIÓ INTRAOPERATÒRIA RADIOGUIADA DE GANGLI SENTINELLA 2"
+  },
+  {
+    "ID": "140",
+    "DESCRIPTION": "RF TRÀNSIT COMPLET NORMAL"
+  },
+  {
+    "ID": "114",
+    "DESCRIPTION": "MG MAMOGRAFIA CA TRACTAT BI-RADS 2"
+  },
+  {
+    "ID": "242",
+    "DESCRIPTION": "NM GAMMAGRAFIA/SPECT DE VENTILACIÓ/PERFUSIÓ PULMONAR_2"
+  },
+  {
+    "ID": "92",
+    "DESCRIPTION": "CT SINS POLIPOSI."
+  },
+  {
+    "ID": "246",
+    "DESCRIPTION": "NM LIMFOGAMMAGRAFIA I DETECCIÓ INTRAOPERATÒRIA RADIOGUIADA DE GANGLI SENTINELLA"
+  },
+  {
+    "ID": "86",
+    "DESCRIPTION": "CT PENYALS NORMAL"
+  },
+  {
+    "ID": "90",
+    "DESCRIPTION": "CT SINS NORMAL"
+  },
+  {
+    "ID": "164",
+    "DESCRIPTION": "US VOLUMS URO"
+  },
+  {
+    "ID": "204",
+    "DESCRIPTION": "MR COLANGIO-RM NORMAL"
+  },
+  {
+    "ID": "248",
+    "DESCRIPTION": "NM GAMMAGRAFIA/SPECT DE VENTILACIÓ/PERFUSIÓ PULMONAR NORMAL"
+  },
+  {
+    "ID": "302",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA NORMAL"
+  },
+  {
+    "ID": "112",
+    "DESCRIPTION": "MG MAMOGRAFIA PRÒTESIS BI-RADS 2"
+  },
+  {
+    "ID": "288",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA TOTAL OA"
+  },
+  {
+    "ID": "120",
+    "DESCRIPTION": "DX TÒRAX MPOC"
+  },
+  {
+    "ID": "128",
+    "DESCRIPTION": "DX ESPONDILOSIS LUMBAR"
+  },
+  {
+    "ID": "264",
+    "DESCRIPTION": "NM GAMMAGRAFIA AMB LEUCÒCITS MARCATS"
+  },
+  {
+    "ID": "122",
+    "DESCRIPTION": "DX ABDOMEN NORMAL"
+  },
+  {
+    "ID": "126",
+    "DESCRIPTION": "DX WATERS NORMAL"
+  },
+  {
+    "ID": "50",
+    "DESCRIPTION": "CR Trànsit intestinal normal"
+  },
+  {
+    "ID": "178",
+    "DESCRIPTION": "US MAMA NORMAL"
+  },
+  {
+    "ID": "188",
+    "DESCRIPTION": "US MANEGOT ROTADOR NORMAL"
+  },
+  {
+    "ID": "182",
+    "DESCRIPTION": "US MAMA FIBRO-QUÍSTICA."
+  },
+  {
+    "ID": "226",
+    "DESCRIPTION": "NM GAMMAGRAFIA RENAL PATOLÒGICA"
+  },
+  {
+    "ID": "298",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA MIG RASTREIG SUP EV"
+  },
+  {
+    "ID": "44",
+    "DESCRIPTION": "CR Cistografia reflux"
+  },
+  {
+    "ID": "192",
+    "DESCRIPTION": "US MALUCS NORMAL"
+  },
+  {
+    "ID": "196",
+    "DESCRIPTION": "MR CRANI NORMAL"
+  },
+  {
+    "ID": "222",
+    "DESCRIPTION": "NM SPECT CEREBRAL DE TRANSPORTADORS DE LA DOPAMINA (DATSCAN)"
+  },
+  {
+    "ID": "230",
+    "DESCRIPTION": "NM LIMFOGAMMAGRAFIA (SPECT-CT) I DETECCIÓ INTRAOPERATÒRIA RADIOGUIADA DE GANGLI SENTINELLA"
+  },
+  {
+    "ID": "224",
+    "DESCRIPTION": "NM GAMMAGRAFIA RENAL NORMAL"
+  },
+  {
+    "ID": "146",
+    "DESCRIPTION": "RF HISTEROSALPINGOGRAFIA NORMAL"
+  },
+  {
+    "ID": "180",
+    "DESCRIPTION": "US MAMA QUÍSTICA."
+  },
+  {
+    "ID": "206",
+    "DESCRIPTION": "MR HEPÀTICA NORMAL"
+  },
+  {
+    "ID": "96",
+    "DESCRIPTION": "CT ABDOMINAL CONTRAST NORMAL"
+  },
+  {
+    "ID": "174",
+    "DESCRIPTION": "US ABDOMINAL HEPATOPATIA"
+  },
+  {
+    "ID": "176",
+    "DESCRIPTION": "US ABDOMINAL COLELITIASI."
+  },
+  {
+    "ID": "124",
+    "DESCRIPTION": "DX TELEMETRIA COLUMNA NORMAL"
+  },
+  {
+    "ID": "134",
+    "DESCRIPTION": "RF UROGRAFIA NORMAL"
+  },
+  {
+    "ID": "186",
+    "DESCRIPTION": "US MAMA PRÒTESIS"
+  },
+  {
+    "ID": "102",
+    "DESCRIPTION": "CT DENTASCAN MAXIL·LAR"
+  },
+  {
+    "ID": "138",
+    "DESCRIPTION": "RF TRÀNSIT INTESTINAL"
+  },
+  {
+    "ID": "166",
+    "DESCRIPTION": "US RENOVESICAL NORMAL"
+  },
+  {
+    "ID": "170",
+    "DESCRIPTION": "US ABDOMINAL COLECISTECTOMIA."
+  },
+  {
+    "ID": "136",
+    "DESCRIPTION": "RF TEGD NORMAL"
+  },
+  {
+    "ID": "130",
+    "DESCRIPTION": "RF CISTOGRAFIA NORMAL."
+  },
+  {
+    "ID": "172",
+    "DESCRIPTION": "US ABDOMINAL ESTEATOSI."
+  },
+  {
+    "ID": "162",
+    "DESCRIPTION": "US TIROIDAL NORMAL"
+  },
+  {
+    "ID": "184",
+    "DESCRIPTION": "US MAMA CICATRIU"
+  },
+  {
+    "ID": "132",
+    "DESCRIPTION": "RF CISTOGRAFIA REFLUX."
+  },
+  {
+    "ID": "94",
+    "DESCRIPTION": "CT ABDOMINAL SIMPLE NORMAL"
+  },
+  {
+    "ID": "168",
+    "DESCRIPTION": "US ABDOMINAL NORMAL"
+  },
+  {
+    "ID": "142",
+    "DESCRIPTION": "RF ÈNEMA OPAC NORMAL"
+  },
+  {
+    "ID": "190",
+    "DESCRIPTION": "US TRANSFONTANEL·LAR NORMAL"
+  },
+  {
+    "ID": "198",
+    "DESCRIPTION": "MR COLL NORMAL"
+  },
+  {
+    "ID": "244",
+    "DESCRIPTION": "NM CISTERNOGAMMAGRAFIA ISOTÒPICA"
+  },
+  {
+    "ID": "200",
+    "DESCRIPTION": "MR CAIs NORMAL"
+  },
+  {
+    "ID": "194",
+    "DESCRIPTION": "US DOPPLER TVP NEGATIU"
+  },
+  {
+    "ID": "202",
+    "DESCRIPTION": "MR HIPÒFISI NORMAL"
+  },
+  {
+    "ID": "266",
+    "DESCRIPTION": "NM RENOGRAMA ISOTÒPIC"
+  },
+  {
+    "ID": "52",
+    "DESCRIPTION": "CR Ènema opac normal"
+  },
+  {
+    "ID": "268",
+    "DESCRIPTION": "NM GAMMAGRAFIA DE RECEPTORS DE SOMATOSTATINA"
+  },
+  {
+    "ID": "228",
+    "DESCRIPTION": "NM GAMMAGRAFIA AMB GAL·LI NO SARCOIDOSI"
+  },
+  {
+    "ID": "284",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA I GAMMAGRAFIA AMB GAL·LI"
+  },
+  {
+    "ID": "300",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA MIG RASTREIG SUP N"
+  },
+  {
+    "ID": "296",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA MIG RASTREIG INF"
+  },
+  {
+    "ID": "306",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA OSTEOPATIA INSERCIONAL"
+  },
+  {
+    "ID": "304",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA OA NO INFLAMATÒRIA"
+  },
+  {
+    "ID": "294",
+    "DESCRIPTION": "NM GAMMAGRAFIA ÒSSIA GENOLLS OSTEOCONDRITIS"
+  },
+  {
+    "ID": "497",
+    "DESCRIPTION": "XCCBCXV"
+  }
+]

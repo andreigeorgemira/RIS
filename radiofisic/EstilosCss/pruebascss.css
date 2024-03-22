@@ -1,0 +1,16 @@
+.fecha {
+    position: absolute;
+    left: -9999px;
+}
+
+#botonFecha {
+    border: 1px solid silver;
+    border-radius: 4px;
+    padding: 10px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+#botonFecha:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}

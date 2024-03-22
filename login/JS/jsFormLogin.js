@@ -1,3 +1,14 @@
+//hasta que no se han ingresado datos en user u pass no se manda el formulario
+document.addEventListener("DOMContentLoaded", function () {
+  var loginForm = document.getElementById("loginForm"); //capturo el formulario
+
+  loginForm.addEventListener("submit", function (event) {
+    event.preventDefault(); // Prevenir la acción por defecto del formulario
+
+    validarForm(); // Llamar a la función validarForm()
+  });
+});
+
 function validarForm() {
   //recejemos el user y pass
 
@@ -5,7 +16,6 @@ function validarForm() {
   var user = document.getElementById("username").value.trim(); //guardo use, sin espacios al inicio ni final
   var password = document.getElementById("password").value.trim(); //guardo pas, sin espacios al inicio ni final
   var especialidad = document.getElementById("selectOption").value;
-  console.log("La elección del especialista fue " + especialidad);
 
   //guardo en una variable el xml modificado con el pas y el user con ${}
   var strXml = `<?xml version="1.0" encoding="utf-8"?>
@@ -22,6 +32,7 @@ function validarForm() {
     //le decimos al servidor que mandamos un xml
     headers: {
       "Content-Type": "application/soap+xml",
+      "Cache-Control": "no-cache", // Agrega esta línea para evitar la caché
     },
   };
 
@@ -30,8 +41,6 @@ function validarForm() {
     .post("http://192.168.4.5:8010/WebService1.asmx", strXml, config)
     .then(function (response) {
       // Manejar la respuesta del servicio web
-      console.log("Respuesta del server");
-      console.log(response.data);
 
       //*************MANEJAR LA RESPUESTA DEL SERVER  */
       //creamos la respuesta en un archivo xml
@@ -43,30 +52,23 @@ function validarForm() {
 
       // Sí dentro del str el booleano contesta true entro
       if (objetoXMLaStr.includes("true")) {
-        console.log("Entro login true");
-
         if (especialidad == "tecnico") {
           //si especialidad es técnico lo mando al apartado de técnico
-          console.log("Entro el especialidad técnico");
+
           //redirection y mano el por post user name y especialidad
-          location.href = "../tecnic/index.html?user=" + user + "&especialidad=" + especialidad;
+          location.href = "../tecnic/tecnic.html?user=" + user + "&especialidad=" + especialidad;
         } else if (especialidad == "Radiologo") {
           //si especialidad es técnico lo mando al apartado de Radiologo
-          console.log("Entro el especialidad Radiologo");
 
-          //location.href = 'htmlSaludo.html?user=' + user + '&especialidad=' + especialidad;//redirection y mano el user name
+          location.href = "../radioleg/radioleg.html?user=" + user + "&especialidad=" + especialidad;
         } else if (especialidad == "Radiofisico") {
           //si especialidad es técnico lo mando al apartado de Radiofisico
-          console.log("Entro el especialidad Radiofisico");
 
-          //location.href = 'htmlSaludo.html?user=' + user + '&especialidad=' + especialidad;//redirection y mano el user name
-        } else {
-          console.log("no entro en ninguna especialidad");
+          location.href = "../radiofisic/radiofisic.html?user=" + user + "&especialidad=" + especialidad;
         }
       } else {
         document.getElementById("errorMessage").textContent = "Usuario o contraseña incorrectos"; //pongo un menaje de error
         document.getElementById("password").value = ""; //reset en el campo password
-        console.log("Usuario o contraseña incorrectos");
       }
     })
 
@@ -75,15 +77,3 @@ function validarForm() {
       console.error(error);
     });
 }
-//
-/*<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
- <soap:Body>
- <IsValidCredentialResponse xmlns="http://tempuri.org/">
- <IsValidCredentialResult>
- <anyType xsi:type="xsd:boolean">false</anyType>
- <anyType xsi:type="xsd:string">Usuari o contrasenya incorrectes</anyType>
- </IsValidCredentialResult>
- </IsValidCredentialResponse>
- </soap:Body>
- </soap:Envelope> */
